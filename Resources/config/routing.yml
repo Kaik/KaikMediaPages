@@ -1,0 +1,3 @@
+kaikmediapagesmodule:
+    resource: "@KaikmediaPagesModule/Controller"
+    type:     annotation

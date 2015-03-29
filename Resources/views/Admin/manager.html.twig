@@ -1,0 +1,82 @@
+  {{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
+   {% form_theme form 'bootstrap_3_layout.html.twig' %}
+<h3>
+    <span class="fa fa-list"></span>
+    {{  p.__('Manager')}}
+</h3> 
+<div class="container-fluid">    
+    <div class="list-group col-lg-12">
+        <div class="list-group-item col-lg-12"   style="background: #FFF6DF;">
+                {{ getstatusmsg() }}
+                {{ form_start(form) }}
+                {{ form_errors(form) }}            
+                <div class="form-group-sm clearfix">                
+                    <div class="col-lg-1">
+                    {{ form_widget(form.online) }}                    
+                    </div>                
+                    <div class="col-lg-4">
+                    {{ form_widget(form.title) }}                    
+                    </div>
+                    <div class="col-lg-1 pull-right text-right">                
+                    {{ form_widget(form.filter, {'attr': {'class': 'btn btn-sm btn-info'}}) }}
+                    </div>                    
+                    <div class="col-lg-1 pull-right text-right">
+                    {{ form_widget(form.limit) }}                    
+                    </div>                
+                </div>
+            {{ form_end(form) }}         
+        </div>
+        <div class="list-group-item col-lg-12" style="background:#eee;">              
+                    <div class="col-lg-1">{{  p.__('Online')}}                
+                    </div>                
+                    <div class="col-lg-6">{{  p.__('Title')}}                   
+                    </div>
+                    <div class="col-lg-3">{{  p.__('Layout')}}                    
+                    </div>                
+                    <div class="col-lg-1 pull-right text-right">{{  p.__('Options')}} 
+                    </div>     
+        </div>        
+    {%for page in pages %}                
+        <div class="list-group-item col-lg-12" >
+                <div class="col-lg-1">
+                    <i title="{{ page.id }}" class="fa fa-key "> </i>{{  page.id }}
+                    <i title="{{ page.online }}" class="fa fa-{{  page.online|statusicon }}"> </i>     
+                </div>
+                <div class="col-lg-6">    
+                    <a href="{{ path('kaikmediapagesmodule_admin_display', {'id': page.id}) }}"><h4 class="list-group-item-heading">{{ page.title }}</h4></a>
+                    <p class="list-group-item-text">{{ page.urltitle }}</p>                
+                </div>                    
+                <div class="col-lg-3">
+                    <p class="list-group-item-text">{{ page.layout }}</p>                
+                </div>                    
+                    
+                    
+                    
+
+        </div>
+    {% endfor %}
+            
+        {% if maxPages > 1 %}
+        <ul class="pagination pagination-sm">
+        {# `«` arrow  #}
+        <li {{ thisPage == 1 ? 'class="disabled"' }}>
+            <a href="{{ path('kaikmediapagesmodule_admin_manager', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+        </li>
+
+        {# Render each page number #}
+        {% for i in 1..maxPages %}
+        <li {{ thisPage == i ? 'class="active"' }}>
+            <a href="{{ path('kaikmediapagesmodule_admin_manager', {page: i}) }}">{{ i }}</a>
+        </li>
+        {% endfor %}
+
+        {# `»` arrow #}
+        <li {{ thisPage == maxPages ? 'class="disabled"' }}>
+            <a href="{{ path('kaikmediapagesmodule_admin_manager', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
+        </li>
+        </ul>
+        {% endif %}                               
+            
+   </div>  
+</div>
+   {{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }}

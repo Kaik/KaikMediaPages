@@ -50,12 +50,12 @@ class PagesEntity extends EntityAccess
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $published;
+    private $publishedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $expired;
+    private $expiredAt;
 
     /**
      * @ORM\Column(type="string", length=5)
@@ -98,38 +98,38 @@ class PagesEntity extends EntityAccess
     /**
     * @ORM\Column(type="string", length=150)
      */
-    private $obj_status = 'A';
+    private $status = 'A';
 
     /**
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
-    private $cr_date;
+    private $createdAt;
 
     /**
      * The user id of the creator of the category
      *     
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
-     * @ORM\JoinColumn(name="cr_uid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="createdBy", referencedColumnName="uid")
      */
-    private $cr_uid;
+    private $createdBy;
 
     /**
      *     
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
-    private $lu_date;
+    private $updatedAt;
 
     /**
      * The user id of the last updater of the category
      *     
      * @Gedmo\Blameable(on="update")
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
-     * @ORM\JoinColumn(name="lu_uid", referencedColumnName="uid")
+     * @ORM\JoinColumn(name="updatedBy", referencedColumnName="uid")
      */
-    private $lu_uid;
+    private $updatedBy;
     
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
@@ -160,7 +160,7 @@ class PagesEntity extends EntityAccess
         
         $this->language = '';
         $this->views = 0;
-        $this->obj_status = 'A';
+        $this->status = 'A';
 
         //$this->attributes = new ArrayCollection();
     }    
@@ -539,9 +539,9 @@ class PagesEntity extends EntityAccess
      * @param string $obj_status
      * @return Pages
      */
-    public function setObj_status($obj_status)
+    public function setStatus($status)
     {
-        $this->obj_status = $obj_status;
+        $this->status = $status;
     
         return $this;
     }
@@ -551,101 +551,101 @@ class PagesEntity extends EntityAccess
      *
      * @return string 
      */
-    public function getObj_status()
+    public function getStatus()
     {
-        return $this->obj_status;
+        return $this->status;
     }
 
     /**
-     * Set cr_date
+     * Set createdAt
      *
-     * @param \DateTime $cr_date
+     * @param \DateTime $createdAt
      * @return Pages
      */
-    public function setCr_date($cr_date)
+    public function setCreatedAt($createdAt)
     {
-        $this->cr_date = $cr_date;
+        $this->createdAt = $createdAt;
     
         return $this;
     }
 
     /**
-     * Get cr_date
+     * Get createdAt
      *
      * @return \DateTime 
      */
-    public function getCr_date()
+    public function getCreatedAt()
     {
-        return $this->cr_date;
+        return $this->createdAt;
     }
 
     /**
-     * Set cr_uid
+     * Set createdBy
      *
-     * @param integer $cr_uid
+     * @param integer $createdBy
      * @return Pages
      */
-    public function setCr_uid($cr_uid)
+    public function setCreatedBy($createdBy)
     {
-        $this->cr_uid = $cr_uid;
+        $this->createdBy = $createdBy;
     
         return $this;
     }
 
     /**
-     * Get cr_uid
+     * Get createdBy
      *
      * @return integer 
      */
-    public function getCr_uid()
+    public function getCreatedBy()
     {
-        return $this->cr_uid;
+        return $this->createdBy;
     }
 
     /**
-     * Set lu_date
+     * Set updatedAt
      *
-     * @param \DateTime $lu_date
+     * @param \DateTime $updatedAt
      * @return Pages
      */
-    public function setLu_date($lu_date)
+    public function setUpdatedAt($updatedAt)
     {
-        $this->lu_date = new \DateTime($lu_date);
+        $this->updatedAt = new \DateTime($updatedAt);
     
         return $this;
     }
 
     /**
-     * Get lu_date
+     * Get updatedAt
      *
      * @return \DateTime 
      */
-    public function getLu_date()
+    public function getUpdatedAt()
     {
-        return $this->lu_date;
+        return $this->updatedAt;
     }
 
     /**
-     * Set lu_uid
+     * Set updatedBy
      *
-     * @param integer $lu_uid
+     * @param integer $updatedBy
      * @return Pages
      */
-    public function setLu_uid($lu_uid)
+    public function setUpdatedBy($updatedBy)
     {
-        $this->lu_uid = $lu_uid;
+        $this->updatedBy = $updatedBy;
     
         return $this;
     }
 
     /**
-     * Get lu_uid
+     * Get updatedBy
      *
      * @return integer 
      */
-    public function getLu_uid()
+    public function getUpdatedBy()
     {
-        return $this->lu_uid;
+        return $this->updatedBy;
     }
     
     /**

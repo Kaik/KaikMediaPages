@@ -10,7 +10,11 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class PagesRepository extends EntityRepository
 {
-
+    /**
+     * Query builder helper 
+     *
+     * @return \Kaikmedia\KmdModule\Entity\CustomersQueryBuilder
+     */    
     public function build()
     {
        $em = ServiceUtil::getService('doctrine.entitymanager'); 
@@ -19,18 +23,19 @@ class PagesRepository extends EntityRepository
     }
     
     /**
-     * Get all or count all
+     * Repository 
      *
-     * @param integer $id
+     * @param integer            $page  Current page (defaults to 1)
+     * @param integer            $limit The total number per page
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
-    public function getOrCountAll($onlyone = false, $countonly = false, $r, $f, $s, $sortby, $sortorder, $startnum = 1, $itemsperpage = 15)
+    public function getOneOrAll($onlyone = false, $f, $s, $sortby, $sortorder, $page = 1, $limit)
     {           
     
         $qb = $this->build();    
         $qb->select('p');  
-        $qb->from('Kaikmedia\Zikula\Module\PagesModule\Entity\PagesEntity', 'p'); 
-        //restrictions
-        $qb->addFilters($r);
+        $qb->from('Kaikmedia\PagesModule\Entity\PagesEntity', 'p');
         //filters
         $qb->addFilters($f);
         //search
@@ -44,82 +49,90 @@ class PagesRepository extends EntityRepository
             $item = $query->getOneOrNullResult();  
             return $item;          
         }
+        $paginator = $this->paginate($query, $page, $limit);  
 
-        $query->setFirstResult($startnum -1)->setMaxResults($itemsperpage);        
-        
-        if ($countonly){
-            $paginator = new Paginator($query, false);
-            $items = $paginator->count(); 
-        }else{
-            $items = $query->getResult();  
-        }
-        
-        return $items;
+        return $paginator;
+    }
+       
+    /**
+     * Paginator Helper
+     *
+     * Pass through a query object, current page & limit
+     * the offset is calculated from the page and limit
+     * returns an `Paginator` instance, which you can call the following on:
+     *
+     *     $paginator->getIterator()->count() # Total fetched (ie: `5` posts)
+     *     $paginator->count() # Count of ALL posts (ie: `20` posts)
+     *     $paginator->getIterator() # ArrayIterator
+     *
+     * @param Doctrine\ORM\Query $dql   DQL Query Object
+     * @param integer            $page  Current page (defaults to 1)
+     * @param integer            $limit The total number per page (defaults to 5)
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    public function paginate($dql, $page = 1, $limit = 15)
+    {
+        $paginator = new Paginator($dql);
+
+        $paginator->getQuery()
+            ->setFirstResult($limit * ($page - 1)) // Offset
+            ->setMaxResults($limit); // Limit
+
+        return $paginator;
     }
     
-    public function getAll($args) {
-        
-        //internal switch
-        $countonly = isset($args['countonly']) ? $args['countonly'] : false;
+    /**
+     * Get all in one function 
+     * @param array              $args
+     * @param integer            $onlyone  Internal switch
+     * @param integer            $page  Current page
+     * @param integer            $limit The total number per page
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     * or
+     * object
+     */
+    public function getAll($args = array())
+    {
+        //internall
         $onlyone = isset($args['onlyone']) ? $args['onlyone'] : false;
         //pager
-        $startnum = isset($args['startnum']) ? $args['startnum'] : 1;
-        $startnum      = $startnum < 1 ? 1 : $startnum;
-        $itemsperpage = isset($args['itemsperpage']) ? $args['itemsperpage'] : 25;    
+        $page = isset($args['page']) ? $args['page'] : 1;
+        $page      = $page < 1 ? 1 : $page;
+        $limit = isset($args['limit']) ? $args['limit'] : 25;    
         //sort
-        $sortby = isset($args['sortby']) ? $args['sortby'] : 'publishdate';    
+        $sortby = isset($args['sortby']) ? $args['sortby'] : 'createdAt';    
         $sortorder = isset($args['sortorder']) ? $args['sortorder'] : 'DESC';     
-        //publishing specyfic restrictions
-        $r['depot'] = isset($args['depot']) && $args['depot'] !== '' ? $args['depot'] : false;
-        $r['online'] = isset($args['online']) && $args['online'] !== '' ? $args['online'] : false;
-        $r['publishdate'] = isset($args['publishdate']) && $args['publishdate'] !== '' ? $args['publishdate'] : false;
-        $r['expiredate'] = isset($args['expiredate']) && $args['expiredate'] !== '' ? $args['expiredate'] : false;
-        $r['showinmenu'] = isset($args['showinmenu']) && $args['showinmenu'] !== '' ? $args['showinmenu'] : false;
-        $r['showinlist'] = isset($args['showinlist']) && $args['showinlist'] !== '' ? $args['showinlist'] : false;
-        //soft delete
-        $r['deleted'] = isset($args['deleted']) && $args['deleted'] !== '' ? $args['deleted'] : false;
         //filter's
-        $f['author'] = isset($args['author']) && $args['author'] !== '' ? $args['author'] : false;
-        $f['revision'] = isset($args['revision']) && $args['revision'] !== '' ? $args['revision'] : false;
         $f['id'] = isset($args['id']) && $args['id'] !== '' ? $args['id'] : false;
-        $f['pid'] = isset($args['pid']) && $args['pid'] !== '' ? $args['pid'] : false;
+        $f['urltitle'] = isset($args['urltitle']) && $args['urltitle'] !== '' ? $args['urltitle'] : false;        
         $f['title'] = isset($args['title']) && $args['title'] !== '' ? $args['title'] : false;
-        $f['urltitle'] = isset($args['urltitle']) && $args['urltitle'] !== '' ? $args['urltitle'] : false;
-        $f['hitcount'] = isset($args['hitcount']) && $args['hitcount'] !== '' ? $args['hitcount'] : false;
-        $f['language'] = isset($args['language']) && $args['language'] !== '' ? $args['language'] : false;
-        //search
+        
+       //search
         $s['search'] = isset($args['search']) && $args['search'] !== '' ? $args['search'] : false;
-        $s['search_field'] = isset($args['search_field']) && $args['search_field'] !== '' ? $args['search_field'] : false;
-        
-        
-       return $this
-          ->getOrCountAll($onlyone, $countonly, $r, $f, $s, $sortby, $sortorder, $startnum, $itemsperpage); 
-  
-    }
-    
-    public function getCount($a) {
+        $s['search_field'] = isset($args['search_field']) && $args['search_field'] !== '' ? $args['search_field'] : false;      
        
-       $a['countonly'] = true;
-       return $this
-          ->getAll($a); 
+        return $this
+          ->getOneOrAll($onlyone, $f, $s, $sortby, $sortorder, $page, $limit);
     }
     
+    /**
+     * Shortcut to get one item
+     *  
+     * @param array              $args
+     * @param integer            $onlyone  Internal switch
+     * @param integer            $page  Current page
+     * @param integer            $limit The total number per page
+     *
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     * or
+     * object
+     */ 
     public function getOneBy($a){ 
-        
+        //set internall
         $a['onlyone'] = true;
         return $this
           ->getAll($a);        
-    }
-    
-    
-    public function getMaxPid(){     
-        
-        $qb = $this->build();    
-        $qb->select($qb->expr()->max('p.pid'));  
-        $qb->from('Kaikmedia\PagesModule\Entity\PagesEntity', 'p'); 
-        $query = $qb->getQuery();
-        $item = $query->getOneOrNullResult();
-        return $item;   
-    }
-    
+    }    
 }
