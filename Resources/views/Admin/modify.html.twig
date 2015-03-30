@@ -1,0 +1,70 @@
+  {{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
+  {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'KaikmediaPagesModule:Form:radio.html.twig'] %}
+
+  
+<h3>
+    <span class="fa fa-list"></span>
+    {{  p.__('Manager')}}
+</h3> 
+{{ getstatusmsg() }}
+<div class="container-fluid">
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+ 
+    <div class="list-group col-md-12">
+        <div class="list-group-item col-md-12"   style="background: #FFF6DF;">
+        <h4><span class="fa fa-image"></span>
+            {{  p.__('Title')}}
+        </h4>             
+        {{ form_widget(form.title) }}
+        </div>       
+        <div class="list-group-item col-md-12" style="background:#eee;">
+        <h4><span class="fa fa-file"></span>
+            {{  p.__('Content')}}
+        </h4>     
+        {{ form_widget(form.content) }}
+        </div>          
+        <div class="list-group-item col-md-12" style="background:#eee;">              
+        <h4><span class="fa fa-image"></span>
+            {{  p.__('Images')}}
+        </h4>             
+        </div>
+        <div class="list-group-item col-md-12 clearfix"   style="background: #D0E6FF">
+        <h4>
+            <span class="fa fa-wrench"></span>
+            {{  p.__('Options')}}
+        </h4> 
+            <div class="col-xs-12 col-md-3 ">           
+            {{ form_widget(form.depot, {'label_attr': {'class': 'btn btn-primary radio-inline'  }}) }}                               
+            </div>
+            <div class="col-xs-12 col-md-3">           
+            {{ form_widget(form.online, {'label_attr': {'class': 'btn btn-primary radio-inline'  }}) }}                               
+            </div>
+            <div class="col-xs-12 col-md-3 ">           
+            {{ form_widget(form.inmenu, {'label_attr': {'class': 'btn btn-primary radio-inline'  }}) }}                                 
+            </div>
+            <div class="col-xs-12 col-md-3">           
+            {{ form_widget(form.inlist, {'label_attr': {'class': 'btn btn-primary radio-inline'  }}) }}                                
+            </div>
+        </div>         
+        <div class="list-group-item col-md-12 clearfix"   style="background: #D0E6FF">
+            <div class="col-xs-12 col-md-3">            
+            {{ form_widget(form.publishedAt) }}                               
+            </div>
+            <div class="col-xs-12 col-md-3">            
+            {{ form_widget(form.expiredAt) }}                               
+            </div>
+            <div class="col-xs-12 col-md-3">            
+            {{ form_widget(form.layout) }}                               
+            </div>
+            <div class="col-xs-12 col-md-3">            
+            {{ form_widget(form.language) }}                               
+            </div> 
+        </div>         
+        <div class="list-group-item col-md-12" >
+        {{ form_widget(form.save, {'attr': {'class': 'btn btn-info'}}) }}         
+        </div>
+    </div>                 
+    {{ form_end(form) }} 
+</div>
+{{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }} 

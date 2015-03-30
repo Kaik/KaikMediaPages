@@ -156,7 +156,63 @@ class AdminController extends AbstractController
         return $this->render('KaikmediaPagesModule:Admin:display.html.twig', array(
             'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
             'page' => $page));
-    }    
+    }
+    
+    /**
+     * @Route("manager/modify/{id}", requirements={"id" = "\d+"})
+     *
+     * Modify site information.
+     *
+     * @param Request $request
+     * @param integer $id
+     *
+     * Parameters passed via GET:
+     * --------------------------------------------------
+     * string   uname The user name of the account for which profile information should be modified; defaults to the uname of the current user.
+     * dynadata array The modified profile information passed into this function in case of an error in the update function.
+     *
+     * @return RedirectResponse|string The rendered template output.
+     *
+     * @throws AccessDeniedException on failed permission check
+     */
+    public function modifyAction(Request $request, $id = null)
+    {
+        // Security check
+        if (!UserUtil::isLoggedIn() || !SecurityUtil::checkPermission($this->name.'::', '::', ACCESS_READ)) {
+            throw new AccessDeniedException();
+        }
+        
+        if($id == null){
+        // create a new customer
+        $page = new Page();            
+        }else{
+        $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
+        $page = $this->entityManager
+                    ->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')
+                    ->getOneBy(array('id' => $id));    
+        }
+        
+        $form = $this->createForm('pageform', $page);
+
+        $form->handleRequest($request);
+
+        /** @var \Doctrine\ORM\EntityManager $em
+         */ 
+        $em = $this->getDoctrine()->getManager();
+        if ($form->isValid()) {
+            $em->persist($page);
+            $em->flush();
+            $request->getSession()->getFlashBag()->add('status', "Page saved!");
+
+            return $this->redirect($this->generateUrl('kaikmediapagesmodule_admin_manager'));
+        }
+
+        $request->attributes->set('_legacy', true); // forces template to render inside old theme
+        return $this->render('KaikmediaPagesModule:Admin:modify.html.twig', array(
+            'form' => $form->createView(),
+            'page' => $page,
+        ));        
+    }     
 
     /**
      * @Route("/preferences")

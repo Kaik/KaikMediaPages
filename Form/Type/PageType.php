@@ -11,6 +11,7 @@ use ServiceUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 
 class PageType extends AbstractType
 {
@@ -18,15 +19,36 @@ class PageType extends AbstractType
     {
         $em = ServiceUtil::getService('doctrine.entitymanager');
         $builder
-            ->setMethod('GET')
-            ->add('itemsperpage', 'text', array('required'  => false,
-                                                'data'=> $options['itemsperpage']))
-            ->add('images_max_count', 'text', array('required'  => false,
-                                                'data'=> $options['images_max_count']))
-            ->add('images_max_size', 'text', array('required'  => false,
-                                                'data'=> $options['images_max_size']))
-            ->add('images_ext_allowed', 'text', array('required'  => false,
-                                                'data'=> $options['images_ext_allowed']))                
+            ->setMethod('POST')
+            ->add('online', 'choice', array('choices' => array('0' => 'Offline','1' => 'Online'),
+                                            'multiple' => false,
+                                            'expanded' => true,
+                                            'required' => true))              
+            ->add('depot', 'choice', array('choices' => array('0' => 'Depot','1' => 'Allowed'),
+                                            'multiple' => false,
+                                            'expanded' => true,
+                                            'required' => true))
+            ->add('inmenu', 'choice', array('choices' => array('0' => 'Not in menus','1' => 'In menus'),
+                                            'multiple' => false,
+                                            'expanded' => true,
+                                            'required' => true))              
+            ->add('inlist', 'choice', array('choices' => array('0' => 'Not in list','1' => 'In List'),
+                                            'multiple' => false,
+                                            'expanded' => true,
+                                            'required' => true))                 
+            ->add('title', 'text', array('required'  => false))
+                
+            ->add('publishedAt', 'date', array('format' => \IntlDateFormatter::SHORT,
+                                             'input' => 'datetime',
+                                             'required'  => false,
+                                             'widget' => 'single_text'))
+            ->add('expiredAt', 'date', array('format' => \IntlDateFormatter::SHORT,
+                                             'input' => 'datetime',
+                                             'required'  => false,
+                                             'widget' => 'single_text'))
+            ->add('language', 'text', array('required'  => false))
+            ->add('layout', 'text', array('required'  => false))              
+            ->add('content', 'textarea', array('required'  => false, 'attr' => array('cols' => '5', 'rows' => '25')))            
             ->add('save', 'submit', array('label' => 'Save'));
     }
 
@@ -44,10 +66,8 @@ class PageType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'itemsperpage' => null,
-            'images_max_count' => null,
-            'images_max_size' => null,
-            'images_ext_allowed' => null            
+            'title' => null,
+            'content' => null          
         ));
     }
 }

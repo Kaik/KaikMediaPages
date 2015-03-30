@@ -49,10 +49,8 @@
                 <div class="col-lg-3">
                     <p class="list-group-item-text">{{ page.layout }}</p>                
                 </div>                    
-                    
-                    
-                    
-
+                <div class="col-lg-1 pull-right text-right"><a href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}"><i class="fa fa-pencil"></i></a> 
+                </div>                     
         </div>
     {% endfor %}
             

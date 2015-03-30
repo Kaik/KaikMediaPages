@@ -320,9 +320,9 @@ class PagesEntity extends EntityAccess
      * @param \DateTime $published
      * @return Pages
      */
-    public function setPublished(\DateTime $published = null)
+    public function setPublishedAt(\DateTime $publishedAt = null)
     {
-        $this->published = $published;
+        $this->publishedAt = $publishedAt;
     
         return $this;
     }
@@ -332,9 +332,9 @@ class PagesEntity extends EntityAccess
      *
      * @return \DateTime 
      */
-    public function getPublished()
+    public function getPublishedAt()
     {
-        return $this->published;
+        return $this->publishedAt;
     }
 
     /**
@@ -343,9 +343,9 @@ class PagesEntity extends EntityAccess
      * @param \DateTime $expired
      * @return Pages
      */
-    public function setExpired(\DateTime $expired = null)
+    public function setExpiredAt(\DateTime $expiredAt = null)
     {
-        $this->expired = $expired;
+        $this->expiredAt = $expiredAt;
     
         return $this;
     }
@@ -355,9 +355,9 @@ class PagesEntity extends EntityAccess
      *
      * @return \DateTime 
      */
-    public function getExpired()
+    public function getExpiredAt()
     {
-        return $this->expired;
+        return $this->expiredAt;
     }
 
     /**
