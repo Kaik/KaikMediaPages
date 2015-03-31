@@ -2,6 +2,7 @@
 
 namespace Kaikmedia\PagesModule\Entity;
 
+use ServiceUtil;
 use UserUtil;
 use Zikula\Core\Doctrine\EntityAccess;
 use Doctrine\ORM\Mapping as ORM;
@@ -149,6 +150,7 @@ class PagesEntity extends EntityAccess
      */
     public function __construct()
     {
+        
         $this->online = 0;
         $this->depot = 0;
         $this->revision = 0;
@@ -156,7 +158,11 @@ class PagesEntity extends EntityAccess
         $this->inlist = 1;
         //$this->published = new \DateTime(null);
         //$this->expired = new \DateTime(null);
-        $this->author['uid'] = UserUtil::getVar('uid');
+        $em = ServiceUtil::getService('doctrine.entitymanager');
+        $this->author = $em
+                    ->getRepository('Zikula\Module\UsersModule\Entity\UserEntity')
+                    ->findOneBy(array('uid' => UserUtil::getVar('uid')));
+        
         
         $this->language = '';
         $this->views = 0;

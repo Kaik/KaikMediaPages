@@ -29,6 +29,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 
+use Kaikmedia\PagesModule\Entity\PagesEntity as Page;
 //use Zikula\IntercomModule\Util\Tools;
 //use Zikula\IntercomModule\Util\Settings;
 

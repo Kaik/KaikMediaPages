@@ -54,10 +54,11 @@ class PageType extends AbstractType
                                              'required'  => false,
                                              'widget' => 'single_text'))
             ->add('layout', 'choice', array('choices'   => array('default' => 'Default', 'slider' => 'Slider'),
+                                            'preferred_choices' => array('default'),                
                                             'required'  => false))
             ->add('language', 'choice', array('choices'   => array('en' => 'English', 'pl' => 'Polish'),
                                               'empty_value' => 'Any',
-                                              'empty_data'  => null,
+                                              'empty_data'  => "",
                                             'required'  => false))             
             ->add('content', 'textarea', array('required'  => false, 'attr' => array('cols' => '5', 'rows' => '25')))            
             ->add('save', 'submit', array('label' => 'Save'));
