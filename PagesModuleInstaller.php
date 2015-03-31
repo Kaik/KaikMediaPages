@@ -59,7 +59,7 @@ class PagesModuleInstaller extends \Zikula_AbstractInstaller
         $sql[] = 'UPDATE pages SET images = "a:0:{};"';
         $sql[] = 'ALTER TABLE pages CHANGE title title VARCHAR(250) AFTER author';        
         $sql[] = 'ALTER TABLE pages CHANGE obj_status status CHAR(1) AFTER images';
-        
+        $sql[] = 'ALTER TABLE pages CHANGE language language VARCHAR(5) DEFAULT NULL AFTER expiredAt';        
         $sql[] = 'ALTER TABLE pages CHANGE cr_date createdAt DATETIME DEFAULT NULL AFTER images';        
         $sql[] = 'ALTER TABLE pages CHANGE cr_uid createdBy CHAR(1) AFTER createdAt';
         $sql[] = 'ALTER TABLE pages CHANGE lu_date updatedAt DATETIME DEFAULT NULL AFTER createdBy';
