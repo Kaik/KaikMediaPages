@@ -92,7 +92,7 @@ class AdminController extends AbstractController
         }
         
         $a['page'] = 1;
-        $a['limit'] = 25;
+        $a['limit'] = 10;
         $a['title'] = '';
         $a['online'] = 1;        
         $form = $this->createForm('pagesfilterform',
