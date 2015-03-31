@@ -12,12 +12,16 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
+use Kaikmedia\PagesModule\Form\DataTransformer\UserToIdTransformer;
 
 class PageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // this assumes that the entity manager was passed in as an optio
         $em = ServiceUtil::getService('doctrine.entitymanager');
+        //$entityManager = $options['em'];
+        $transformer = new UserToIdTransformer($em);
         $builder
             ->setMethod('POST')
             ->add('online', 'choice', array('choices' => array('0' => 'Offline','1' => 'Online'),
@@ -37,17 +41,24 @@ class PageType extends AbstractType
                                             'expanded' => true,
                                             'required' => true))                 
             ->add('title', 'text', array('required'  => false))
-                
-            ->add('publishedAt', 'date', array('format' => \IntlDateFormatter::SHORT,
+            ->add('urltitle', 'text', array('required'  => false))
+            ->add($builder->create('author', 'text',['attr' => ['class' => 'author_search']])
+            ->addModelTransformer($transformer)) 
+            ->add('views', 'text', array('required'  => false)) 
+            ->add('publishedAt', 'datetime', array('format' => \IntlDateFormatter::SHORT,
                                              'input' => 'datetime',
                                              'required'  => false,
                                              'widget' => 'single_text'))
-            ->add('expiredAt', 'date', array('format' => \IntlDateFormatter::SHORT,
+            ->add('expiredAt', 'datetime', array('format' => \IntlDateFormatter::SHORT,
                                              'input' => 'datetime',
                                              'required'  => false,
                                              'widget' => 'single_text'))
-            ->add('language', 'text', array('required'  => false))
-            ->add('layout', 'text', array('required'  => false))              
+            ->add('layout', 'choice', array('choices'   => array('default' => 'Default', 'slider' => 'Slider'),
+                                            'required'  => false))
+            ->add('language', 'choice', array('choices'   => array('en' => 'English', 'pl' => 'Polish'),
+                                              'empty_value' => 'Any',
+                                              'empty_data'  => null,
+                                            'required'  => false))             
             ->add('content', 'textarea', array('required'  => false, 'attr' => array('cols' => '5', 'rows' => '25')))            
             ->add('save', 'submit', array('label' => 'Save'));
     }

@@ -12,12 +12,22 @@
     {{ form_errors(form) }}
  
     <div class="list-group col-md-12">
-        <div class="list-group-item col-md-12"   style="background: #FFF6DF;">
-        <h4><span class="fa fa-image"></span>
+        <div class="list-group-item col-md-12 clearfix"   style="background:#eee;"> 
+        <div class="col-xs-12 col-md-2">            
+             <h4>
+            <span class="fa fa-list"></span>
             {{  p.__('Title')}}
-        </h4>             
-        {{ form_widget(form.title) }}
-        </div>       
+            </h4>                               
+            </div>             
+            <div class="col-xs-12 col-md-9">
+              {{ form_widget(form.title, {'attr': {'class': 'input-lg'  }}) }}
+            </div>
+        </div>
+        <div class="list-group-item col-md-12"   style="background:#eee;">     
+        <div class="col-md-12 controls form-inline">
+            <p><strong>{{  p.__('Direct link')}}:</strong> /pages/about/{{ form_widget(form.urltitle, {'attr': {'class': 'input-sm'  }}) }}</p>        
+        </div>
+        </div>
         <div class="list-group-item col-md-12" style="background:#eee;">
         <h4><span class="fa fa-file"></span>
             {{  p.__('Content')}}
@@ -29,7 +39,20 @@
             {{  p.__('Images')}}
         </h4>             
         </div>
-        <div class="list-group-item col-md-12 clearfix"   style="background: #D0E6FF">
+        <div class="list-group-item col-md-12" style="background:#eee;"> 
+            <div class="row">
+            <div class="col-xs-12 col-md-3">            
+             <h4>
+            <span class="fa fa-list"></span>
+            {{  p.__('Layout')}}
+            </h4>                               
+            </div>             
+            <div class="col-xs-12 col-md-3">            
+            {{ form_widget(form.layout) }}                               
+            </div>
+            </div> 
+        </div>        
+        <div class="list-group-item col-md-12 clearfix"   style="background:#eee;"> 
         <h4>
             <span class="fa fa-wrench"></span>
             {{  p.__('Options')}}
@@ -47,22 +70,32 @@
             {{ form_widget(form.inlist, {'label_attr': {'class': 'btn btn-primary radio-inline'  }}) }}                                
             </div>
         </div>         
-        <div class="list-group-item col-md-12 clearfix"   style="background: #D0E6FF">
-            <div class="col-xs-12 col-md-3">            
-            {{ form_widget(form.publishedAt) }}                               
+        <div class="list-group-item col-md-12 clearfix"   style="background:#eee;"> 
+            <div class="col-xs-12 col-md-4 controls form-inline">               
+            {{ form_label(form.publishedAt, 'Published', { 'label_attr': {'class': 'control-label col-md-4'} }) }}            
+            {{ form_widget(form.publishedAt,{ 'attr': {'class': 'control-label col-md-8'} }) }}            
             </div>
-            <div class="col-xs-12 col-md-3">            
-            {{ form_widget(form.expiredAt) }}                               
+            <div class="col-xs-12 col-md-4 controls form-inline">               
+            {{ form_label(form.expiredAt, 'Expired', { 'label_attr': {'class': 'control-label col-md-4'} }) }}            
+            {{ form_widget(form.expiredAt,{ 'attr': {'class': 'control-label col-md-8'} }) }}             
             </div>
-            <div class="col-xs-12 col-md-3">            
-            {{ form_widget(form.layout) }}                               
-            </div>
-            <div class="col-xs-12 col-md-3">            
-            {{ form_widget(form.language) }}                               
+            <div class="col-xs-12 col-md-4 controls form-inline">            
+            {{ form_label(form.language, 'Language', { 'label_attr': {'class': 'control-label col-md-4'} }) }}
+            {{ form_widget(form.language,{ 'attr': {'class': 'control-label col-md-8'} }) }}                               
             </div> 
-        </div>         
+        </div>
+        <div class="list-group-item col-md-12 clearfix"   style="background:#eee;"> 
+            <div class="col-xs-12 col-md-4 controls form-inline">               
+            {{ form_label(form.author, 'Author', { 'label_attr': {'class': 'control-label col-md-4'} }) }}            
+            {{ form_widget(form.author,{ 'attr': {'class': 'control-label col-md-8'} }) }}             
+            </div>
+            <div class="col-xs-12 col-md-4 controls form-inline">            
+            {{ form_label(form.views, 'Views', { 'label_attr': {'class': 'control-label col-md-4'} }) }}
+            {{ form_widget(form.views,{ 'attr': {'class': 'control-label col-md-8'} }) }}                               
+            </div>         
+        </div>             
         <div class="list-group-item col-md-12" >
-        {{ form_widget(form.save, {'attr': {'class': 'btn btn-info'}}) }}         
+        {{ form_widget(form.save, {'attr': {'class': 'btn btn-info pull-right'}}) }}         
         </div>
     </div>                 
     {{ form_end(form) }} 
