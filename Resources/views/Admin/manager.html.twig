@@ -11,12 +11,15 @@
                 {{ form_start(form) }}
                 {{ form_errors(form) }}            
                 <div class="form-group-sm clearfix">                
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                     {{ form_widget(form.online) }}                    
                     </div>                
                     <div class="col-lg-4">
                     {{ form_widget(form.title) }}                    
                     </div>
+                    <div class="col-lg-2">
+                    <a href="{{ path('kaikmediapagesmodule_admin_modify')}}"><i class="fa fa-plus"> {{ p.__('Add new page') }}</i></a>                   
+                    </div>                    
                     <div class="col-lg-1 pull-right text-right">                
                     {{ form_widget(form.filter, {'attr': {'class': 'btn btn-sm btn-info'}}) }}
                     </div>                    
