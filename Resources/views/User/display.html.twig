@@ -1,37 +1,8 @@
-<h3>
+<h2>
     <span class="fa fa-list"></span>
     {{  p.__('About')}}
-</h3> 
+</h2>
+<h1> {{ page.title }} </h2>
 <div class="container-fluid">    
-    <div class="list-group col-md-12">
-        <div class="list-group-item col-md-12"   style="background: #FFF6DF;">
-            <h1> {{ page.title }} </h1>
-            <p><small>{{  p.__('url')}}</small> {{ page.urltitle }}</p>
-        </div>
-        <div class="list-group-item col-md-12" style="background:#eee;">              
-                    <div class="col-md-1">{{  p.__('Online')}}                
-                    </div>                
-                    <div class="col-md-3">{{  p.__('Views')}}: {{ page.views }}                  
-                    </div>
-                    <div class="col-md-3">{{  p.__('Layout')}}: {{ page.layout }}                    
-                    </div>                
-                    <div class="col-md-2 pull-right text-right">
-                        <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                    {{  p.__('Options')}}
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}">{{  p.__('Edit')}}</a></li>
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{  p.__('Depot')}}</a></li>
-                    </ul>
-        </div>
-                    </div>     
-        </div>                   
-        <div class="list-group-item col-md-12" >
-                 {{ page.content|raw }}               
-        </div>
-                            
-            
-   </div>  
+    {{ page.content|raw }}               
 </div>
