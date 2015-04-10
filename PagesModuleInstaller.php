@@ -9,7 +9,8 @@ use DoctrineHelper;
 class PagesModuleInstaller extends \Zikula_AbstractInstaller
 {
     
-    private $_entities = array('Kaikmedia\PagesModule\Entity\PagesEntity');    
+    private $_entities = array('Kaikmedia\PagesModule\Entity\PagesEntity',
+                               'Kaikmedia\PagesModule\Entity\ImageEntity' );    
     
     
     public function install()

@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Kaikmedia\PagesModule\Form\DataTransformer\UserToIdTransformer;
+use Kaikmedia\PagesModule\Form\Type\ImageType;
 
 class PageType extends AbstractType
 {
@@ -53,6 +54,11 @@ class PageType extends AbstractType
                                              'input' => 'datetime',
                                              'required'  => false,
                                              'widget' => 'single_text'))
+            ->add('images', 'collection', array('type' => new ImageType(),
+                                                'allow_add' => true,
+                                                'by_reference' => false,
+                                                'allow_delete' => true,
+                                                'prototype' => true))   
             ->add('layout', 'choice', array('choices'   => array('default' => 'Default', 'slider' => 'Slider'),
                                             'preferred_choices' => array('default'),                
                                             'required'  => false))

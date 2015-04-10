@@ -7,6 +7,8 @@ use UserUtil;
 use Zikula\Core\Doctrine\EntityAccess;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\Common\Collections\ArrayCollection;
+use Kaikmedia\PagesModule\Entity\ImageEntity;
 
 /**
  * Pages
@@ -92,9 +94,11 @@ class PagesEntity extends EntityAccess
     private $content;
     
     /**
-     * @ORM\Column(type="array")
+     *
+     *
+     * @ORM\OneToMany(targetEntity="ImageEntity", mappedBy="page", cascade={"persist"})
      */
-    private $images;    
+    private $images;  
 
     /**
     * @ORM\Column(type="string", length=150)
@@ -167,6 +171,7 @@ class PagesEntity extends EntityAccess
         $this->language = '';
         $this->views = 0;
         $this->status = 'A';
+        $this->images = new ArrayCollection();
 
         //$this->attributes = new ArrayCollection();
     }    
@@ -505,38 +510,45 @@ class PagesEntity extends EntityAccess
     }
 
     /**
-     * Set images
+     * Add image
      *
-     * @param string $images
-     * @return Pages
+     * @param \Kaikmedia\PagesModule\Entity\ImageEntity $images
+     * @return page
      */
-    public function setImages($images)
+    public function addImage(\Kaikmedia\PagesModule\Entity\ImageEntity $image)
     {
-        $this->images = $images;
-    
+        $this->images[] = $image;
+        $image->setPage($this);
         return $this;
     }
 
+    public function setImages(ArrayCollection $images)
+    {
+        foreach ($images as $image) {
+        $image->setPage($this);    
+        }
+
+        $this->images = $images;
+    }
+
     /**
-     * Get linkDesc
+     * Remove images
      *
-     * @return string 
+     * @param \Kaikmedia\PagesModule\Entity\Image $images
+     */
+    public function removeImage(\Kaikmedia\PagesModule\Entity\ImageEntity $images)
+    {
+        $this->images->removeElement($images);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getImages()
     {
-        if(is_array($this->images)){
-            foreach($this->images as $k=>$image){
-                $images[$k]['name'] = isset($image['name']) ? $image['name']: false ;                
-                $images[$k]['size'] = isset($image['size']) ? $image['size']: false ;
-                $images[$k]['type'] = isset($image['type']) ? $image['type']: false ;
-                $images[$k]['error'] = isset($image['error']) ? $image['error']: false ;                
-                $images[$k]['author'] = isset($image['author']) ? $image['author']: false ; 
-                $images[$k]['tmp_name'] = isset($image['tmp_name']) ? $image['tmp_name']: false ;                
-                $images[$k]['file_name'] = isset($image['file_name']) ? $image['file_name']: false ;
-                $images[$k]['tmp_file_name'] = isset($image['tmp_file_name']) ? $image['tmp_file_name']: false ;                
-            }
-          return $images;            
-        }
+        return $this->images;
     }
 
     /**

@@ -35,9 +35,23 @@
         {{ form_widget(form.content) }}
         </div>          
         <div class="list-group-item col-md-12" style="background:#eee;">              
-        <h4><span class="fa fa-image"></span>
-            {{  p.__('Images')}}
-        </h4>             
+        <h4><span class="fa fa-image"></span>{{  p.__('Images')}} <a id="addnewdetail" href="#"><i class="fa fa-plus"> </i> {{  p.__('Add image') }}</a></h4> 
+         <div class="row">
+        {% macro information_prototype(image) %}
+            
+            <div class="col-sm-12">{{ form_widget(image.name) }}</div>
+            <div class="col-sm-12">{{ form_widget(image.file) }}</div>                      
+        {% endmacro %}
+        <ul class="images col-sm-12 list-unstyled" data-prototype="{{ _self.information_prototype(form.images.vars.prototype)|e }}">
+        {# iterate over each existing tag and render its only field: name #}
+        {% for image in form.images %}
+            <li class="col-xs-12 col-md-3 form-group-sm">
+                {{ _self.information_prototype(image) }}
+            </li>
+         {% endfor %}
+        </ul>
+        </div>              
+            
         </div>
         <div class="list-group-item col-md-12" style="background:#eee;"> 
             <div class="row">
@@ -100,4 +114,7 @@
     </div>                 
     {{ form_end(form) }} 
 </div>
+{% javascripts '@KaikmediaPagesModule/Resources/public/js/*' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}    
 {{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }} 
