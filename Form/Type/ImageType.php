@@ -16,6 +16,16 @@ class ImageType extends AbstractType
         $builder
               ->add('name','text', array('required' => false))
               ->add('path','text', array('required' => false))
+              ->add('description','textarea', array('required' => false))
+              ->add('legal','textarea', array('required' => false))              
+              ->add('publicdomain', 'checkbox', array(
+                  'label'    => 'public',
+                  'required' => false,
+              ))
+              ->add('promoted', 'checkbox', array(
+                  'label'    => 'promoted',
+                  'required' => false,
+              ))              
               ->add('file', 'file', array('required' => false));
 
     }

@@ -25,7 +25,7 @@ KaikMedia.Pages.Form = {};
     
     KaikMedia.Pages.Form.addDeleteLink = function ($FormLi)
     {
-        var $removeFormA = $('<a href="#"> <i class="fa fa-trash"> </i></a>');
+        var $removeFormA = $('<a href="#" class="btn btn-default btn-xs"> <i class="fa fa-trash"> </i></a>');
         $FormLi.find('.menu').append($removeFormA);
 
         $removeFormA.on('click', function(e) {
@@ -38,7 +38,7 @@ KaikMedia.Pages.Form = {};
     
     KaikMedia.Pages.Form.addEditLink = function ($FormLi)
     {
-        var $editFormA = $('<a href="#" class="pull-right"> <i class="fa fa-pencil"> </i></a>');
+        var $editFormA = $('<a href="#" class="btn btn-default btn-xs"> <i class="fa fa-pencil"> </i></a>');
         $FormLi.find('.menu').append($editFormA);
 
         $editFormA.on('click', function(e) {
@@ -46,37 +46,22 @@ KaikMedia.Pages.Form = {};
             e.preventDefault();
             // display editable fields
             $FormLi.find('.name input').toggleClass( "simplebox");
+            $FormLi.find('.description textarea').toggleClass( "simplebox");
         });
-    };   
-    
-    KaikMedia.Pages.Form.addMenu = function ($FormLi)
-    {
-        var $menuDiv = $('<div class="col-xs-12 menu"> </div>');
-        $FormLi.append($menuDiv);
-    };     
+    };       
 
     KaikMedia.Pages.Form.AddNew = function ()
     {
-        // setup an "add a tag" link
-        //var $addLink = $('<a href="#"><i class="fa fa-plus"> </i></a>');
-        var $newLi = $('<li class="col-xs-12 col-md-2 form-group-sm"></li>');   
-        // add the "add a tag" anchor and li to the tags ul
-        $collectionHolder.append($newLi);
-
-        // count the current form inputs we have (e.g. 2), use that as the new
-        // index when inserting a new item (e.g. 2)
-        $collectionHolder.data('index', $collectionHolder.find(':input').length);
-
         $('#addnew').on('click', function(e) {
             // prevent the link from creating a "#" on the URL
             e.preventDefault();
             // add a new tag form (see next code block)
-            KaikMedia.Pages.Form.addForm($newLi);
+            KaikMedia.Pages.Form.addForm();
         });   
     };
 
     
-    KaikMedia.Pages.Form.addForm = function ($newLi)
+    KaikMedia.Pages.Form.addForm = function ()
     {
         // Get the data-prototype explained earlier
         var prototype = $collectionHolder.data('prototype');
@@ -93,7 +78,7 @@ KaikMedia.Pages.Form = {};
 
         // Display the form in the page in an li, before the "Add a tag" link li
         var $newFormLi = $('<li class="col-xs-12 col-md-2 form-group-sm"></li>').append(newForm);
-        $newLi.before($newFormLi);
+        $collectionHolder.find('.new').before($newFormLi);
     }    
 
     $(document).ready(function() {

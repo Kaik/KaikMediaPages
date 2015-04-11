@@ -1,5 +1,4 @@
 <?php
-
 namespace Kaikmedia\PagesModule\Entity;
 
 use ServiceUtil;
@@ -8,7 +7,7 @@ use Zikula\Core\Doctrine\EntityAccess;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
-use Kaikmedia\PagesModule\Entity\ImageEntity;
+use Kaikmedia\PagesModule\Entity\ImageEntity as Image;
 
 /**
  * Pages
@@ -18,17 +17,18 @@ use Kaikmedia\PagesModule\Entity\ImageEntity;
  */
 class PagesEntity extends EntityAccess
 {
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\Column(type="string", length=250)
      */
-    private $urltitle;    
+    private $urltitle;
 
     /**
      * @ORM\Column(type="boolean")
@@ -68,7 +68,7 @@ class PagesEntity extends EntityAccess
     /**
      * @ORM\Column(type="string", length=250)
      */
-    private $layout;    
+    private $layout;
 
     /**
      * @ORM\Column(type="integer")
@@ -77,31 +77,29 @@ class PagesEntity extends EntityAccess
 
     /**
      * The author uid
-     *     
+     *
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="author", referencedColumnName="uid")
      */
-    private $author;  
+    private $author;
 
     /**
      * @ORM\Column(type="string", length=150)
      */
-    private $title;    
+    private $title;
 
     /**
      * @ORM\Column(type="text")
      */
     private $content;
-    
-    /**
-     *
-     *
-     * @ORM\OneToMany(targetEntity="ImageEntity", mappedBy="page", cascade={"persist"})
-     */
-    private $images;  
 
     /**
-    * @ORM\Column(type="string", length=150)
+     * @ORM\OneToMany(targetEntity="ImageEntity", mappedBy="page", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    private $images;
+
+    /**
+     * @ORM\Column(type="string", length=150)
      */
     private $status = 'A';
 
@@ -113,7 +111,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * The user id of the creator of the category
-     *     
+     *
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="createdBy", referencedColumnName="uid")
@@ -121,7 +119,6 @@ class PagesEntity extends EntityAccess
     private $createdBy;
 
     /**
-     *     
      * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
@@ -129,58 +126,53 @@ class PagesEntity extends EntityAccess
 
     /**
      * The user id of the last updater of the category
-     *     
+     *
      * @Gedmo\Blameable(on="update")
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="updatedBy", referencedColumnName="uid")
      */
     private $updatedBy;
-    
+
     /**
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
      */
     private $deletedAt;
-    
+
     /**
-     * 
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="deletedBy", referencedColumnName="uid")
      */
-    private $deletedBy;    
-
+    private $deletedBy;
 
     /**
      * constructor
      */
     public function __construct()
     {
-        
         $this->online = 0;
         $this->depot = 0;
         $this->revision = 0;
         $this->inmenu = 1;
         $this->inlist = 1;
-        //$this->published = new \DateTime(null);
-        //$this->expired = new \DateTime(null);
+        // $this->published = new \DateTime(null);
+        // $this->expired = new \DateTime(null);
         $em = ServiceUtil::getService('doctrine.entitymanager');
-        $this->author = $em
-                    ->getRepository('Zikula\Module\UsersModule\Entity\UserEntity')
-                    ->findOneBy(array('uid' => UserUtil::getVar('uid')));
-        
+        $this->author = $em->getRepository('Zikula\Module\UsersModule\Entity\UserEntity')->findOneBy(array(
+            'uid' => UserUtil::getVar('uid')
+        ));
         
         $this->language = '';
         $this->views = 0;
         $this->status = 'A';
         $this->images = new ArrayCollection();
+        
+        // $this->attributes = new ArrayCollection();
+    }
 
-        //$this->attributes = new ArrayCollection();
-    }    
-    
-    
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -190,43 +182,43 @@ class PagesEntity extends EntityAccess
     /**
      * Set urltitle
      *
-     * @param string $urltitle
+     * @param string $urltitle            
      * @return Pages
      */
     public function setUrltitle($urltitle)
     {
         $this->urltitle = $urltitle;
-    
+        
         return $this;
     }
 
     /**
      * Get urltitle
      *
-     * @return string 
+     * @return string
      */
     public function getUrltitle()
     {
         return $this->urltitle;
-    }    
+    }
 
     /**
      * Set online
      *
-     * @param boolean $online
+     * @param boolean $online            
      * @return Pages
      */
     public function setOnline($online)
     {
         $this->online = $online;
-    
+        
         return $this;
     }
 
     /**
      * Get online
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getOnline()
     {
@@ -236,20 +228,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set depot
      *
-     * @param boolean $depot
+     * @param boolean $depot            
      * @return Pages
      */
     public function setDepot($depot)
     {
         $this->depot = $depot;
-    
+        
         return $this;
     }
 
     /**
      * Get depot
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDepot()
     {
@@ -259,20 +251,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set revision
      *
-     * @param integer $revision
+     * @param integer $revision            
      * @return Pages
      */
     public function setRevision($revision)
     {
         $this->revision = $revision;
-    
+        
         return $this;
     }
 
     /**
      * Get revision
      *
-     * @return integer 
+     * @return integer
      */
     public function getRevision()
     {
@@ -282,20 +274,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set inmenu
      *
-     * @param boolean $inmenu
+     * @param boolean $inmenu            
      * @return Pages
      */
     public function setInmenu($inmenu)
     {
         $this->inmenu = $inmenu;
-    
+        
         return $this;
     }
 
     /**
      * Get inmenu
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getInmenu()
     {
@@ -305,20 +297,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set inlist
      *
-     * @param boolean $inlist
+     * @param boolean $inlist            
      * @return Pages
      */
     public function setInlist($inlist)
     {
         $this->inlist = $inlist;
-    
+        
         return $this;
     }
 
     /**
      * Get inlist
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getInlist()
     {
@@ -328,20 +320,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set published
      *
-     * @param \DateTime $published
+     * @param \DateTime $published            
      * @return Pages
      */
     public function setPublishedAt(\DateTime $publishedAt = null)
     {
         $this->publishedAt = $publishedAt;
-    
+        
         return $this;
     }
 
     /**
      * Get published
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getPublishedAt()
     {
@@ -351,20 +343,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set expired
      *
-     * @param \DateTime $expired
+     * @param \DateTime $expired            
      * @return Pages
      */
     public function setExpiredAt(\DateTime $expiredAt = null)
     {
         $this->expiredAt = $expiredAt;
-    
+        
         return $this;
     }
 
     /**
      * Get expired
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpiredAt()
     {
@@ -374,66 +366,66 @@ class PagesEntity extends EntityAccess
     /**
      * Set language
      *
-     * @param string $language
+     * @param string $language            
      * @return Pages
      */
     public function setLanguage($language)
     {
         $this->language = $language;
-    
+        
         return $this;
     }
 
     /**
      * Get language
      *
-     * @return string 
+     * @return string
      */
     public function getLanguage()
     {
         return $this->language;
     }
-    
+
     /**
      * Set layout
      *
-     * @param string $layout
+     * @param string $layout            
      * @return Pages
      */
     public function setLayout($layout)
     {
         $this->layout = $layout;
-    
+        
         return $this;
     }
 
     /**
      * Get layout
      *
-     * @return string 
+     * @return string
      */
     public function getLayout()
     {
         return $this->layout;
-    }    
+    }
 
     /**
      * Set views
      *
-     * @param integer $views
+     * @param integer $views            
      * @return Pages
      */
     public function setViews($views)
     {
         $this->views = $views;
-    
+        
         return $this;
     }
 
     /**
      * Get views
      *
-     * @return integer 
+     * @return integer
      */
     public function getViews()
     {
@@ -443,66 +435,66 @@ class PagesEntity extends EntityAccess
     /**
      * Set author
      *
-     * @param integer $author
+     * @param integer $author            
      * @return Pages
      */
     public function setAuthor(\Zikula\Module\UsersModule\Entity\UserEntity $author = null)
     {
         $this->author = $author;
-    
+        
         return $this;
     }
 
     /**
      * Get author
      *
-     * @return integer 
+     * @return integer
      */
     public function getAuthor()
     {
         return $this->author;
     }
-    
+
     /**
      * Set title
      *
-     * @param string $title
+     * @param string $title            
      * @return Pages
      */
     public function setTitle($title)
     {
         $this->title = $title;
-    
+        
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
         return $this->title;
-    }    
+    }
 
     /**
      * Set content
      *
-     * @param string $content
+     * @param string $content            
      * @return Pages
      */
     public function setContent($content)
     {
         $this->content = $content;
-    
+        
         return $this;
     }
 
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -512,39 +504,43 @@ class PagesEntity extends EntityAccess
     /**
      * Add image
      *
-     * @param \Kaikmedia\PagesModule\Entity\ImageEntity $images
+     * @param \Kaikmedia\PagesModule\Entity\ImageEntity $images            
      * @return page
      */
-    public function addImage(\Kaikmedia\PagesModule\Entity\ImageEntity $image)
+    public function addImage(Image $image)
     {
-        $this->images[] = $image;
+        if ($image->isEmpty()){
+            return;
+        }
+        
         $image->setPage($this);
-        return $this;
+        $this->images->add($image);
     }
 
-    public function setImages(ArrayCollection $images)
+    public function setImages($images)
     {
         foreach ($images as $image) {
-        $image->setPage($this);    
+            $image->setPage($this);
         }
-
+        
         $this->images = $images;
     }
 
     /**
      * Remove images
      *
-     * @param \Kaikmedia\PagesModule\Entity\Image $images
+     * @param \Kaikmedia\PagesModule\Entity\Image $images            
      */
-    public function removeImage(\Kaikmedia\PagesModule\Entity\ImageEntity $images)
+    public function removeImage(Image $image)
     {
-        $this->images->removeElement($images);
+        $this->images->removeElement($image);
+
     }
 
     /**
      * Get images
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getImages()
     {
@@ -554,20 +550,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set obj_status
      *
-     * @param string $obj_status
+     * @param string $obj_status            
      * @return Pages
      */
     public function setStatus($status)
     {
         $this->status = $status;
-    
+        
         return $this;
     }
 
     /**
      * Get obj_status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -577,20 +573,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set createdAt
      *
-     * @param \DateTime $createdAt
+     * @param \DateTime $createdAt            
      * @return Pages
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-    
+        
         return $this;
     }
 
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -600,20 +596,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set createdBy
      *
-     * @param integer $createdBy
+     * @param integer $createdBy            
      * @return Pages
      */
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
-    
+        
         return $this;
     }
 
     /**
      * Get createdBy
      *
-     * @return integer 
+     * @return integer
      */
     public function getCreatedBy()
     {
@@ -623,20 +619,20 @@ class PagesEntity extends EntityAccess
     /**
      * Set updatedAt
      *
-     * @param \DateTime $updatedAt
+     * @param \DateTime $updatedAt            
      * @return Pages
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = new \DateTime($updatedAt);
-    
+        
         return $this;
     }
 
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -646,64 +642,63 @@ class PagesEntity extends EntityAccess
     /**
      * Set updatedBy
      *
-     * @param integer $updatedBy
+     * @param integer $updatedBy            
      * @return Pages
      */
     public function setUpdatedBy($updatedBy)
     {
         $this->updatedBy = $updatedBy;
-    
+        
         return $this;
     }
 
     /**
      * Get updatedBy
      *
-     * @return integer 
+     * @return integer
      */
     public function getUpdatedBy()
     {
         return $this->updatedBy;
     }
-    
+
     /**
      * Get delete status
      *
-     * @return DateTime 
+     * @return DateTime
      */
     public function getDeletedAt()
     {
         return $this->deletedAt;
     }
-    
+
     /**
      * Set deleted at status
      *
-     * @return integer 
+     * @return integer
      */
     public function setDeletedAt($deletedAt)
     {
         $this->deletedAt = $deletedAt;
     }
-    
+
     /**
      * Get deleted by status
      *
-     * @return integer 
+     * @return integer
      */
     public function getDeletedBy()
     {
         return $this->deletedBy;
     }
-    
+
     /**
      * Get deleted by
      *
-     * @return integer 
+     * @return integer
      */
     public function setDeletedBy($deletedBy)
     {
         $this->deletedBy = $deletedBy;
-    }    
-    
+    }
 }

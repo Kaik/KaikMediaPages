@@ -28,7 +28,7 @@
         </div>
         <div class="list-group-item col-md-12"   style="background:#eee;">     
         <div class="col-md-12 controls form-inline">
-            <p><strong>{{  p.__('Direct link')}}:</strong> /pages/about/{{ form_widget(form.urltitle, {'attr': {'class': 'input-sm'  }}) }}</p>        
+            <p><strong>{{  p.__('Direct link')}}:</strong> /pages/about/{{ form_widget(form.urltitle, {'attr': {'class': 'simplebox input-sm'  }}) }}</p>        
         </div>
         </div>
         <div class="list-group-item col-md-12" style="background:#eee;">
@@ -38,31 +38,53 @@
         {{ form_widget(form.content) }}
         </div>          
         <div class="list-group-item col-md-12" style="background:#eee;">              
-        <h4><span class="fa fa-image"></span> {{  p.__('Images')}} <a id="addnew" href="#"><i class="fa fa-plus"> </i> {{  p.__('Add image') }}</a></h4> 
+        <h4><span class="fa fa-image"></span> {{  p.__('Images')}}</h4> 
          <div class="row">         
         {% macro information_prototype(image) %}
             <div class="col-sm-12 thumbnail">
                 {% if image.path.vars.value %}        
                 <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ image.path.vars.value}}" />
                 {% endif %}
-                <div class="col-sm-12 {% if image.path.vars.value %} hide {% endif %}">{{ form_widget(image.file) }}</div>            
-                <div class="col-sm-12 menu"></div>
+                <div class="row promoted {% if image.path.vars.value %} {% else %} hide {% endif %}">
+                <div class="col-md-12">
+                 {{ form_widget(image.promoted, { 'label_attr': {'class': 'checkbox-inline'} }) }} 
+                </div>
+                </div>                  
+                <div class="col-sm-12 {% if image.path.vars.value %} hide {% endif %}">{{ form_widget(image.file) }}</div>                           
                 <div class="col-sm-12 path hide">{{ form_widget(image.path) }}</div>                 
-                <div class="col-sm-12 name ">
+                <div class="row name {% if image.path.vars.value %} {% else %} hide {% endif %}">
                 {{ form_label(image.name, 'Name', { 'label_attr': {'class': 'control-label col-md-2'} }) }} 
                 <div class="col-md-10">
                 {{ form_widget(image.name,{ 'attr': {'class': 'simplebox'} }) }}
                 </div>
-                </div>                 
+                </div>
+                <div class="row legal {% if image.path.vars.value %} {% else %} hide {% endif %}">
+                {{ form_label(image.legal, 'Credits', { 'label_attr': {'class': 'control-label col-md-2'} }) }}                
+                <div class="col-md-10">
+                {{ form_widget(image.legal,{ 'attr': {'class': 'simplebox'} }) }}
+                {{ form_widget(image.publicdomain, { 'label_attr': {'class': 'checkbox-inline'} }) }} 
+                </div>
+                </div>                
+                <div class="row description {% if image.path.vars.value %} {% else %} hide {% endif %}">
+                {{ form_label(image.description, 'Desc', { 'label_attr': {'class': 'control-label col-md-2'} }) }} 
+                <div class="col-md-10">
+                {{ form_widget(image.description,{ 'attr': {'class': 'simplebox'} }) }}
+                </div>
+                </div>
+                <div class="col-sm-12 menu btn-group btn-group-justified" role="group">
+                </div>                                                 
             </div>                                           
         {% endmacro %}
-        <ul class="images col-sm-12 list-unstyled" data-prototype="{{ _self.information_prototype(form.images.vars.prototype)|e }}">
+        <ul class="images col-sm-12 list-unstyled" data-prototype="{{ _self.information_prototype(form.images.vars.prototype)|e }}">       
         {# iterate over each existing tag and render its only field: name #}
         {% for image in form.images %}
             <li class="col-xs-12 col-md-2 form-group-sm">           
                 {{ _self.information_prototype(image) }}
             </li>
          {% endfor %}
+            <li class="col-xs-12 col-md-12 form-group-sm new">           
+                <a id="addnew" href="#"><i class="fa fa-plus"> </i> {{  p.__('Add image') }}</a>
+            </li>   
         </ul>                                   
         </div>
         </div>
