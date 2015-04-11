@@ -56,6 +56,8 @@ class PageType extends AbstractType
                                              'widget' => 'single_text'))
             ->add('images', 'collection', array('type' => new ImageType(),
                                                 'allow_add' => true,
+                                                'required' => false,
+                                                'delete_empty' => true,
                                                 'by_reference' => false,
                                                 'allow_delete' => true,
                                                 'prototype' => true))   

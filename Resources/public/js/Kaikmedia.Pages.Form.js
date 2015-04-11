@@ -17,15 +17,16 @@ KaikMedia.Pages.Form = {};
 
         // add a delete link to all of the existing tag form li elements
         $collectionHolder.find('li').each(function() {
-            KaikMedia.Pages.Form.addFormDeleteLink($(this));           
+            KaikMedia.Pages.Form.addDeleteLink($(this));
+            KaikMedia.Pages.Form.addEditLink($(this)); 
         });             
-        KaikMedia.Pages.Form.detailsAdd();
+        KaikMedia.Pages.Form.AddNew();
     };
     
-    KaikMedia.Pages.Form.addFormDeleteLink = function ($FormLi)
+    KaikMedia.Pages.Form.addDeleteLink = function ($FormLi)
     {
-        var $removeFormA = $('<a href="#"><i class="fa fa-trash"> </i></a>');
-        $FormLi.append($removeFormA);
+        var $removeFormA = $('<a href="#"> <i class="fa fa-trash"> </i></a>');
+        $FormLi.find('.menu').append($removeFormA);
 
         $removeFormA.on('click', function(e) {
             // prevent the link from creating a "#" on the URL
@@ -33,13 +34,32 @@ KaikMedia.Pages.Form = {};
             // remove the li for the tag form
             $FormLi.remove();
         });
+    };
+    
+    KaikMedia.Pages.Form.addEditLink = function ($FormLi)
+    {
+        var $editFormA = $('<a href="#" class="pull-right"> <i class="fa fa-pencil"> </i></a>');
+        $FormLi.find('.menu').append($editFormA);
+
+        $editFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+            // display editable fields
+            $FormLi.find('.name input').toggleClass( "simplebox");
+        });
+    };   
+    
+    KaikMedia.Pages.Form.addMenu = function ($FormLi)
+    {
+        var $menuDiv = $('<div class="col-xs-12 menu"> </div>');
+        $FormLi.append($menuDiv);
     };     
 
-    KaikMedia.Pages.Form.detailsAdd = function ()
+    KaikMedia.Pages.Form.AddNew = function ()
     {
         // setup an "add a tag" link
         //var $addLink = $('<a href="#"><i class="fa fa-plus"> </i></a>');
-        var $newLi = $('<li class="col-xs-12 col-md-3 form-group-sm"></li>');   
+        var $newLi = $('<li class="col-xs-12 col-md-2 form-group-sm"></li>');   
         // add the "add a tag" anchor and li to the tags ul
         $collectionHolder.append($newLi);
 
@@ -47,7 +67,7 @@ KaikMedia.Pages.Form = {};
         // index when inserting a new item (e.g. 2)
         $collectionHolder.data('index', $collectionHolder.find(':input').length);
 
-        $('#addnewdetail').on('click', function(e) {
+        $('#addnew').on('click', function(e) {
             // prevent the link from creating a "#" on the URL
             e.preventDefault();
             // add a new tag form (see next code block)
@@ -72,9 +92,8 @@ KaikMedia.Pages.Form = {};
         $collectionHolder.data('index', index + 1);
 
         // Display the form in the page in an li, before the "Add a tag" link li
-        var $newFormLi = $('<li class="col-xs-12 col-md-3 form-group-sm"></li>').append(newForm);
+        var $newFormLi = $('<li class="col-xs-12 col-md-2 form-group-sm"></li>').append(newForm);
         $newLi.before($newFormLi);
-        KaikMedia.Pages.Form.addFormDeleteLink($newFormLi);
     }    
 
     $(document).ready(function() {

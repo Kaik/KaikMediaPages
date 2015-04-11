@@ -1,0 +1,7 @@
+{% block file_widget %}
+    {% spaceless %}
+     <td>{% set type = type|default('file') %} 
+         <input type="{{ type }}" {{ block('widget_attributes') }} />
+     </td>
+    {% endspaceless %}
+{% endblock file_widget %}
