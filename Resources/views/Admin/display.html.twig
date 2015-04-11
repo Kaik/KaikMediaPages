@@ -28,7 +28,18 @@
                     </ul>
         </div>
                     </div>     
-        </div>                   
+        </div> 
+        <div class="list-group-item col-md-12" >          
+           {%for image in page.images %}
+              <div class="col-md-4">
+                <div class="col-md-12 thumbnail">
+                {% if image.path %}        
+                <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ image.path}}" />
+                {% endif %}
+                </div>
+              </div>  
+           {% endfor %}              
+        </div>                          
         <div class="list-group-item col-md-12" >
                  {{ page.content|raw }}               
         </div>
