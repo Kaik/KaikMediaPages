@@ -68,7 +68,8 @@ class PageType extends AbstractType
                                               'empty_value' => 'Any',
                                               'empty_data'  => "",
                                             'required'  => false))             
-            ->add('content', 'textarea', array('required'  => false, 'attr' => array('cols' => '5', 'rows' => '25')))            
+            ->add('content', 'textarea', array('required'  => false,'attr' => array(
+                                                'class' => 'tinymce'))) // Skip it if you want to use default theme))            
             ->add('save', 'submit', array('label' => 'Save'));
     }
 
