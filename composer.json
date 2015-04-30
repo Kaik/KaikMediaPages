@@ -1,24 +1,26 @@
 {
-    "name": "kaikmedia/pages-module",
-    "description": "Module to manage simple html pages",
-    "type": "zikula-module",
-    "license": "LGPL-3.0+",
-    "authors": [
-        {
-            "name": "Kaik",
-            "homepage": "http://kaikmedia.com/",
-            "email": "contact@kaikmedia.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": { "Kaikmedia\\PagesModule\\": "" }
-    },
-    "require": {
-        "php": ">5.3.3"
-    },
-    "extra": {
-        "zikula": {
-            "class": "Kaikmedia\\PagesModule\\KaikmediaPagesModule"
-        }
-    }
+	"name" : "kaikmedia/pages-module",
+	"description" : "Module to manage simple html pages",
+	"type" : "zikula-module",
+	"license" : "LGPL-3.0+",
+	"authors" : [{
+			"name" : "Kaik",
+			"homepage" : "http://kaikmedia.com/",
+			"email" : "contact@kaikmedia.com"
+		}
+	],
+	"autoload" : {
+		"psr-4" : {
+			"Kaikmedia\\PagesModule\\" : ""
+		}
+	},
+	"require" : {
+		"php" : ">5.3.3",
+		"tinymce/tinymce" : "4.1.9"
+	},
+	"extra" : {
+		"zikula" : {
+			"class" : "Kaikmedia\\PagesModule\\KaikmediaPagesModule"
+		}
+	}
 }
