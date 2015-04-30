@@ -1,7 +1,4 @@
-{% stylesheets '@KaikmediaPagesModule/Resources/public/css/*' filter='cssrewrite' %}
-<link rel="stylesheet" href="{{ asset_url }}" />
-{% endstylesheets %}
- {{ tinymce_init({'theme': {'simple': {'menubar': false}}}) }}
+{% include '@KaikmediaPagesModule:Common:resources.html.twig'  %}
   {{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
   {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'KaikmediaPagesModule:Form:radio.html.twig', 'KaikmediaPagesModule:Form:file.html.twig'] %}
 

@@ -1,19 +1,34 @@
-<h2>
-    <span class="fa fa-list"></span>
-    {{  p.__('About')}}
-</h2>
-<h1> {{ page.title }} </h2>
-<div class="container-fluid"> 
-       <div class="col-md-12" >          
-           {%for image in page.images %}
-              <div class="col-md-4">
-                <div class="col-md-12 thumbnail">
-                {% if image.path %}        
-                <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ image.path}}" />
-                {% endif %}
-                </div>
-              </div>  
-           {% endfor %}              
-        </div>      
-    {{ page.content|raw }}               
+{% include 'KaikmediaPagesModule:Common:resources.html.twig'  %}
+<div class="panel panel-transparent">
+  <div class="panel-body">
+	<div class="row" > 
+	<div class="col-md-6" > 
+	    <h1><span class="fa fa-list"></span>
+	    {{  p.__('About')}} {{ page.title }}
+</h1>	
+	</div>
+	<div class="col-md-6" > 
+
+	</div>
+	</div>
+	<div class="container-fluid"> 
+	       <div class="col-md-12" >          
+	           {%for image in page.images %}
+	              <div class="col-md-4">
+	                <div class="col-md-12 thumbnail">
+	                {% if image.path %}        
+	                <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ image.path}}" />
+	                {% endif %}
+	                </div>
+	              </div>  
+	           {% endfor %}              
+	        </div>      
+	    {{ page.content|raw }}               
+	</div>
+  </div>
 </div>
+
+
+
+
+

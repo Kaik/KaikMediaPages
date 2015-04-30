@@ -90,7 +90,7 @@ class AdminController extends AbstractController
         if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
-        
+        $a = array();
         $a['page'] = 1;
         $a['limit'] = 10;
         $a['title'] = '';
@@ -185,7 +185,8 @@ class AdminController extends AbstractController
         
         if($id == null){
         // create a new customer
-        $page = new Page();            
+        $page = new Page();
+                    
         }else{
         $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
         $page = $this->entityManager
