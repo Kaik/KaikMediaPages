@@ -87,6 +87,11 @@ class PagesEntity extends EntityAccess
      * @ORM\Column(type="string", length=150)
      */
     private $title;
+    
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;    
 
     /**
      * @ORM\Column(type="text")
@@ -477,6 +482,27 @@ class PagesEntity extends EntityAccess
     {
         return $this->title;
     }
+    
+
+    /**
+     * Get description
+     *
+     * @return string
+     */
+    public function getDescription()
+    {
+    	return $this->description;
+    }
+    
+    /**
+     * Set description
+     *
+     * @return $this
+     */
+    public function setDescription($description)
+    {
+    	$this->description = $description;
+    }    
 
     /**
      * Set content

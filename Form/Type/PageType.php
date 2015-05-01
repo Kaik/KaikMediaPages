@@ -66,7 +66,9 @@ class PageType extends AbstractType
                                             'required'  => false))
             ->add('language', 'choice', array('choices'   => array('any' => 'Any', 'en' => 'English', 'pl' => 'Polish')))            
             ->add('content', 'textarea', array('required'  => false,'attr' => array(
-                                                'class' => 'tinymce'))) // Skip it if you want to use default theme))            
+                                                'class' => 'tinymce'))) // Skip it if you want to use default theme))
+            ->add('description', 'textarea', array('required'  => false,'attr' => array(
+                                                	'class' => 'tinymc'))) // Skip it if you want to use default theme))                                                            
             ->add('save', 'submit', array('label' => 'Save'));
     }
 

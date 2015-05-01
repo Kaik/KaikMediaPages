@@ -1,4 +1,4 @@
-{% include '@KaikmediaPagesModule:Common:resources.html.twig'  %}
+{% include 'KaikmediaPagesModule:Common:resources.html.twig'  %}
   {{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
   {% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'KaikmediaPagesModule:Form:radio.html.twig', 'KaikmediaPagesModule:Form:file.html.twig'] %}
 
@@ -28,6 +28,12 @@
             <p><strong>{{  p.__('Direct link')}}:</strong> /pages/about/{{ form_widget(form.urltitle, {'attr': {'class': 'simplebox input-sm'  }}) }}</p>        
         </div>
         </div>
+        <div class="list-group-item col-md-12" style="background:#eee;">
+        <h4><span class="fa fa-file"></span>
+            {{  p.__('Description')}}
+        </h4>     
+        {{ form_widget(form.description) }}
+        </div>           
         <div class="list-group-item col-md-12" style="background:#eee;">
         <h4><span class="fa fa-file"></span>
             {{  p.__('Content')}}

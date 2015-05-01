@@ -1,11 +1,12 @@
 {% include 'KaikmediaPagesModule:Common:resources.html.twig'  %}
-<div class="panel panel-transparent">
+<div class="panel">
   <div class="panel-body">
 	<div class="row" > 
 	<div class="col-md-6" > 
 	    <h1><span class="fa fa-list"></span>
-	    {{  p.__('About')}} {{ page.title }}
-</h1>	
+	    {{  __("title")}} {{ page.title }}
+		</h1>	
+		<a href="{{ path('kaikmediapagesmodule_user_about', {urltitle: 'mojeleicester'}) }}">   {{  __("Pages")}}</a>
 	</div>
 	<div class="col-md-6" > 
 
