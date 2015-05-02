@@ -111,6 +111,11 @@ class UserController extends AbstractController
             throw new AccessDeniedException();
         }
         
+        $test = \ZLanguage::getModuleDomain($this->name);
+        
+        //var_dump($test);
+        //exit(0);
+        
         // Get parameters from whatever input we need.
         $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
         $page = $this->entityManager
