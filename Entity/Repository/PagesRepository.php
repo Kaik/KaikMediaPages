@@ -112,7 +112,11 @@ class PagesRepository extends EntityRepository
        //search
         $s['search'] = isset($args['search']) && $args['search'] !== '' ? $args['search'] : false;
         $s['search_field'] = isset($args['search_field']) && $args['search_field'] !== '' ? $args['search_field'] : false;      
-       
+
+        
+        $f['language'] = isset($args['language']) && $args['language'] !== '' ? $args['language'] : false;
+        
+        
         return $this
           ->getOneOrAll($onlyone, $f, $s, $sortby, $sortorder, $page, $limit);
     }

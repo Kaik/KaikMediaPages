@@ -2,7 +2,7 @@
   {% form_theme form 'bootstrap_3_layout.html.twig' %}
 <h3>
     <span class="fa fa-wrench"></span>
-   {{  p.__('Settings')}}
+   {{  __('Settings')}}
 </h3>   
         {{ getstatusmsg() }}       
 <div class="container-fluid">
@@ -10,30 +10,30 @@
         {{ form_errors(form) }}
 <div class="col-md-12">
 <div class="col-md-6">
-         <h3>{{  p.__('General settings') }}</h3>    
+         <h3>{{  __('General settings') }}</h3>    
          <div class="col-md-6">
-            <p>{{  p.__('Items per page') }}</p>
+            <p>{{  __('Items per page') }}</p>
          </div>
          <div class="col-md-6">
              {{ form_widget(form.itemsperpage) }}
          </div> 
 </div>         
 <div class="col-md-6">
-         <h3>{{  p.__('Images settings') }}</h3>    
+         <h3>{{  __('Images settings') }}</h3>    
          <div class="col-md-6">
-            <p>{{  p.__('Images max count') }}</p>
+            <p>{{  __('Images max count') }}</p>
          </div>
          <div class="col-md-6">            
              {{ form_widget(form.images_max_count) }}
          </div>         
          <div class="col-md-6">
-            <p>{{  p.__('Images max size') }}</p>
+            <p>{{  __('Images max size') }}</p>
          </div>
          <div class="col-md-6">            
              {{ form_widget(form.images_max_size) }}
          </div>   
          <div class="col-md-6">
-            <p>{{  p.__('Images allowed extensions') }}</p>
+            <p>{{  __('Images allowed extensions') }}</p>
          </div>
          <div class="col-md-6">            
              {{ form_widget(form.images_ext_allowed) }}

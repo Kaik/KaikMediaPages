@@ -110,23 +110,50 @@ class UserController extends AbstractController
         if (!SecurityUtil::checkPermission($this->name.'::view', '::', ACCESS_READ)) {
             throw new AccessDeniedException();
         }
-        
-        $test = \ZLanguage::getModuleDomain($this->name);
-        
-        //var_dump($test);
-        //exit(0);
-        
+
         // Get parameters from whatever input we need.
         $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
         $page = $this->entityManager
                     ->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')
-                    ->getOneBy(array('urltitle' => $urltitle));
+                    ->getOneBy(array('urltitle' => $urltitle, 'language' => $this->container->get('translator')->getLocale()));
         
+        //"Done! Deleted %1$d user account." => "Gotowe! Usunięto %1$d konto użytkownika."
+        //"Done! Deleted %1$d user accounts." => "Gotowe! Usunięto %1$d konto użytkownika.|Gotowe! Usunięto %1$d konta użytkowników.|Gotowe! Usunięto %1$d kont użytkowników."
+       // $translated = $this->translator->__('Page');
+        /*
+        $translated = $this->translator->transChoice(
+        		'Done! Deleted %1$d user accounts.',
+        		2,
+        		array('%1$d' => 2),
+        		'zikula'
+        );
+        */
+        
+
+        $translated = array();
+        //m1 m2 n params domain locale
+        //default locale
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 1, array('%1$d' => 1), 'zikula');        
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 2, array('%1$d' => 2), 'zikula'); 
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 5, array('%1$d' => 5), 'zikula'); 
+        //forced locale
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 1, array('%1$d' => 1), 'zikula', 'pl');         
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 2, array('%1$d' => 2), 'zikula', 'pl'); 
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 5, array('%1$d' => 5), 'zikula', 'pl'); 
+        // default domain and locale should be not translated        
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 1, array('%1$d' => 1));        
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 2, array('%1$d' => 2));
+        $translated[] = $this->translator->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 5, array('%1$d' => 5));  
+		//zikula notation
+        $translated[] = $this->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 1, array('%1$d' => 1));
+        $translated[] = $this->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 2, array('%1$d' => 2));
+        $translated[] = $this->_fn('Done! Deleted %1$d user account.', 'Done! Deleted %1$d user accounts.', 5, array('%1$d' => 5));
+        $translated[] = $this->__('Page');
         
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
         return $this->render('KaikmediaPagesModule:User:display.html.twig', array(
             'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
-            'page' => $page));
+            'page' => $page ,'translated' => $translated, 'translator' =>$this->get('translator')));
     }    
     
 }

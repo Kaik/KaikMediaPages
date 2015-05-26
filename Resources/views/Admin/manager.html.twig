@@ -2,7 +2,7 @@
    {% form_theme form 'bootstrap_3_layout.html.twig' %}
 <h3>
     <span class="fa fa-list"></span>
-    {{  p.__('Manager')}}
+    {{  __('Manager')}}
 </h3> 
 <div class="container-fluid">    
     <div class="list-group col-lg-12">
@@ -18,7 +18,7 @@
                     {{ form_widget(form.title) }}                    
                     </div>
                     <div class="col-lg-2">
-                    <a href="{{ path('kaikmediapagesmodule_admin_modify')}}"><i class="fa fa-plus"> {{ p.__('Add new page') }}</i></a>                   
+                    <a href="{{ path('kaikmediapagesmodule_admin_modify')}}"><i class="fa fa-plus"> {{ __('Add new page') }}</i></a>                   
                     </div>                    
                     <div class="col-lg-1 pull-right text-right">                
                     {{ form_widget(form.filter, {'attr': {'class': 'btn btn-sm btn-info'}}) }}
@@ -30,13 +30,13 @@
             {{ form_end(form) }}         
         </div>
         <div class="list-group-item col-lg-12" style="background:#eee;">              
-                    <div class="col-lg-1">{{  p.__('Online')}}                
+                    <div class="col-lg-1">{{  __('Online')}}                
                     </div>                
-                    <div class="col-lg-6">{{  p.__('Title')}}                   
+                    <div class="col-lg-6">{{  __('Title')}}                   
                     </div>
-                    <div class="col-lg-3">{{  p.__('Layout')}}                    
+                    <div class="col-lg-3">{{  __('Layout')}}                    
                     </div>                
-                    <div class="col-lg-1 pull-right text-right">{{  p.__('Options')}} 
+                    <div class="col-lg-1 pull-right text-right">{{  __('Options')}} 
                     </div>     
         </div>        
     {%for page in pages %}                

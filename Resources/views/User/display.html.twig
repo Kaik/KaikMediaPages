@@ -2,14 +2,11 @@
 <div class="panel">
   <div class="panel-body">
 	<div class="row" > 
-	<div class="col-md-6" > 
-	    <h1><span class="fa fa-list"></span>
-	    {{ __('title','kaikmediapagesmodule') }} {{ page.title }}
+	<div class="title col-md-9" > 
+	    <h1>{{ page.title }}
 		</h1>	
-		<a href="{{ path('kaikmediapagesmodule_user_about', {urltitle: 'mojeleicester'}) }}">   {{  p.__("Pages", d) }}</a>
 	</div>
-	<div class="col-md-6" > 
-	{{ __("title")}} {{ p.__("page")}} {{ __("title")}}
+	<div class="menu col-md-4 pull-right" > 
 	</div>
 	</div>
 	<div class="container-fluid"> 
@@ -23,13 +20,13 @@
 	                </div>
 	              </div>  
 	           {% endfor %}              
-	        </div>      
-	    {{ page.content|raw }}               
+	        </div>      	        
+	<div class="col-md-12" > 	        
+	    {{ page.content|raw }}      
+	</div>	              
 	</div>
   </div>
 </div>
-
-
 
 
 

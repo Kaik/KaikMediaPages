@@ -106,7 +106,7 @@ class PagesQueryBuilder extends QueryBuilder {
             return $this
                             ->andWhere('p.language = :language')
                             ->setParameter('language', $language);
-        }
+        }           
     }    
 
     public function filterViews($views) {
