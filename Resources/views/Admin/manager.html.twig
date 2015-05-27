@@ -4,6 +4,7 @@
     <span class="fa fa-list"></span>
     {{  __('Manager')}}
 </h3> 
+{{ dump() }}
 <div class="container-fluid">    
     <div class="list-group col-lg-12">
         <div class="list-group-item col-lg-12"   style="background: #FFF6DF;">
@@ -34,8 +35,10 @@
                     </div>                
                     <div class="col-lg-6">{{  __('Title')}}                   
                     </div>
-                    <div class="col-lg-3">{{  __('Layout')}}                    
-                    </div>                
+                    <div class="col-lg-2">{{  __('Layout')}}                    
+                    </div> 
+                    <div class="col-lg-2">{{  __('Language')}}                    
+                    </div>                                    
                     <div class="col-lg-1 pull-right text-right">{{  __('Options')}} 
                     </div>     
         </div>        
@@ -49,9 +52,12 @@
                     <a href="{{ path('kaikmediapagesmodule_admin_display', {'id': page.id}) }}"><h4 class="list-group-item-heading">{{ page.title }}</h4></a>
                     <p class="list-group-item-text">{{ page.urltitle }}</p>                
                 </div>                    
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <p class="list-group-item-text">{{ page.layout }}</p>                
-                </div>                    
+                </div>    
+                <div class="col-lg-2">
+                    <p class="list-group-item-text">{{ page.language }}</p>                
+                </div>                                 
                 <div class="col-lg-1 pull-right text-right"><a href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}"><i class="fa fa-pencil"></i></a> 
                 </div>                     
         </div>

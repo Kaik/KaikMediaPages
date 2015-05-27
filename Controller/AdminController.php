@@ -118,7 +118,8 @@ class AdminController extends AbstractController
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
         return $this->render('KaikmediaPagesModule:Admin:manager.html.twig', array(
             'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
-            'pages' => $pages,          
+            'pages' => $pages,
+            'translator' => $this->translator,                      
             'form' => $form->createView(),            
             'thisPage' => $a['page'],
             'maxPages' => ceil($pages->count() / $a['limit'])));        

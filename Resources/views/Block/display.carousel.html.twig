@@ -1,0 +1,24 @@
+<div id="carousel_home" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    {% for page in pages %}     
+    <li data-target="#carousel_home" data-slide-to="{{ loop.index0 }}" {% if loop.index0 == 0 %} class="active" {% endif %} ></li>    
+    {% endfor %} 
+  </ol>
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner" role="listbox" ">
+    {% for page in pages %}       
+    <div class="item {% if loop.index0 == 0 %} active {% endif %}">      
+    {% if page.getPromotedImage() != null %}
+     <img class="logo-carousel" src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ page.getPromotedImage().getPath()}}" />
+     {% endif %}
+      <div class="carousel-caption">
+       <a href="{{ path('kaikmediapagesmodule_user_about', {'_locale': translator.locale, 'urltitle': page.urltitle}) }}"> <h2 class="text-left"> {{ page.title }} </h2> </a>
+        <p class="text-left">
+        {{ page.description }}
+        </p>
+      </div>
+    </div>  
+    {% endfor %}    
+  </div>
+</div>

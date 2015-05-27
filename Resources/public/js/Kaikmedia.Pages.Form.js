@@ -111,6 +111,12 @@ KaikMedia.Pages.Form = {};
         // Display the form in the page in an li, before the "Add a tag" link li
         var $newFormLi = $('<li class="col-xs-12 col-md-2 form-group-sm"></li>').append(newForm);
         $collectionHolder.find('.new').before($newFormLi);
+        $newFormLi.find('.promoted').toggleClass( "hide");
+        $newFormLi.find('.name').toggleClass( "hide");
+        $newFormLi.find('.legal').toggleClass( "hide");
+        $newFormLi.find('.description').toggleClass( "hide");
+        $newFormLi.find('.menu').toggleClass( "hide");
+       // $newFormLi.find('.name').toggleClass( "hide");
     }    
 
     $(document).ready(function() {

@@ -46,7 +46,7 @@
         {% macro information_prototype(image) %}
             <div class="col-sm-12 thumbnail">
                 {% if image.path.vars.value %}        
-                <img src="{{ aprequest.scheme ~ '://' ~ aprequest.host ~ '/web/uploads/documents/' ~ image.path.vars.value}}" />
+                <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ image.path.vars.value}}" />
                 {% endif %}
                 <div class="row promoted {% if image.path.vars.value %} {% else %} hide {% endif %}">
                 <div class="col-md-12">

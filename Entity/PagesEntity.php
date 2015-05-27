@@ -727,4 +727,18 @@ class PagesEntity extends EntityAccess
     {
         $this->deletedBy = $deletedBy;
     }
+    
+    /**
+     * Get defaultimage
+     *
+     * @return integer
+     */
+    public function getPromotedImage()
+    {    
+        foreach ($this->images as $image) {            
+            if ($image->getPromoted()){
+              return $image;  
+            }
+        }  
+    }     
 }
