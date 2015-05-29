@@ -73,8 +73,17 @@ class PagesListBlock extends AbstractBlockController
         if (empty($vars['numitems'])) {
             $vars['numitems'] = 5;
         }
+        
         if (empty($vars['template'])) {
             $vars['template'] = 'carousel';
+        }  
+
+        if (empty($vars['show_ids'])) {
+            $vars['show_ids'] = false;
+        }        
+
+        if (empty($vars['show_titles'])) {
+            $vars['show_titles'] = false;
         }        
         
         // Check if the module is available.
@@ -84,7 +93,11 @@ class PagesListBlock extends AbstractBlockController
         //var_dump($locale);
         //exit(0);
         $a = array();
-        
+        if ($vars['show_titles']){
+        $a['urltitle'] = explode(',', $vars['show_titles']);
+        $a['sortby'] = 'id';
+        $a['sortorder'] = 'ASC';
+        }
         $a['page'] = 1;
         $a['limit'] = $vars['numitems'];
         $a['title'] = '';
@@ -115,6 +128,8 @@ class PagesListBlock extends AbstractBlockController
         // Defaults
         $vars['template'] = !empty($vars['template']) ? $vars['template'] : 'list';
         $vars['numitems'] = !empty($vars['numitems']) ? $vars['numitems'] : 5;
+        $vars['show_ids'] = !empty($vars['show_ids']) ? $vars['show_ids'] : ''; 
+        $vars['show_titles'] = !empty($vars['show_titles']) ? $vars['show_titles'] : '';               
         return $this->render('KaikmediaPagesModule:Block:modify.list.html.twig', $vars)->getContent();
     }
     /**
@@ -131,6 +146,8 @@ class PagesListBlock extends AbstractBlockController
         // alter the corresponding variable
         $vars['template'] = $this->get('request')->request->get('template', null);
         $vars['numitems'] = $this->get('request')->request->get('numitems', null);
+        $vars['show_ids'] = $this->get('request')->request->get('show_ids', null);
+        $vars['show_titles'] = $this->get('request')->request->get('show_titles', null);        
         // write back the new contents
         $blockInfo['content'] = BlockUtil::varsToContent($vars);
         return $blockInfo;

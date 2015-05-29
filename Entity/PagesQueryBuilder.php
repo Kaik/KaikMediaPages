@@ -19,19 +19,28 @@ class PagesQueryBuilder extends QueryBuilder {
     
     
     public function filterId($id) {
-        if ($id !== false) {
+        if (is_array($id)) {
             return $this
-                            ->andWhere('p.id = :id')
-                            ->setParameter('id', $id);
-        }
+            ->andWhere('p.id IN (:id)')
+            ->setParameter('id', $id);
+        } elseif ($id !== false){
+            return $this
+            ->andWhere('p.id = :id')
+            ->setParameter('id', $id);
+        }                
     }
     
     public function filterUrltitle($urltitle) {
-        if ($urltitle !== false) {
+
+        if (is_array($urltitle)) {
             return $this
-                            ->andWhere('p.urltitle = :urltitle')
-                            ->setParameter('urltitle', $urltitle);
-        }
+            ->andWhere('p.urltitle IN (:urltitle)')
+            ->setParameter('urltitle', $urltitle);
+        } elseif ($urltitle !== false) {
+            return $this
+            ->andWhere('p.urltitle = :urltitle')
+            ->setParameter('urltitle', $urltitle);
+        }        
     }    
 
     public function filterDepot($depot) {

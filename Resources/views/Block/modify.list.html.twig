@@ -3,6 +3,16 @@
     <div class="col-sm-9">
         <input id="pages_numitems" type="text" class="form-control" name="numitems" value="{{ numitems }}" maxlength="5" />
     </div>
+
+    <label class="col-sm-3 control-label" for="show_ids">{{ __('Show ids') }}{# domain='module_pages' #}</label>
+    <div class="col-sm-9">
+        <input id="show_ids" type="text" class="form-control" name="show_ids" value="{{ show_ids }}" maxlength="100" />
+    </div>       
+ 
+    <label class="col-sm-3 control-label" for="show_titles">{{ __('Show titles') }}{# domain='module_pages' #}</label>
+    <div class="col-sm-9">
+        <input id="show_titls" type="text" class="form-control" name="show_titles" value="{{ show_titles }}" maxlength="100" />
+    </div>  
     
     <label class="col-sm-3 control-label" for="pages_template">{{ __('Template') }}{# domain='module_pages' #}</label>
     <div class="col-sm-9">
