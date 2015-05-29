@@ -7,7 +7,19 @@
 		</h1>	
 	</div>
 	<div class="menu col-md-4 pull-right" > 
-	</div>
+	{%  if ZUserLoggedIn %}
+      <div class="dropdown">
+         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+          {{ __('Options')}}
+         <span class="caret"></span>
+         </button>
+         <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+         <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}">{{ __('Edit')}}</a></li>
+         <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>
+         </ul>
+      </div>
+    {% endif %}
+    </div>     	
 	</div>
 	<div> 
 	       <div class="col-md-12" >          

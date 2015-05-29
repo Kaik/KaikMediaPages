@@ -740,5 +740,19 @@ class PagesEntity extends EntityAccess
               return $image;  
             }
         }  
-    }     
+    } 
+    
+    /**
+     * Get icon image
+     *
+     * @return integer
+     */
+    public function getIconImage()
+    {
+        foreach ($this->images as $image) {
+            if ($image->getName() == 'icon'){
+                return $image;
+            }
+        }
+    }        
 }
