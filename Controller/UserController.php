@@ -87,7 +87,7 @@ class UserController extends AbstractController
     }
     
     /**
-     * @Route("/about/{urltitle}")
+     * @Route("/about/{urltitle}", options={"zkNoBundlePrefix"=1})
      * 
      * Display item.
      *
