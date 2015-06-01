@@ -86,31 +86,43 @@ class PagesListBlock extends AbstractBlockController
             $vars['show_titles'] = false;
         }        
         
-        // Check if the module is available.
         if (!ModUtil::available($this->name)) {
             return false;
         }
-        //var_dump($locale);
-        //exit(0);
+
         $a = array();
-        if ($vars['show_titles']){
-        $a['urltitle'] = explode(',', $vars['show_titles']);
-        $a['sortby'] = 'id';
-        $a['sortorder'] = 'ASC';
-        }
+        $pages = array();
         $a['page'] = 1;
         $a['limit'] = $vars['numitems'];
         $a['title'] = '';
         $a['online'] = 1;
         $a['language'] = $locale;
-        // Get parameters from whatever input we need.
-        $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getAll($a); 
+        $a['sortby'] = 'id';
+        $a['sortorder'] = 'ASC';
+                                
+        $repo = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity');
                
+        if ($vars['show_titles']){
+            $titles_arr = explode(',', $vars['show_titles']);                       
+            foreach($titles_arr as $title){
+                $a['urltitle'] = $title;
+                $pages[] = $repo->getOneBy($a);
+            }       
+                 
+            $pages = array_filter($pages);                        
+            $maxPages = 5;            
+            
+        }else{            
+            // Get parameters from whatever input we need.
+            $pages = $repo->getAll($a);       
+            $maxPages = ceil($pages->count() / $a['limit']);    
+        }
+
         $blockInfo['content'] = $this->render('KaikmediaPagesModule:Block:display.'. $vars['template'] .'.html.twig',
              array('pages' => $pages,
                    'thisPage' => $a['page'],
                    'translator' => $this->translator,
-                   'maxPages' => ceil($pages->count() / $a['limit'])))->getContent();
+                   'maxPages' => $maxPages))->getContent();
              
         return BlockUtil::themeBlock($blockInfo);
     }
