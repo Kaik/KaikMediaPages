@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright (c) KaikMedia.com 2014
+ */
 namespace Kaikmedia\PagesModule\Entity;
 
 use ServiceUtil;
@@ -77,7 +80,6 @@ class PagesEntity extends EntityAccess
 
     /**
      * The author uid
-     *
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="author", referencedColumnName="uid")
      */
@@ -87,11 +89,11 @@ class PagesEntity extends EntityAccess
      * @ORM\Column(type="string", length=150)
      */
     private $title;
-    
+
     /**
      * @ORM\Column(type="text")
      */
-    private $description;    
+    private $description;
 
     /**
      * @ORM\Column(type="text")
@@ -116,7 +118,6 @@ class PagesEntity extends EntityAccess
 
     /**
      * The user id of the creator of the category
-     *
      * @Gedmo\Blameable(on="create")
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="createdBy", referencedColumnName="uid")
@@ -131,7 +132,6 @@ class PagesEntity extends EntityAccess
 
     /**
      * The user id of the last updater of the category
-     *
      * @Gedmo\Blameable(on="update")
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="updatedBy", referencedColumnName="uid")
@@ -176,7 +176,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get id
-     *
+     * 
      * @return integer
      */
     public function getId()
@@ -186,7 +186,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set urltitle
-     *
+     * 
      * @param string $urltitle            
      * @return Pages
      */
@@ -199,7 +199,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get urltitle
-     *
+     * 
      * @return string
      */
     public function getUrltitle()
@@ -209,7 +209,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set online
-     *
+     * 
      * @param boolean $online            
      * @return Pages
      */
@@ -222,7 +222,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get online
-     *
+     * 
      * @return boolean
      */
     public function getOnline()
@@ -232,7 +232,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set depot
-     *
+     * 
      * @param boolean $depot            
      * @return Pages
      */
@@ -245,7 +245,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get depot
-     *
+     * 
      * @return boolean
      */
     public function getDepot()
@@ -255,7 +255,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set revision
-     *
+     * 
      * @param integer $revision            
      * @return Pages
      */
@@ -268,7 +268,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get revision
-     *
+     * 
      * @return integer
      */
     public function getRevision()
@@ -278,7 +278,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set inmenu
-     *
+     * 
      * @param boolean $inmenu            
      * @return Pages
      */
@@ -291,7 +291,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get inmenu
-     *
+     * 
      * @return boolean
      */
     public function getInmenu()
@@ -301,7 +301,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set inlist
-     *
+     * 
      * @param boolean $inlist            
      * @return Pages
      */
@@ -314,7 +314,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get inlist
-     *
+     * 
      * @return boolean
      */
     public function getInlist()
@@ -324,7 +324,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set published
-     *
+     * 
      * @param \DateTime $published            
      * @return Pages
      */
@@ -337,7 +337,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get published
-     *
+     * 
      * @return \DateTime
      */
     public function getPublishedAt()
@@ -347,7 +347,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set expired
-     *
+     * 
      * @param \DateTime $expired            
      * @return Pages
      */
@@ -360,7 +360,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get expired
-     *
+     * 
      * @return \DateTime
      */
     public function getExpiredAt()
@@ -370,7 +370,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set language
-     *
+     * 
      * @param string $language            
      * @return Pages
      */
@@ -383,7 +383,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get language
-     *
+     * 
      * @return string
      */
     public function getLanguage()
@@ -393,7 +393,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set layout
-     *
+     * 
      * @param string $layout            
      * @return Pages
      */
@@ -406,7 +406,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get layout
-     *
+     * 
      * @return string
      */
     public function getLayout()
@@ -416,7 +416,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set views
-     *
+     * 
      * @param integer $views            
      * @return Pages
      */
@@ -429,7 +429,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get views
-     *
+     * 
      * @return integer
      */
     public function getViews()
@@ -439,7 +439,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set author
-     *
+     * 
      * @param integer $author            
      * @return Pages
      */
@@ -452,7 +452,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get author
-     *
+     * 
      * @return integer
      */
     public function getAuthor()
@@ -462,7 +462,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set title
-     *
+     * 
      * @param string $title            
      * @return Pages
      */
@@ -475,38 +475,37 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get title
-     *
+     * 
      * @return string
      */
     public function getTitle()
     {
         return $this->title;
     }
-    
 
     /**
      * Get description
-     *
+     * 
      * @return string
      */
     public function getDescription()
     {
-    	return $this->description;
+        return $this->description;
     }
-    
+
     /**
      * Set description
-     *
+     * 
      * @return $this
      */
     public function setDescription($description)
     {
-    	$this->description = $description;
-    }    
+        $this->description = $description;
+    }
 
     /**
      * Set content
-     *
+     * 
      * @param string $content            
      * @return Pages
      */
@@ -519,7 +518,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get content
-     *
+     * 
      * @return string
      */
     public function getContent()
@@ -529,13 +528,13 @@ class PagesEntity extends EntityAccess
 
     /**
      * Add image
-     *
+     * 
      * @param \Kaikmedia\PagesModule\Entity\ImageEntity $images            
      * @return page
      */
     public function addImage(Image $image)
     {
-        if ($image->isEmpty()){
+        if ($image->isEmpty()) {
             return;
         }
         
@@ -554,18 +553,17 @@ class PagesEntity extends EntityAccess
 
     /**
      * Remove images
-     *
+     * 
      * @param \Kaikmedia\PagesModule\Entity\Image $images            
      */
     public function removeImage(Image $image)
     {
         $this->images->removeElement($image);
-
     }
 
     /**
      * Get images
-     *
+     * 
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getImages()
@@ -575,7 +573,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set obj_status
-     *
+     * 
      * @param string $obj_status            
      * @return Pages
      */
@@ -588,7 +586,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get obj_status
-     *
+     * 
      * @return string
      */
     public function getStatus()
@@ -598,7 +596,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set createdAt
-     *
+     * 
      * @param \DateTime $createdAt            
      * @return Pages
      */
@@ -611,7 +609,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get createdAt
-     *
+     * 
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -621,7 +619,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set createdBy
-     *
+     * 
      * @param integer $createdBy            
      * @return Pages
      */
@@ -634,7 +632,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get createdBy
-     *
+     * 
      * @return integer
      */
     public function getCreatedBy()
@@ -644,7 +642,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set updatedAt
-     *
+     * 
      * @param \DateTime $updatedAt            
      * @return Pages
      */
@@ -657,7 +655,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get updatedAt
-     *
+     * 
      * @return \DateTime
      */
     public function getUpdatedAt()
@@ -667,7 +665,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set updatedBy
-     *
+     * 
      * @param integer $updatedBy            
      * @return Pages
      */
@@ -680,7 +678,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get updatedBy
-     *
+     * 
      * @return integer
      */
     public function getUpdatedBy()
@@ -690,7 +688,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get delete status
-     *
+     * 
      * @return DateTime
      */
     public function getDeletedAt()
@@ -700,7 +698,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Set deleted at status
-     *
+     * 
      * @return integer
      */
     public function setDeletedAt($deletedAt)
@@ -710,7 +708,7 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get deleted by status
-     *
+     * 
      * @return integer
      */
     public function getDeletedBy()
@@ -720,39 +718,39 @@ class PagesEntity extends EntityAccess
 
     /**
      * Get deleted by
-     *
+     * 
      * @return integer
      */
     public function setDeletedBy($deletedBy)
     {
         $this->deletedBy = $deletedBy;
     }
-    
+
     /**
      * Get defaultimage
-     *
+     * 
      * @return integer
      */
     public function getPromotedImage()
-    {    
-        foreach ($this->images as $image) {            
-            if ($image->getPromoted()){
-              return $image;  
+    {
+        foreach ($this->images as $image) {
+            if ($image->getPromoted()) {
+                return $image;
             }
-        }  
-    } 
-    
+        }
+    }
+
     /**
      * Get icon image
-     *
+     * 
      * @return integer
      */
     public function getIconImage()
     {
         foreach ($this->images as $image) {
-            if ($image->getName() == 'icon'){
+            if ($image->getName() == 'icon') {
                 return $image;
             }
         }
-    }        
+    }
 }

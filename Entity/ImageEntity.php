@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright (c) KaikMedia.com 2014
+ */
 namespace Kaikmedia\PagesModule\Entity;
 
 use ServiceUtil;
@@ -9,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Image
- *
  * @ORM\Table(name="kmpages_images")
  * @ORM\Entity(repositoryClass="Kaikmedia\PagesModule\Entity\ImagesRepository")
  * @ORM\HasLifecycleCallbacks
@@ -58,7 +60,6 @@ class ImageEntity
 
     /**
      * The author uid
-     *
      * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="author", referencedColumnName="uid")
      */
@@ -78,7 +79,7 @@ class ImageEntity
 
     /**
      * Get id
-     *
+     * 
      * @return integer
      */
     public function getId()
@@ -88,7 +89,7 @@ class ImageEntity
 
     /**
      * Set name
-     *
+     * 
      * @param string $name            
      * @return Image
      */
@@ -101,7 +102,7 @@ class ImageEntity
 
     /**
      * Get name
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -111,7 +112,7 @@ class ImageEntity
 
     /**
      * Get description
-     *
+     * 
      * @return string
      */
     public function getDescription()
@@ -121,7 +122,7 @@ class ImageEntity
 
     /**
      * Set description
-     *
+     * 
      * @return $this
      */
     public function setDescription($description)
@@ -131,7 +132,7 @@ class ImageEntity
 
     /**
      * Set page
-     *
+     * 
      * @param \Kaikmedia\PagesModule\Entity\PagesEntity $page            
      * @return Image
      */
@@ -144,7 +145,7 @@ class ImageEntity
 
     /**
      * Get page
-     *
+     * 
      * @return \Kaikmedia\PagesModule\Entity\PagesEntity
      */
     public function getPage()
@@ -165,7 +166,7 @@ class ImageEntity
 
     /**
      * Set author
-     *
+     * 
      * @param integer $author            
      * @return Pages
      */
@@ -178,7 +179,7 @@ class ImageEntity
 
     /**
      * Get author
-     *
+     * 
      * @return integer
      */
     public function getAuthor()
@@ -210,7 +211,7 @@ class ImageEntity
 
     /**
      * Set path
-     *
+     * 
      * @param string $path            
      * @return Image
      */
@@ -223,7 +224,7 @@ class ImageEntity
 
     /**
      * Get path
-     *
+     * 
      * @return string
      */
     public function getPath()
@@ -265,8 +266,7 @@ class ImageEntity
             'uid' => UserUtil::getVar('uid')
         ));
         $this->publicdomian = 0;
-        $this->promoted = 0;        
-
+        $this->promoted = 0;
     }
 
     /**
@@ -285,7 +285,6 @@ class ImageEntity
             $this->name = $this->file->getClientOriginalName();
         }
     }
-        
 
     /**
      * @ORM\PostPersist()
@@ -296,7 +295,6 @@ class ImageEntity
         if (null === $this->file) {
             return;
         }
-        
         
         // if there is an error when moving the file, an exception will
         // be automatically thrown by move(). This will properly prevent
@@ -315,9 +313,8 @@ class ImageEntity
             unlink($file);
         }
     }
-    
+
     /**
-     * 
      */
     public function isEmpty()
     {

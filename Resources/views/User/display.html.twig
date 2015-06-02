@@ -1,12 +1,12 @@
 {% include 'KaikmediaPagesModule:Common:resources.html.twig'  %}
 <div class="panel">
-  <div class="panel-body">
+  <div class="panel-body km-podstrona">
 	<div > 
 	<div class="title col-md-9" > 
 	    <h1>{{ page.title }}
 		</h1>	
 	</div>
-	<div class="menu col-md-4 pull-right" > 
+	<div class="menu col-md-2 pull-right text-right" > 
 	{%  if ZUserLoggedIn %}
       <div class="dropdown">
          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
@@ -21,24 +21,17 @@
     {% endif %}
     </div>     	
 	</div>
-	<div> 
-	       <div class="col-md-12" >          
-	           {%for image in page.images %}
-	              <div class="col-md-4">
-	                <div class="col-md-12 thumbnail">
-	                {% if image.path %}        
-	                <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ image.path}}" />
-	                {% endif %}
-	                </div>
-	              </div>  
-	           {% endfor %}              
-	        </div>      	        
+	<div>     	        
 	<div class="col-md-12" > 	        
 	    {{ page.content|raw }}      
 	</div>	              
 	</div>
+			<div class="col-md-12 text-center services-bottom">
+				<h2>{% trans from "kaikmediakmtheme" %}Want to contact us?{% endtrans %}
+					<a class="btn btn-primary btn-info btn-cta" href="{{  path('kaikmediakmdmodule_messages_contact') }}">
+                    {% trans from "kaikmediakmtheme" %}Why not by sending a message?{% endtrans %}
+                    </a>
+				</h2>
+			</div>	
   </div>
 </div>
-
-
-
