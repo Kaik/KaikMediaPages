@@ -38,8 +38,27 @@ KaikMedia.Pages.Form = {};
 	             "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
 	             "save table contextmenu directionality emoticons template paste textcolor"
 	       ],
+	       menubar: false,
 	       content_css: "css/content.css",
-	       toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | l      ink image | print preview media fullpage | forecolor backcolor emoticons", 
+	       toolbar1: "gallery   | undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link charmap table image | print preview",      
+	       setup: function(editor) {
+	           editor.addButton('gallery', {
+	               text: 'Add media',
+	               icon: false,
+	               onclick: function() {
+	            	// Opens a new dialog with the file.htm file and the size 320x240
+	            	// It also adds a custom parameter this can be retrieved by using tinyMCEPopup.getWindowArg inside the dialog.
+	            	tinymce.activeEditor.windowManager.open({
+	            	   url: 'file.htm',
+	            	   width: 920,
+	            	   height: 650
+	            	}, {
+	            	   custom_param: 1
+	            	});
+	               }
+	           });
+	       },
+	         
 	       style_formats: [
 	            {title: 'Bold text', inline: 'b'},
 	            {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
