@@ -41,6 +41,7 @@ class ImageType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
+            'isXmlHttpRequest' => false,
             'data_class' => 'Kaikmedia\PagesModule\Entity\ImageEntity'
         ));
     }

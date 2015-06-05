@@ -280,6 +280,7 @@ class ImageEntity
         }
         if (null !== $this->file) {
             // do whatever you want to generate a unique name
+
             $filename = sha1(uniqid(mt_rand(), true));
             $this->path = $filename . '.' . $this->file->guessExtension();
             $this->name = $this->file->getClientOriginalName();
@@ -295,7 +296,7 @@ class ImageEntity
         if (null === $this->file) {
             return;
         }
-        
+
         // if there is an error when moving the file, an exception will
         // be automatically thrown by move(). This will properly prevent
         // the entity from being persisted to the database on error
@@ -324,4 +325,22 @@ class ImageEntity
         
         return false;
     }
+    
+    /**
+     */
+    public function toArray()
+    {    
+        $array =array();
+        $array['id'] = $this->id;
+        $array['page_id'] = $this->page;
+        $array['name'] = $this->name;
+        $array['description'] = $this->description;
+        $array['legal'] = $this->legal;
+        $array['publicdomain'] = $this->publicdomain;
+        $array['promoted'] = $this->promoted;
+        $array['path'] = $this->path;
+        $array['author'] = $this->author;
+        $array['absolute_path'] = $this->getUploadDir().'/'.$this->path;
+        return $array;
+    }    
 }

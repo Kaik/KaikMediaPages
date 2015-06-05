@@ -15,4 +15,8 @@ services:
     pages.form.type.pagesfilter:
         class: Kaikmedia\PagesModule\Form\Type\PagesFilterType
         tags:
-            - { name: form.type, alias: pagesfilterform }            
+            - { name: form.type, alias: pagesfilterform }
+    pages.form.type.images:
+        class: Kaikmedia\PagesModule\Form\Type\ImageType
+        tags:
+            - { name: form.type, alias: images }                        

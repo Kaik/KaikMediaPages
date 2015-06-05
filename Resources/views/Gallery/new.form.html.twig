@@ -1,0 +1,46 @@
+{{ form_start(form) }}
+{{ form_errors(form) }}
+         <a href="#" class="thumbnail">
+                    {% if file %}        
+                    <img src="{*  *}" />
+                    {% else %}
+                    
+                    {% endif %}
+         </a>
+         <div class="upload_icon col-sm-2"><i class="fa fa-upload fa-2x"> </i></div>   
+                                     
+         <div class="promoted row {% if file %} {% else %}  {% endif %}">
+                        <div class="col-md-12">
+                         {{ form_widget(form.promoted, { 'label_attr': {'class': 'checkbox-inline'} }) }} 
+                        </div>
+         </div>      
+                                
+         <div class="upload_form col-sm-6 {% if file %}  {% endif %}">{{ form_widget(form.file) }}</div>   
+                                            
+         <div class="path col-sm-12">{{ form_widget(form.path) }}</div>                 
+                    
+         <div class="name row {% if file %} {% else %}  {% endif %}">
+                       {{ form_label(form.name, 'Name', { 'label_attr': {'class': 'control-label col-md-2'} }) }} 
+                        <div class="col-md-10">
+                        {{ form_widget(form.name,{ 'attr': {'class': 'simplebox'} }) }}
+                        </div>
+         </div>
+                    
+         <div class="legal row {% if file %} {% else %}  {% endif %}">
+                        {{ form_label(form.legal, 'Credits', { 'label_attr': {'class': 'control-label col-md-2'} }) }}                
+                        <div class="col-md-10">
+                        {{ form_widget(form.legal,{ 'attr': {'class': 'simplebox'} }) }}
+                        {{ form_widget(form.publicdomain, { 'label_attr': {'class': 'checkbox-inline'} }) }} 
+                        </div>
+         </div>            
+                        
+         <div class="description row {% if file %} {% else %}  {% endif %}">
+                    {{ form_label(form.description, 'Desc', { 'label_attr': {'class': 'control-label col-md-2'} }) }} 
+                    <div class="col-md-10">
+                    {{ form_widget(form.description,{ 'attr': {'class': 'simplebox'} }) }}
+                    </div>
+         </div>
+                    
+         <div class="menu col-sm-12 btn-group btn-group-justified" role="group">
+         </div>                                                                     
+{{ form_end(form) }}

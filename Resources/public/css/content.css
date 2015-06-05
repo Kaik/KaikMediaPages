@@ -1,0 +1,41 @@
+body {
+    margin-top: 0px;
+    font-family: 'Cambay', sans-serif;
+    color:#5e5e5e;
+    line-height:1.5;
+    font-size:18px;  
+}
+
+#body_home {
+    margin-top: 0px;
+    font-family: 'Cambay', sans-serif;
+    color:#5e5e5e;
+    line-height:1.7;
+    font-size:18px;  
+}
+
+h1 {
+	font-family: 'Rajdhani', 'Cambay', sans-serif;
+	color:#282828;
+	font-size: 60px;
+	font-weight: 900;
+}
+
+h2 {
+	font-family: 'Rajdhani', 'Cambay', sans-serif;
+	color:#1e6858;
+	font-size: 30px;
+	font-weight: 900;
+}
+
+h3 {
+	font-family: 'Rajdhani', 'Cambay', sans-serif;
+	color:#5e5e5e;
+	font-size: 22px;
+	font-weight: 900;
+}
+
+p.text-left {
+	font-size:21px;
+	
+}

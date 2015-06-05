@@ -1,0 +1,104 @@
+{% macro information_prototype(image) %}
+         <input type="hidden" name="upload_token" value="{{ csrf_token('images') }}"> 
+
+         <a href="#" class="thumbnail">
+             {% if image.path.vars.value %}        
+             <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ image.path.vars.value}}" />
+             {% else %}
+             {% endif %}
+         </a>
+         <div class="menu">
+         <a href="#" class="expand"><i class="fa fa-pencil-square fa-2x"> </i> </a>   
+         </div>
+         <div class="upload_icon col-sm-2 {% if image.path.vars.value %} hide {% endif %}"><i class="fa fa-upload fa-2x"> </i></div>   
+         <div class="upload_file col-sm-10 {% if image.path.vars.value %} hide {% endif %}">{{ form_widget(image.file) }}</div>            
+         
+         
+         <div class="image_data col-xs-8 hide">
+         <div class="name row {% if image.path.vars.value %} {% else %} {% endif %}">
+                       {{ form_label(image.name, 'Name', { 'label_attr': {'class': 'control-label col-md-2'} }) }} 
+                        <div class="col-md-10">
+                        {{ form_widget(image.name,{ 'attr': {'class': 'simplebox'} }) }}
+                        </div>
+         </div>
+         <div class="path row">
+                       {{ form_label(image.path, 'Path', { 'label_attr': {'class': 'control-label col-md-2'} }) }} 
+                        <div class="col-md-10">
+                        {{ form_widget(image.path,{ 'attr': {'class': 'simplebox'} }) }}
+                        </div>                            
+         </div>                                    
+         <div class="description row{% if image.path.vars.value %} {% else %} {% endif %}">
+                    {{ form_label(image.description, 'Desc', { 'label_attr': {'class': 'control-label col-md-2'} }) }} 
+                    <div class="col-md-10">
+                    {{ form_widget(image.description,{ 'attr': {'class': 'simplebox'} }) }}
+                    </div>
+         </div>
+         <div class="legal row {% if image.path.vars.value %} {% else %} {% endif %}">
+                        {{ form_label(image.legal, 'Credits', { 'label_attr': {'class': 'control-label col-md-2'} }) }}                
+                        <div class="col-md-10">
+                        {{ form_widget(image.legal,{ 'attr': {'class': 'simplebox'} }) }}
+                        </div>
+         </div>         
+         <div class="publicdomain row {% if image.path.vars.value %} {% else %} {% endif %}">
+                        {{ form_label(image.publicdomain, 'Public', { 'label_attr': {'class': 'control-label col-md-2'} }) }}                
+                        <div class="col-md-10">
+                        {{ form_widget(image.publicdomain, { 'label_attr': {'class': 'checkbox-inline'} }) }} 
+                        </div>
+         </div>           
+                                 
+         <div class="promoted row {% if image.path.vars.value %} {% else %} {% endif %}">
+                        <div class="col-md-12">
+                         {{ form_widget(image.promoted, { 'label_attr': {'class': 'checkbox-inline'} }) }} 
+                        </div>
+         </div>      
+         </div>                                                                     
+{% endmacro %}
+<div id="gallery" class="modal fade">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header" style="background:#E4F2FF;">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title"><span class="fa fa-image"></span> {{  __('Gallery')}}</h4>
+          </div>
+          <div class="modal-body">  
+          <div class="row hide" style="background:#E4F2FF;  margin-top: -15px;">  
+          <div class="col-xs-3"><h5>{{ __('Folder') }}</h5></div>
+          <div class="col-xs-9"><h5>{{  __('This page images') }}</h5></div>
+          </div>
+          
+                    
+          <div class="row"> 
+          <div id="gallery-left-col" class="col-xs-3" style="padding-top:15px;">  
+          <ul class="nav nav-pills">
+                <li role="presentation" class="active">           
+                    <a id="page_gallery" href="#"><i class="fa fa-file"> </i> {{  __('This page images') }}</a>
+                </li> 
+                <li role="presentation">           
+                    <a id="public_gallery" href="#"><i class="fa fa-cloud"> </i> {{  __('Public gallery') }}</a>
+                </li> 
+                <li role="presentation">           
+                    <a id="user_gallery" href="#"><i class="fa fa-user"> </i> {{  __('My uploads') }}</a>
+                </li>   
+                <li role="presentation">           
+                    <a id="addnew" href="#"><i class="fa fa-upload"> </i> {{  __('Upload image') }}</a>
+                </li>                 
+          </ul>              
+          </div>                              
+          <div id="gallery-right-col" class="col-xs-9" style="padding-top:15px;overflow-x:hidden;overflow-y: auto; height: 600px;">         
+            <ul id="page_images_list" class="images list-unstyled" data-prototype="{{ _self.information_prototype(form.images.vars.prototype)|e }}">       
+            {# iterate over each existing tag and render its only field: name #}
+            {% for image in form.images %}
+                <li class="gallery_item col-xs-4 col-md-3 form-group-sm">           
+                    {{ _self.information_prototype(image) }}
+                </li>
+             {% endfor %}
+  
+            </ul>
+            </div>
+          </div></div>         
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{  __('Done') }}</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal --> 
