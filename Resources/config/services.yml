@@ -19,4 +19,5 @@ services:
     pages.form.type.images:
         class: Kaikmedia\PagesModule\Form\Type\ImageType
         tags:
-            - { name: form.type, alias: images }                        
+            - { name: form.type, alias: images }
+            
