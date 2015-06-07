@@ -20,7 +20,7 @@ use Zikula\Core\Event\GenericEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route; // used in annotations - do not remove
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method; // used in annotations - do not remove
 use Symfony\Component\Routing\RouterInterface;
-// use Kaikmedia\PagesModule\Entity\PagesEntity as Page;
+
 class UserController extends AbstractController
 {
 
@@ -37,76 +37,53 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/abouts")
-     * Display item.
+     * @Route("/view/{page}")
      * 
-     * @param Request $request
-     *            Parameters passed via GET:
-     *            --------------------------------------------------
-     *            numeric uid The user account id (uid) of the user for whom to display profile information; optional, ignored if uname is supplied, if not provided
-     *            and if uname is not supplied then defaults to the current user.
-     *            string uname The user name of the user for whom to display profile information; optional, if not supplied, then uid is used to determine the user.
-     *            string page The name of the Profile "page" (view template) to display; optional, if not provided then the standard view template is used.
-     * @return RedirectResponse|string The rendered template output.
+     * Display pages list.
      * @throws AccessDeniedException on failed permission check
      */
-    public function aboutsAction(Request $request)
+    public function viewAction(Request $request, $page)
     {
         // Security check
         if (! SecurityUtil::checkPermission($this->name . '::view', '::', ACCESS_READ)) {
             throw new AccessDeniedException();
         }
+        
         $a = array();
-        $a['page'] = 1;
+        $a['page'] = $page;
         $a['limit'] = 10;
-        $a['title'] = '';
         $a['online'] = 1;
         
-        // Get parameters from whatever input we need.
-        $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
-        $pages = $this->entityManager->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getAll($a);
+        $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getAll($a);
         
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
-        return $this->render('KaikmediaPagesModule:User:list.html.twig', array(
-            'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
-            'pages' => $pages,
-            'thisPage' => $a['page'],
-            'maxPages' => ceil($pages->count() / $a['limit'])
+        
+        return $this->render('KaikmediaPagesModule:User:view.html.twig', array(
+            'pages' => $pages,'thisPage' => $a['page'],'maxPages' => ceil($pages->count() / $a['limit'])
         ));
     }
 
     /**
-     * @Route("/about/{urltitle}", options={"zkNoBundlePrefix"=1})
+     * @Route("/display/{urltitle}", options={"zkNoBundlePrefix"=1})
      * Display item.
      * 
-     * @param Request $request
-     *            Parameters passed via GET:
-     *            --------------------------------------------------
-     *            numeric uid The user account id (uid) of the user for whom to display profile information; optional, ignored if uname is supplied, if not provided
-     *            and if uname is not supplied then defaults to the current user.
-     *            string uname The user name of the user for whom to display profile information; optional, if not supplied, then uid is used to determine the user.
-     *            string page The name of the Profile "page" (view template) to display; optional, if not provided then the standard view template is used.
-     * @return RedirectResponse|string The rendered template output.
      * @throws AccessDeniedException on failed permission check
      */
-    public function aboutAction(Request $request, $urltitle)
+    public function displayAction(Request $request, $urltitle)
     {
         // Security check
         if (! SecurityUtil::checkPermission($this->name . '::view', '::', ACCESS_READ)) {
             throw new AccessDeniedException();
         }
-        
-        // Get parameters from whatever input we need.
-        $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
-        $page = $this->entityManager->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
-            'urltitle' => $urltitle,
-            'language' => $this->container->get('translator')
+
+        $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
+            'urltitle' => $urltitle,'language' => $this->container->get('translator')
                 ->getLocale()
         ));
         
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
+        
         return $this->render('KaikmediaPagesModule:User:display.html.twig', array(
-            'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
             'page' => $page
         ));
     }

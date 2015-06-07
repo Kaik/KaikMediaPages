@@ -26,22 +26,13 @@ class AdminApi extends \Zikula_AbstractApi
         $links = array();
         if (SecurityUtil::checkPermission('KaikmediaPagesModule::', '::', ACCESS_ADMIN)) {
             $links[] = array(
-                'url' => $this->get('router')->generate('kaikmediapagesmodule_admin_manager'),
-                'text' => $this->__('Manager'),
-                'title' => $this->__('Here you can manage your messages database'),
-                'icon' => 'list'
+                'url' => $this->get('router')->generate('kaikmediapagesmodule_admin_manager'),'text' => $this->__('Manager'),'title' => $this->__('Here you can manage your messages database'),'icon' => 'list'
             );
             $links[] = array(
-                'url' => $this->get('router')->generate('kaikmediapagesmodule_admin_modify'),
-                'text' => $this->__('Add new page'),
-                'title' => $this->__('Add new page'),
-                'icon' => 'plus'
+                'url' => $this->get('router')->generate('kaikmediapagesmodule_admin_modify'),'text' => $this->__('Add new page'),'title' => $this->__('Add new page'),'icon' => 'plus'
             );
             $links[] = array(
-                'url' => $this->get('router')->generate('kaikmediapagesmodule_admin_preferences'),
-                'text' => $this->__('Settings'),
-                'title' => $this->__('Adjust module settings'),
-                'icon' => 'wrench'
+                'url' => $this->get('router')->generate('kaikmediapagesmodule_admin_preferences'),'text' => $this->__('Settings'),'title' => $this->__('Adjust module settings'),'icon' => 'wrench'
             );
         }
         return $links;
