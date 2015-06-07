@@ -52,7 +52,7 @@ KaikMedia.Pages.Form = {};
 	       ],
 	       menubar: false,
 	       content_css: "/web/modules/kaikmediapages/css/content.css",
-	       toolbar1: "gallery | print preview",      	       
+	       toolbar1: "gallery | code print preview",      	       
 	       toolbar2: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link charmap table image ",      
 	       setup: function(editor) {
 	           editor.addButton('gallery', {
@@ -63,7 +63,8 @@ KaikMedia.Pages.Form = {};
 	               }
 	           });
 	       },
-	         
+	       code_dialog_width: 1000,
+	       code_dialog_height: 800, 
 	       style_formats: [
 	       	    {title: 'Headers'},           
    	            {title: 'H1', block: 'h1'},
