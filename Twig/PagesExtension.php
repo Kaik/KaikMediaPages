@@ -25,17 +25,6 @@ class PagesExtension extends \Twig_Extension
         );
     }
 
-    public function getFunctions()
-    {
-        return array(
-            'currentuser' => new \Twig_Function_Method($this, 'getCurrentUser', array(
-                'is_safe' => array(
-                    'html'
-                )
-            ))
-        );
-    }
-
     /**
      * status icon hardcoded
      * 
@@ -55,19 +44,7 @@ class PagesExtension extends \Twig_Extension
                 return 'trash';
         }
     }
-
-    /**
-     * 
-     * @param array $params            
-     * @return string
-     */
-    public function getCurrentUser(array $params = array())
-    {
-        $result = \UserUtil::getVar('uname');
-        
-        return $result;
-    }
-
+    
     public function getName()
     {
         return 'pages_extension';
