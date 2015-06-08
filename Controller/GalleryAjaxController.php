@@ -33,7 +33,7 @@ use Kaikmedia\PagesModule\Entity\ImageEntity as File;
 class GalleryAjaxController extends AbstractController
 {
     /**
-     * @Route("/new/{id}", options={"expose"=true})
+     * @Route("/modify/{id}", options={"expose"=true})
      * @Method("GET")
      * Modify aplicant information.
      *
@@ -46,7 +46,7 @@ class GalleryAjaxController extends AbstractController
      * @return RedirectResponse|string The rendered template output.
      * @throws AccessDeniedException on failed permission check
      */
-    public function newAction(Request $request, $id = null)
+    public function modifyAction(Request $request, $id = null)
     {
     	// Security check
     	if (!UserUtil::isLoggedIn() || !SecurityUtil::checkPermission($this->name.'::', '::', ACCESS_ADMIN)) {
@@ -66,7 +66,7 @@ class GalleryAjaxController extends AbstractController
          
         $options = array();
         $options['isXmlHttpRequest'] = $request->isXmlHttpRequest();
-        $options['action'] =  $this->get('router')->generate('kaikmediapagesmodule_galleryajax_new', array(), RouterInterface::ABSOLUTE_URL);
+        $options['action'] =  $this->get('router')->generate('kaikmediapagesmodule_galleryajax_modify', array(), RouterInterface::ABSOLUTE_URL);
         $form = $this->createForm('images', $file, $options);
 
         //$form->bindRequest($request);
@@ -107,6 +107,7 @@ class GalleryAjaxController extends AbstractController
 		$response->headers->set('Content-Type', 'application/json');
 		return $response;
     }
+    
     /**
      * @Route("/add/", options={"expose"=true})
      * @Method("POST")
@@ -128,16 +129,12 @@ class GalleryAjaxController extends AbstractController
             throw new AccessDeniedException();
         }
         
-        //$a = array();
-        //$a['files'] = $_FILES;
         $file = new File(); 
         $file->setPromoted(false);       
         $options = array();
         $options['isXmlHttpRequest'] = $request->isXmlHttpRequest();
         $form = $this->createForm('images', $file, $options);
-        
-        //$form->bindRequest($request);
-        
+
         if ($request->getMethod() == "POST"){
             $a = $form->isValid();
             $form->handleRequest($request);
@@ -164,6 +161,46 @@ class GalleryAjaxController extends AbstractController
         )));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+    
+    /**
+     * @Route("/get/{file}", options={"expose"=true})
+     * @Method("GET")
+     * Modify aplicant information.
+     *
+     * @param Request $request
+     * @param integer $id
+     *            Parameters passed via GET:
+     *            --------------------------------------------------
+     *            string uname The user name of the account for which profile information should be modified; defaults to the uname of the current user.
+     *            dynadata array The modified profile information passed into this function in case of an error in the update function.
+     * @return RedirectResponse|string The rendered template output.
+     * @throws AccessDeniedException on failed permission check
+     */
+    public function getAction(Request $request, File $file)
+    {
+        // Security check
+        if (!SecurityUtil::checkPermission($this->name . '::view', '::', ACCESS_READ)) {
+            throw new AccessDeniedException();
+        }
+        
+        if (!$file){
+            throw new AccessDeniedException();            
+        }
+        
+        $mode = 'html';       
+        if($mode == 'html'){
+            $template = $this->renderView('KaikmediaPagesModule:Gallery:element.html.twig', array(
+                'file' => $file));
+        }else {
+            $template['id'] = $file->getId();
+            $template['name'] = $file->getName();
+        }
+                
+        $response = new Response(json_encode(array('template' => $template)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;        
+         
     }
     
     /**

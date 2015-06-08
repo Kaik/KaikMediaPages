@@ -4,17 +4,11 @@
  */
 namespace Kaikmedia\PagesModule\Controller;
 
-use DataUtil;
-use ModUtil;
 use SecurityUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use System;
-use UserUtil;
-use ServiceUtil;
-use ZLanguage;
 use Zikula\Core\Controller\AbstractController;
 use Zikula\Core\Event\GenericEvent;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route; // used in annotations - do not remove
@@ -39,6 +33,7 @@ class UserController extends AbstractController
     /**
      * @Route("/view/{page}")
      * 
+     * @todo online defailt in repository
      * Display pages list.
      * @throws AccessDeniedException on failed permission check
      */
@@ -51,8 +46,8 @@ class UserController extends AbstractController
         
         $a = array();
         $a['page'] = $page;
-        $a['limit'] = 10;
-        $a['online'] = 1;
+        $a['limit'] = $request->query->get('limit', 25);
+        $a['online'] = 1;// this should be 1 by default
         
         $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getAll($a);
         
@@ -75,11 +70,13 @@ class UserController extends AbstractController
         if (! SecurityUtil::checkPermission($this->name . '::view', '::', ACCESS_READ)) {
             throw new AccessDeniedException();
         }
-
-        $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
-            'urltitle' => $urltitle,'language' => $this->container->get('translator')
-                ->getLocale()
-        ));
+        
+        $a = array();        
+        $a['online'] = 1;
+        $a['urltitle'] = $urltitle;
+        $a['language'] = $this->container->get('translator')->getLocale();
+        
+        $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy($a);
         
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
         
