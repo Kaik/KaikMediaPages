@@ -3,12 +3,12 @@
 <div class="panel">
   <div class="panel-body">
      {% if page.getIconImage() != null %}
-    <a href="{{ path('kaikmediapagesmodule_user_about', {'urltitle': page.urltitle}) }}">
+    <a href="{{ path('kaikmediapagesmodule_user_display', {'urltitle': page.urltitle}) }}">
      <img src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ page.getIconImage().getPath()}}" class="center-block" />
     </a>  
      {% endif %}
       <div class="">
-        <a href="{{ path('kaikmediapagesmodule_user_about', {'urltitle': page.urltitle}) }}"> <h2 class="text-center"> {{ page.title }} </h2> </a>
+        <a href="{{ path('kaikmediapagesmodule_user_display', {'urltitle': page.urltitle}) }}"> <h2 class="text-center"> {{ page.title }} </h2> </a>
         <p class="text-left">
         {{ page.description }}
         </p>

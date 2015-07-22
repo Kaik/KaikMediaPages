@@ -13,12 +13,12 @@
     {% for page in pages %}       
     <div class="item {% if loop.index0 == 0 %} active {% endif %}">      
     {% if page.getPromotedImage() != null %}
-    <a href="{{ path('kaikmediapagesmodule_user_about', {'urltitle': page.urltitle}) }}">
+    <a href="{{ path('kaikmediapagesmodule_user_display', {'urltitle': page.urltitle}) }}">
      <img class="logo-carousel" src="{{ app.request.scheme ~ '://' ~ app.request.host ~ '/web/uploads/documents/' ~ page.getPromotedImage().getPath()}}" />
     </a>  
      {% endif %}
       <div class="carousel-caption">
-       <a href="{{ path('kaikmediapagesmodule_user_about', {'urltitle': page.urltitle}) }}"> <h2 class="text-left"> {{ page.title }} </h2> </a>
+       <a href="{{ path('kaikmediapagesmodule_user_display', {'urltitle': page.urltitle}) }}"> <h2 class="text-left"> {{ page.title }} </h2> </a>
         <p class="text-left">
         {{ page.description }}
         </p>
