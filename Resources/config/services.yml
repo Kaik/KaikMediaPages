@@ -7,8 +7,5 @@ services:
         class: Kaikmedia\PagesModule\Form\Type\PageType
         tags:
             - { name: form.type, alias: pageform }
-    pages.form.type.pagesfilter:
-        class: Kaikmedia\PagesModule\Form\Type\PagesFilterType
-        tags:
-            - { name: form.type, alias: pagesfilterform }
+
             
