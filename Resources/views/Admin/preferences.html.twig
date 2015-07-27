@@ -18,35 +18,11 @@
              {{ form_widget(form.itemsperpage) }}
          </div> 
 </div>         
-<div class="col-md-6">
-         <h3>{{  __('Images settings') }}</h3>    
-         <div class="col-md-6">
-            <p>{{  __('Images max count') }}</p>
-         </div>
-         <div class="col-md-6">            
-             {{ form_widget(form.images_max_count) }}
-         </div>         
-         <div class="col-md-6">
-            <p>{{  __('Images max size') }}</p>
-         </div>
-         <div class="col-md-6">            
-             {{ form_widget(form.images_max_size) }}
-         </div>   
-         <div class="col-md-6">
-            <p>{{  __('Images allowed extensions') }}</p>
-         </div>
-         <div class="col-md-6">            
-             {{ form_widget(form.images_ext_allowed) }}
-         </div> 
-</div>          
-        
-        
+               
         <div class="col-md-12">
         {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
          </div>
-         
-         
-         
+                  
         {{ form_end(form) }} 
 </div>      
    {{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }}

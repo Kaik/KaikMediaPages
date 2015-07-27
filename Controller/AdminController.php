@@ -74,16 +74,32 @@ class AdminController extends AbstractController
         // Get startnum and perpage parameter for pager
         $a['page'] = $page;
         $a['limit'] = $request->query->get('limit', 15);
-        $a['title'] = $request->query->get('title', false);
-        $a['online'] = $request->query->get('online', false);
-        $filters = array();
-        $form = $this->createForm('pagesfilterform', $filters, array(
-            'action' => $this->get('router')
-                ->generate('kaikmediapagesmodule_admin_manager', array(), RouterInterface::ABSOLUTE_URL),
-            'limit' => $a['limit'],
-            'title' => $a['title'],
-            'online' => $a['online']
-        ));
+        $a['title'] = $request->query->get('title', '');
+        $a['online'] = $request->query->get('online', '');
+        $a['depot'] = $request->query->get('depot', '');
+        $a['inlist'] = $request->query->get('inlist', '');
+        $a['inmenu'] = $request->query->get('inmenu', '');
+        $a['language'] = $request->query->get('language', '');
+        $a['layout'] = $request->query->get('layout', '');
+        $a['author'] = $request->query->get('author', '');
+        
+        $form = $this->createFormBuilder($a)
+        ->setAction($this->get('router')->generate('kaikmediapagesmodule_admin_manager', array(), RouterInterface::ABSOLUTE_URL))
+        ->setMethod('GET')      
+        ->add('limit', 'choice', array('choices' => array('10' => '10','15' => '15','25' => '25','50' => '50','100'=> '100'), 'required' => false))
+        ->add('title', 'text', array('required' => false))
+        ->add('online', 'choice', array('choices' => array('1' => 'Online','0' => 'Offline'),'required' => false))
+        ->add('depot', 'choice', array('choices' => array('1' => 'Allowed','0' => 'Depot'),'required' => false))
+        ->add('inlist', 'choice', array('choices' => array('1' => 'In List','0' => 'Not in list'),'required' => false))
+        ->add('inmenu', 'choice', array('choices' => array('1' => 'In Menu','0' => 'Not in menu'),'required' => false))
+        //todo add language detection
+        ->add('language', 'choice', array('choices' => array('any' => 'Any','en' => 'English' ,'pl' => 'Polish'),'required' => false))
+        //todo add layout detection
+        ->add('layout', 'choice', array('choices' => array('default' => 'Default','slider' => 'Slider'),'required' => false))
+        ->add('author', 'text', array('required' => false))
+        ->add('filter', 'submit', array('label' => 'Filter'))
+        ->getForm();        
+        
         $form->handleRequest($request);
         
         if ($form->isValid()) {
@@ -91,15 +107,19 @@ class AdminController extends AbstractController
             $a['limit'] = $data['limit'] ? $data['limit'] : $a['limit'];
             $a['title'] = $data['title'] ? $data['title'] : $a['title'];
             $a['online'] = $data['online'] ? $data['online'] : $a['online'];
+            $a['depot'] = $data['depot'] ? $data['depot'] : $a['depot'];
+            $a['inlist'] = $data['inlist'] ? $data['inlist'] : $a['inlist'];
+            $a['inmenu'] = $data['inmenu'] ? $data['inmenu'] : $a['inmenu'];
+            $a['language'] = $data['language'] ? $data['language'] : $a['language'];
+            $a['layout'] = $data['layout'] ? $data['layout'] : $a['layout'];
+            $a['author'] = $data['author'] ? $data['author'] : $a['author'];
         }
         
         // Get parameters from whatever input we need.
-        $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
-        $pages = $this->entityManager->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getAll($a);
+        $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getAll($a);
         
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
         return $this->render('KaikmediaPagesModule:Admin:manager.html.twig', array(
-            'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
             'pages' => $pages,
             'form' => $form->createView(),
             'thisPage' => $a['page'],
@@ -127,8 +147,7 @@ class AdminController extends AbstractController
             throw new AccessDeniedException();
         }
         // Get parameters from whatever input we need.
-        $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
-        $page = $this->entityManager->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
+        $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
             'id' => $id
         ));
         
@@ -163,8 +182,7 @@ class AdminController extends AbstractController
             // create a new customer
             $page = new Page();
         } else {
-            $this->entityManager = ServiceUtil::getService('doctrine.entitymanager');
-            $page = $this->entityManager->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
+            $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
                 'id' => $id
             ));
         }
@@ -215,10 +233,7 @@ class AdminController extends AbstractController
         $form = $this->createForm('settingsform', $settings = array(), array(
             'action' => $this->get('router')
                 ->generate('kaikmediapagesmodule_admin_preferences', array(), RouterInterface::ABSOLUTE_URL),
-            'itemsperpage' => isset($mod_vars['itemsperpage']) ? $mod_vars['itemsperpage'] : 25,
-            'images_max_count' => isset($mod_vars['images_max_count']) ? $mod_vars['images_max_count'] : 5,
-            'images_max_size' => isset($mod_vars['images_max_size']) ? $mod_vars['images_max_size'] : 555,
-            'images_ext_allowed' => isset($mod_vars['images_ext_allowed']) ? $mod_vars['images_ext_allowed'] : 'png'
+            'itemsperpage' => isset($mod_vars['itemsperpage']) ? $mod_vars['itemsperpage'] : 25
         ));
         $form->handleRequest($request);
         

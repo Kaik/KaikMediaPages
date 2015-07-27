@@ -1,55 +1,77 @@
- {{ render(controller('ZikulaAdminModule:Admin:adminheader')) }} {%
-form_theme form 'bootstrap_3_layout.html.twig' %}
+{{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
+{% include 'KaikmediaPagesModule:Common:resources.html.twig'  %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
 <h3>
 	<span class="fa fa-list"></span> {{ __('Manager')}}
 </h3>
 <div class="container-fluid">
+<div class="row">
 	<div class="list-group col-md-12">
-		<div class="list-group-item col-md-12" style="background: #FFF6DF;">
-			{{ getstatusmsg() }} {{ form_start(form) }} {{ form_errors(form) }}
+		<div class="list-group-item col-md-12" style="background: #d9edf7;">
+            {{ form_start(form) }} {{ form_errors(form) }}
 			<div class="form-group-sm clearfix">
-				<div class="col-md-1">{{ form_widget(form.online) }}</div>
-				<div class="col-md-4">{{ form_widget(form.title) }}</div>
-				<div class="col-md-2">
-
-				</div>
-				<div class="col-md-1 pull-right text-right">{{
-					form_widget(form.filter, {'attr': {'class': 'btn btn-sm
-					btn-info'}}) }}</div>
-				<div class="col-md-1 pull-right text-right">{{
-					form_widget(form.limit) }}</div>
+				<div class="col-md-4"> <span class="visible-xs hidden-md hidden-lg">{{ form_label(form.title) }}</span> {{ form_widget(form.title) }}</div>
+				<div class="col-md-5 text-center"> 
+                <a data-toggle="collapse" data-target="#all_filters" href="#" >{{ __('Show all filters') }} <i class="fa fa-filter fa-1x" title="{{ __('Show all filters') }}"> </i></a> 					
+                </div>
+				<div class="col-md-1 text-right">{{ form_label(form.limit) }}</div>                
+				<div class="col-md-1">{{ form_widget(form.limit) }}</div>
+				<div class="col-md-1 col-xs-12">{{ form_widget(form.filter, {'attr': {'class': 'col-xs-12 btn btn-sm btn-info'}}) }}</div>				
 			</div>
+        <div id="all_filters" class="collapse">			
+			<div class="form-group-sm clearfix">
+				<div class="col-md-2">{{ form_label(form.online) }}{{ form_widget(form.online) }}</div>			
+				<div class="col-md-2">{{ form_label(form.depot) }}{{ form_widget(form.depot) }}</div>				
+				<div class="col-md-2">{{ form_label(form.inmenu) }}{{ form_widget(form.inmenu) }}</div>	
+				<div class="col-md-2">{{ form_label(form.inlist) }}{{ form_widget(form.inlist) }}</div>	
+				<div class="col-md-2">{{ form_label(form.layout) }}{{ form_widget(form.layout) }}</div>	
+			    <div class="col-md-2">{{ form_label(form.language) }}{{ form_widget(form.language) }}</div>
+				<div class="col-md-3">{{ form_label(form.author) }}{{ form_widget(form.author) }}</div>									
+			</div>
+		</div>	
 			{{ form_end(form) }}
 		</div>
 		<div class="list-group-item col-md-12" style="background: #eee;">
+			<div class="col-md-4">{{ __('Title')}}</div>		
 			<div class="col-md-1">{{ __('Online')}}</div>
-			<div class="col-md-6">{{ __('Title')}}</div>
-			<div class="col-md-2">{{ __('Layout')}}</div>
-			<div class="col-md-2">{{ __('Language')}}</div>
+			<div class="col-md-1">{{ __('Depot')}}</div>
+			<div class="col-md-1">{{ __('In list')}}</div>
+			<div class="col-md-1">{{ __('In menu')}}</div>
+			<div class="col-md-1">{{ __('Layout')}}</div>
+			<div class="col-md-1">{{ __('Language')}}</div>
+			<div class="col-md-1">{{ __('Author')}}</div>
 			<div class="col-md-1 pull-right text-right">{{ __('Options')}}</div>
 		</div>
 		{%for page in pages %}
 		<div class="list-group-item col-md-12">
-			<div class="col-md-1">
-				<i title="{{ page.id }}" class="fa fa-key "> </i>{{ page.id }} <i
-					title="{{ page.online }}"
-					class="fa fa-{{  page.online|statusicon }}"> </i>
-			</div>
-			<div class="col-md-6">
-				<a
-					href="{{ path('kaikmediapagesmodule_admin_display', {'id': page.id}) }}"><h4
+			<div class="col-md-4">
+				<a href="{{ path('kaikmediapagesmodule_admin_display', {'id': page.id}) }}"><h4
 						class="list-group-item-heading">{{ page.title }}</h4></a>
-				<p class="list-group-item-text">{{ page.urltitle }}</p>
+				<p class="list-group-item-text"><i title="{{ __('Id') }} {{ page.id }}" class="fa fa-key "> </i> <i title="{{ __('Url') }}" class="fa fa-link"> </i> {{ page.urltitle }}</p>
 			</div>
-			<div class="col-md-2">
-				<p class="list-group-item-text">{{ page.layout }}</p>
+			<div class="col-md-1">		
+            {% include "KaikmediaPagesModule:Common:online.menu.html.twig" with {'id': page.id, 'selected': page.online} %}
+			</div>	
+			<div class="col-md-1">			            
+            {% include "KaikmediaPagesModule:Common:depot.menu.html.twig" with {'id': page.id, 'selected': page.depot} %}	
+            </div>	
+			<div class="col-md-1">		
+            {% include "KaikmediaPagesModule:Common:inlist.menu.html.twig" with {'id': page.id, 'selected': page.inlist} %}
+			</div>	
+			<div class="col-md-1">			            
+            {% include "KaikmediaPagesModule:Common:inmenu.menu.html.twig" with {'id': page.id, 'selected': page.inmenu} %}	
+            </div>            
+			<div class="col-md-1">
+            {% include "KaikmediaPagesModule:Common:layout.menu.html.twig" with {'id': page.id, 'selected': page.layout} %}	
 			</div>
-			<div class="col-md-2">
-				<p class="list-group-item-text">{{ page.language }}</p>
+			<div class="col-md-1">
+            {% include "KaikmediaPagesModule:Common:language.menu.html.twig" with {'id': page.id, 'selected': page.language} %}	
 			</div>
+			<div class="col-md-1">
+            <p class="list-group-item-text">{{ page.author.uname }}</p>	
+			</div>						
 			<div class="col-md-1 pull-right text-right">
-				<a
-					href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}"><i
+				<a href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}"><i
 					class="fa fa-pencil"></i></a>
 			</div>
 		</div>
@@ -71,5 +93,6 @@ form_theme form 'bootstrap_3_layout.html.twig' %}
 			{% endif %}
 		</div>
 	</div>
+</div>
 </div>
 {{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }}

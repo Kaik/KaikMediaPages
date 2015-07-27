@@ -10,7 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Kaikmedia\PagesModule\Form\DataTransformer\UserToIdTransformer;
-use Kaikmedia\PagesModule\Form\Type\ImageType;
 
 class PageType extends AbstractType
 {
@@ -85,15 +84,6 @@ class PageType extends AbstractType
             'required' => false,
             'widget' => 'single_text'
         ))
-            ->add('images', 'collection', array(
-            'type' => new ImageType(),
-            'allow_add' => true,
-            'required' => false,
-            'delete_empty' => true,
-            'by_reference' => false,
-            'allow_delete' => true,
-            'prototype' => true
-        ))
             ->add('layout', 'choice', array(
             'choices' => array(
                 'default' => 'Default',
@@ -117,15 +107,13 @@ class PageType extends AbstractType
                 'class' => 'tinymce'
             )
         ))
-            -> // Skip it if you want to use default theme))
-add('description', 'textarea', array(
+            ->add('description', 'textarea', array(
             'required' => false,
             'attr' => array(
                 'class' => 'tinymc'
             )
         ))
-            -> // Skip it if you want to use default theme))
-add('save', 'submit', array(
+            ->add('save', 'submit', array(
             'label' => 'Save'
         ));
     }

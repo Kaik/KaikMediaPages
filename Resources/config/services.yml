@@ -1,9 +1,4 @@
 services:
-    pages.twig.pages_extension:
-        class: Kaikmedia\PagesModule\Twig\PagesExtension
-        arguments: ["@session"]
-        tags:
-            - { name: twig.extension }
     pages.form.type.settings:
         class: Kaikmedia\PagesModule\Form\Type\SettingsType
         tags:
@@ -16,8 +11,4 @@ services:
         class: Kaikmedia\PagesModule\Form\Type\PagesFilterType
         tags:
             - { name: form.type, alias: pagesfilterform }
-    pages.form.type.images:
-        class: Kaikmedia\PagesModule\Form\Type\ImageType
-        tags:
-            - { name: form.type, alias: images }
             

@@ -19,49 +19,45 @@
     .panel-transparent .panel-body{
         background: rgba(46, 51, 56, 0.2)!important;
     }
-    
-.new_element {
-	
-	background:#eee;
-	padding-top:20px;
-	padding-bottom:20px;
-	margin-bottom:15px;
-	border-radius: 5px;
-}
-.gallery_item {
-	margin-bottom:15px;
-	padding: 7px;
-	border-radius:5px;
-	
-}
-.gallery_item .thumbnail{
-	height:130px;
-	overflow-y:hidden;
-	margin-bottom:0px;
-}
-.gallery_item .menu {
-  position: absolute;
-  top: 7px;
-  right: 10px;
-  z-index:10;
-}
-
-.gallery_item .menu a {
-  color: #ccc;
-  border-radius: 5px;
-  text-decoration: none;
-}
-.gallery_item .menu a:hover {
-  color: #1F6959;
-  text-decoration: none;
-}
-
-.image_data {
-  padding-top:35px;
-}
-
-.image_data div label{
-  text-align:left !important;
-}
 
 #mceu_24 { float: right; }
+
+.online-0 {
+	background-color: #777;
+}
+
+.online-1 {
+	background-color: #5cb85c;	
+}
+
+.depot-0 {
+	background-color: #5cb85c;
+}
+
+.depot-1 {
+	background-color: #777;
+}
+
+.inlist-0 {
+	background-color: #777;
+}
+
+.inlist-1 {
+	background-color: #5cb85c;
+}
+
+.inmenu-0 {
+	background-color: #777;
+}
+
+.inmenu-1 {
+	background-color: #5cb85c;
+}
+
+.language-any, .language-pl, .language-en {
+	background-color: #777;
+}
+
+.layout-default, .layout-slider {
+	background-color: #777;
+}

@@ -10,7 +10,6 @@ use Zikula\Core\Doctrine\EntityAccess;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\Common\Collections\ArrayCollection;
-use Kaikmedia\PagesModule\Entity\ImageEntity as Image;
 
 /**
  * Pages
@@ -101,11 +100,6 @@ class PagesEntity extends EntityAccess
     private $content;
 
     /**
-     * @ORM\OneToMany(targetEntity="ImageEntity", mappedBy="page", cascade={"persist", "remove"}, orphanRemoval=true)
-     */
-    private $images;
-
-    /**
      * @ORM\Column(type="string", length=150)
      */
     private $status = 'A';
@@ -169,7 +163,6 @@ class PagesEntity extends EntityAccess
         $this->language = '';
         $this->views = 0;
         $this->status = 'A';
-        $this->images = new ArrayCollection();
         
         // $this->attributes = new ArrayCollection();
     }
@@ -525,52 +518,7 @@ class PagesEntity extends EntityAccess
     {
         return $this->content;
     }
-
-    /**
-     * Add image
-     * 
-     * @param \Kaikmedia\PagesModule\Entity\ImageEntity $images            
-     * @return page
-     */
-    public function addImage(Image $image)
-    {
-        if ($image->isEmpty()) {
-            return;
-        }
-        
-        $image->setPage($this);
-        $this->images->add($image);
-    }
-
-    public function setImages($images)
-    {
-        foreach ($images as $image) {
-            $image->setPage($this);
-        }
-        
-        $this->images = $images;
-    }
-
-    /**
-     * Remove images
-     * 
-     * @param \Kaikmedia\PagesModule\Entity\Image $images            
-     */
-    public function removeImage(Image $image)
-    {
-        $this->images->removeElement($image);
-    }
-
-    /**
-     * Get images
-     * 
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
+    
     /**
      * Set obj_status
      * 
@@ -733,11 +681,7 @@ class PagesEntity extends EntityAccess
      */
     public function getPromotedImage()
     {
-        foreach ($this->images as $image) {
-            if ($image->getPromoted()) {
-                return $image;
-            }
-        }
+        return false;
     }
 
     /**
@@ -747,10 +691,6 @@ class PagesEntity extends EntityAccess
      */
     public function getIconImage()
     {
-        foreach ($this->images as $image) {
-            if ($image->getName() == 'icon') {
-                return $image;
-            }
-        }
+        return false;
     }
 }

@@ -1,8 +1,7 @@
 {% include 'KaikmediaPagesModule:Common:resources.html.twig' %} {{
 render(controller('ZikulaAdminModule:Admin:adminheader')) }} {%
 form_theme form with ['bootstrap_3_horizontal_layout.html.twig',
-'KaikmediaPagesModule:Form:radio.html.twig',
-'KaikmediaPagesModule:Form:file.html.twig'] %}
+'KaikmediaPagesModule:Form:radio.html.twig'] %}
 <h3>
 	<span class="fa fa-list"></span> {{ __('Manager')}}
 </h3>
@@ -10,7 +9,6 @@ form_theme form with ['bootstrap_3_horizontal_layout.html.twig',
 <div class="container-fluid">
 	{{ form_start(form) }}
 	{{ form_errors(form) }}
-	{% include 'KaikmediaPagesModule:Gallery:form.display.html.twig' %}
 	<div class="list-group col-md-12">
 		<div class="list-group-item col-md-12 clearfix"
 			style="background: #eee;">
@@ -97,25 +95,6 @@ form_theme form with ['bootstrap_3_horizontal_layout.html.twig',
 </div>
 {{ form_end(form) }}
 </div>
-<a href="#" id="addnewimage" > add new</a>
-<div id="gallery_new" class="modal fade">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header" style="background:#E4F2FF;">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title"><span class="fa fa-image"></span> {{  __('Gallery')}}</h4>
-          </div>
-          <div class="modal-body">  
-                <div id="image_new" > </div>
-            </div>         
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">{{  __('Done') }}</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal --> 
-
-
 
 {% javascripts '@KaikmediaPagesModule/Resources/public/js/*' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>

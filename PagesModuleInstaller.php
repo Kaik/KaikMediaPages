@@ -12,8 +12,7 @@ class PagesModuleInstaller extends \Zikula_AbstractInstaller
 {
 
     private $_entities = array(
-        'Kaikmedia\PagesModule\Entity\PagesEntity',
-        'Kaikmedia\PagesModule\Entity\ImageEntity'
+        'Kaikmedia\PagesModule\Entity\PagesEntity'
     );
 
     public function install()
@@ -28,9 +27,6 @@ class PagesModuleInstaller extends \Zikula_AbstractInstaller
         }
         
         $this->setVar('itemsperpage', 0);
-        $this->setVar('images_max_count', 0);
-        $this->setVar('images_max_size', 0);
-        $this->setVar('images_ext_allowed', 0);
         
         HookUtil::registerSubscriberBundles($this->version->getHookSubscriberBundles());
         
@@ -119,7 +115,6 @@ class PagesModuleInstaller extends \Zikula_AbstractInstaller
         $this->delVars();
         // unregister hooks
         HookUtil::unregisterSubscriberBundles($this->version->getHookSubscriberBundles());
-        HookUtil::unregisterProviderBundles($this->version->getHookProviderBundles());
         // Deletion successful
         return true;
     }

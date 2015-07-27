@@ -1,0 +1,18 @@
+{% set thisname = 'depot' %}
+{% set options = [{'id': 0,'name': 'allowed'},{'id': 1,'name': 'depot'} ] %}
+{% set option = options[selected] %}
+<div id="{{ thisname }}-dropdown-{{ id }}" class="dropdown">
+  	<a class="dropdown-toggle" id="{{ thisname }}-menu-{{ id }}" data-toggle="dropdown" aria-expanded="true">
+    <i title="{{ option.name }}" class="sr-only fa fa-circle "></i>
+    <span class="label {{ thisname }}-{{ option.id }}">{{ option.name }}</span>
+    </a>
+  	<ul class="dropdown-menu" role="menu" aria-labelledby="{{ thisname }}-menu-{{ id }}">
+  		{%for opt in options %} 	
+		<li role="presentation" {% if option.id == opt.id %} class="disabled" {% endif %} >
+		<a role="menuitem" class="menu_{{ thisname }}" {% if option.id == opt.id %} {% else %} data-id="{{ id }}" data-value="{{ opt.id }}" {% endif %} tabindex="-1" href="#">
+		<i class="sr-only fa fa-circle text-primary"> </i> <span class="label {{ thisname }}-{{ opt.id }}">{{ opt.name }}</span>
+		</a>
+		</li>		
+		{% endfor %}
+  	</ul>
+</div>

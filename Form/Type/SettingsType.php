@@ -20,18 +20,6 @@ class SettingsType extends AbstractType
             'required' => false,
             'data' => $options['itemsperpage']
         ))
-            ->add('images_max_count', 'text', array(
-            'required' => false,
-            'data' => $options['images_max_count']
-        ))
-            ->add('images_max_size', 'text', array(
-            'required' => false,
-            'data' => $options['images_max_size']
-        ))
-            ->add('images_ext_allowed', 'text', array(
-            'required' => false,
-            'data' => $options['images_ext_allowed']
-        ))
             ->add('save', 'submit', array(
             'label' => 'Save'
         ));
@@ -51,10 +39,7 @@ class SettingsType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'itemsperpage' => null,
-            'images_max_count' => null,
-            'images_max_size' => null,
-            'images_ext_allowed' => null
+            'itemsperpage' => null
         ));
     }
 }
