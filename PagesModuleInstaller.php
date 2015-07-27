@@ -32,6 +32,8 @@ class PagesModuleInstaller extends \Zikula_AbstractInstaller
         $this->setVar('images_max_size', 0);
         $this->setVar('images_ext_allowed', 0);
         
+        HookUtil::registerSubscriberBundles($this->version->getHookSubscriberBundles());
+        
         return true;
     }
 
