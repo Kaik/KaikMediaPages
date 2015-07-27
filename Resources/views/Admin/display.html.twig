@@ -1,40 +1,53 @@
-  {{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
+{{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
+{% include 'KaikmediaPagesModule:Common:resources.html.twig'  %}
 <h3>
     <span class="fa fa-list"></span>
     {{ __('Manager')}}
 </h3> 
-<div class="container-fluid">    
-    <div class="list-group col-md-12">
-        <div class="list-group-item col-md-12"   style="background: #FFF6DF;">
+<div class="container-fluid"> 
+<div class="row">   
+<div class="list-group col-md-12">
+    <div class="list-group-item col-md-12"   style="background: #FFF6DF;">
             <h1> {{ page.title }} </h1>
             <p><small>{{ __('url')}}</small> {{ page.urltitle }}</p>
-        </div>
-        <div class="list-group-item col-md-12" style="background:#eee;">              
-                    <div class="col-md-1">{{ __('Online')}}                
-                    </div>                
-                    <div class="col-md-3">{{ __('Views')}}: {{ page.views }}                  
-                    </div>
-                    <div class="col-md-3">{{ __('Layout')}}: {{ page.layout }}                    
-                    </div>                
-                    <div class="col-md-2 pull-right text-right">
+    </div>
+    <div class="list-group-item col-md-12 clearfix" style="background:#eee;">
+           <div class="col-md-3">{{ __('Views')}}: {{ page.views }}</div>                   
+			<div class="col-xs-3 col-md-1">		
+            {% include "KaikmediaPagesModule:Common:online.menu.html.twig" with {'id': page.id, 'selected': page.online} %}
+			</div>	
+			<div class="col-xs-3 col-md-1">			            
+            {% include "KaikmediaPagesModule:Common:depot.menu.html.twig" with {'id': page.id, 'selected': page.depot} %}	
+            </div>	
+			<div class="col-xs-3 col-md-1">		
+            {% include "KaikmediaPagesModule:Common:inlist.menu.html.twig" with {'id': page.id, 'selected': page.inlist} %}
+			</div>	
+			<div class="col-xs-3 col-md-1">			            
+            {% include "KaikmediaPagesModule:Common:inmenu.menu.html.twig" with {'id': page.id, 'selected': page.inmenu} %}	
+            </div>            
+			<div class="col-xs-3 col-md-1">
+            {% include "KaikmediaPagesModule:Common:layout.menu.html.twig" with {'id': page.id, 'selected': page.layout} %}	
+			</div>
+			<div class="col-xs-3 col-md-1">
+            {% include "KaikmediaPagesModule:Common:language.menu.html.twig" with {'id': page.id, 'selected': page.language} %}	
+			</div>              
+            <div class="col-md-2 pull-right text-right">
                         <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                    {{ __('Options')}}
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}">{{ __('Edit')}}</a></li>
-                      <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>
-                    </ul>
-        </div>
-                    </div>     
-        </div> 
-                        
-        <div class="list-group-item col-md-12" >
-                 {{ page.content|raw }}               
-        </div>
-                            
-            
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                            {{ __('Options')}}
+                              <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                              <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}">{{ __('Edit')}}</a></li>
+                              <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>
+                            </ul>
+                        </div>
+            </div>     
+    </div>                         
+    <div class="list-group-item col-md-12 clearfix" >
+           {{ page.content|raw }}               
+    </div>           
    </div>  
+</div>   
 </div>
-   {{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }}
+{{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }}
