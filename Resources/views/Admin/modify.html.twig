@@ -7,8 +7,10 @@ form_theme form with ['bootstrap_3_horizontal_layout.html.twig',
 </h3>
 {{ getstatusmsg() }}
 <div class="container-fluid">
+<div class="row">
 	{{ form_start(form) }}
 	{{ form_errors(form) }}
+	
 	<div class="list-group col-md-12">
 		<div class="list-group-item col-md-12 clearfix"
 			style="background: #eee;">
@@ -94,6 +96,7 @@ form_theme form with ['bootstrap_3_horizontal_layout.html.twig',
 		{'attr': {'class': 'btn btn-info pull-right'}}) }}</div>
 </div>
 {{ form_end(form) }}
+</div>
 </div>
 
 {% javascripts '@KaikmediaPagesModule/Resources/public/js/*' %}
