@@ -23,7 +23,7 @@ KaikMedia.Pages.Form = {};
    	   	 $('#pageform_urltitle').on('change', function(e) {	           
    		            e.preventDefault();
    		            KaikMedia.Pages.Form.urlcheck();
-   	   	 });   	   	 		   	 		
+   	   	 }); 
     	}
     };
   
@@ -101,7 +101,7 @@ KaikMedia.Pages.Form = {};
 	       menubar: false,
 	       content_css: "/web/modules/kaikmediapages/css/content.css, http://fonts.googleapis.com/css?family=Cambay:400|400italic|700|700italic, http://fonts.googleapis.com/css?family=Rajdhani:300|400|500|600|700",
 	       toolbar1: "gallery | code print preview",      	       
-	       toolbar2: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link charmap table image ",      
+	       toolbar2: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link charmap table",      
 	       style_formats: [
 	       	    {title: 'Headers'},           
    	            {title: 'H1', block: 'h1'},

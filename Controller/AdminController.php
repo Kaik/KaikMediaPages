@@ -190,18 +190,25 @@ class AdminController extends AbstractController
         $form = $this->createForm('pageform', $page);
         
         $form->handleRequest($request);
-        
-        /**
-         *
-         * @var \Doctrine\ORM\EntityManager $em
-         */
+
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
+            
+            $images = $form->get('test')->getData();
+            
+            var_dump($images);
+            exit(0);
+            
+            
             $em->persist($page);
             $em->flush();
             $request->getSession()
                 ->getFlashBag()
                 ->add('status', "Page saved!");
+            
+            
+            
+            
             
             return $this->redirect($this->generateUrl('kaikmediapagesmodule_admin_display', array(
                 'id' => $page->getId()

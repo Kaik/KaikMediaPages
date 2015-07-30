@@ -31,7 +31,7 @@ class PageType extends AbstractType
             'required' => true
         ))
             ->add('id', 'hidden')
-            ->add('extra', 'hidden', [
+            ->add('images', 'hidden', [
                 'mapped' => false,
             ])
             ->add('depot', 'choice', array(
@@ -95,7 +95,7 @@ class PageType extends AbstractType
         ))
             ->add('language', 'choice', array(
             'choices' => array(
-                'any' => 'Any',
+                'all' => 'All',
                 'en' => 'English',
                 'pl' => 'Polish'
             ),'required' => false

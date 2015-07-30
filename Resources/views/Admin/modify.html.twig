@@ -30,10 +30,13 @@ form_theme form with ['bootstrap_3_horizontal_layout.html.twig',
 				<p><strong>{{ __('Direct link')}}: </strong>/{{form_widget(form.urltitle, {'attr': {'class':'simplebox input-sm'}}) }}</p>
 			</div>
 	</div>
+	<div class="list-group-item col-md-12">	
+	{{ render(controller('KaikmediaGalleryModule:MediaSelect:mediaselect', {'bundle': 'KaikmediaGalleryModule', 'id': page.id})) }}
+	</div>		
 	<div class="list-group-item col-md-12" style="background: #eee;">
 			<h4><span class="fa fa-file"></span> {{ __('Content')}}</h4>
 			{{ form_widget(form.content) }}
-	</div>
+	</div>	
 	<div class="list-group-item col-md-12" style="background: #eee;">
 		  <div class="row">
 			<div class="col-xs-12 col-md-6">
