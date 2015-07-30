@@ -30,6 +30,10 @@ class PageType extends AbstractType
             'expanded' => true,
             'required' => true
         ))
+            ->add('id', 'hidden')
+            ->add('extra', 'hidden', [
+                'mapped' => false,
+            ])
             ->add('depot', 'choice', array(
             'choices' => array(
                 '0' => 'Depot',
@@ -63,15 +67,13 @@ class PageType extends AbstractType
             ->add('urltitle', 'text', array(
             'required' => false
         ))
-            ->add($builder->create('author', 'text', [
-            'attr' => [
-                'class' => 'author_search'
-            ]
-        ])
+            ->add($builder->create('author', 'text', ['attr' => ['class' => 'author_search'],
+            'required' => false])
             ->addModelTransformer($transformer))
+                       
             ->add('views', 'text', array(
-            'required' => false
-        ))
+            'required' => false ))
+            
             ->add('publishedAt', 'datetime', array(
             'format' => \IntlDateFormatter::SHORT,
             'input' => 'datetime',
@@ -89,9 +91,6 @@ class PageType extends AbstractType
                 'default' => 'Default',
                 'slider' => 'Slider'
             ),
-            'preferred_choices' => array(
-                'default'
-            ),
             'required' => false
         ))
             ->add('language', 'choice', array(
@@ -99,7 +98,7 @@ class PageType extends AbstractType
                 'any' => 'Any',
                 'en' => 'English',
                 'pl' => 'Polish'
-            )
+            ),'required' => false
         ))
             ->add('content', 'textarea', array(
             'required' => false,

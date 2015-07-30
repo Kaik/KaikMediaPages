@@ -160,7 +160,8 @@ class PagesEntity extends EntityAccess
             'uid' => UserUtil::getVar('uid')
         ));
         
-        $this->language = '';
+        $this->language = 'any';
+        $this->layout = 'default';
         $this->views = 0;
         $this->status = 'A';
         
