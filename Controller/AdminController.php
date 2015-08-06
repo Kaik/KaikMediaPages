@@ -194,10 +194,10 @@ class AdminController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
             
-            $images = $form->get('test')->getData();
+           // $images = $form->get('test')->getData();
             
-            var_dump($images);
-            exit(0);
+           // var_dump($images);
+           // exit(0);
             
             
             $em->persist($page);

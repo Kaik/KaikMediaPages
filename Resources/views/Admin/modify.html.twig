@@ -31,7 +31,7 @@ form_theme form with ['bootstrap_3_horizontal_layout.html.twig',
 			</div>
 	</div>
 	<div class="list-group-item col-md-12">	
-	{{ render(controller('KaikmediaGalleryModule:MediaSelect:mediaselect', {'bundle': 'KaikmediaGalleryModule', 'id': page.id})) }}
+	{{ render(controller('KaikmediaGalleryModule:Plugin:gallery', {'obj_name': 'KaikmediaGalleryModule', 'obj_id': page.id})) }}
 	</div>		
 	<div class="list-group-item col-md-12" style="background: #eee;">
 			<h4><span class="fa fa-file"></span> {{ __('Content')}}</h4>
