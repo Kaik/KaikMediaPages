@@ -29,11 +29,11 @@ class PageType extends AbstractType
             'multiple' => false,
             'expanded' => true,
             'required' => true
-        ))
-            ->add('id', 'hidden')
+        ))            
             ->add('images', 'hidden', [
                 'mapped' => false,
             ])
+            
             ->add('depot', 'choice', array(
             'choices' => array(
                 '0' => 'Depot',

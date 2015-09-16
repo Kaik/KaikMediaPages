@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Kaikmedia\PagesModule\Entity\PagesEntity as Page;
-
+use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
 /**
  * @Route("/admin")
  */
@@ -194,12 +194,8 @@ class AdminController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
             
-           // $images = $form->get('test')->getData();
-            
-           // var_dump($images);
-           // exit(0);
-            
-            
+            $images = $form->get('images')->getData();
+                        
             $em->persist($page);
             $em->flush();
             $request->getSession()
@@ -207,8 +203,12 @@ class AdminController extends AbstractController
                 ->add('status', "Page saved!");
             
             
+            $gallery = new GalleryPlugin($this->container->get('doctrine.entitymanager'));
             
-            
+            $result = $gallery->assignMedia('KaikmediaPagesModule', $page->getId(), $images);
+
+            var_dump($result);
+            exit(0);
             
             return $this->redirect($this->generateUrl('kaikmediapagesmodule_admin_display', array(
                 'id' => $page->getId()
