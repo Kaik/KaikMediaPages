@@ -1,94 +1,113 @@
-{% include 'KaikmediaPagesModule:Common:resources.html.twig' %} {{
-render(controller('ZikulaAdminModule:Admin:adminheader')) }} {%
-form_theme form with ['bootstrap_3_horizontal_layout.html.twig',
-'KaikmediaPagesModule:Form:radio.html.twig'] %}
+{% extends 'KaikmediaPagesModule:Base:admin.html.twig' %}
+{% block header %}
+    {% set settings='settings' %}
+    {{ parent() }}
+    {#{ pageAddAsset('stylesheet', zasset('@ZikulaIntercomModule:css/inbox.css')) }#}
+{% endblock %} 
+{% block title %}
+    {% set title_icon="<i class='fa fa-user-secret'></i>" %}
+    {% set title=__('Pages') %}
+    {{ parent() }}
+{% endblock %}
+{% block content %}
+    <div id="km_pages_admin_index" class="col-md-12 clearfix">    
+{% form_theme form with ['bootstrap_3_horizontal_layout.html.twig', 'KaikmediaPagesModule:Form:radio.html.twig'] %}
 <h3>
-	<span class="fa fa-list"></span> {{ __('Manager')}}
+    <span class="fa fa-list"></span> {{ __('Manager')}}
 </h3>
-{{ getstatusmsg() }}
 <div class="container-fluid">
-<div class="row">
-	{{ form_start(form) }}
-	{{ form_errors(form) }}
-	
-	<div class="list-group col-md-12">
-	<div id="autosave-info" class="list-group-item col-md-12 {% if page.id %} list-group-item-success {% else %} list-group-item-warning {% endif %}" >
-				<p> <i class="fa fa-floppy-o"> </i>
-				<span id="autosave-info-off" class="{% if page.id %} hide {% else %}  {% endif %}">{{ __('Autosave is off! Please enter title to turn on auto save feature.')}}</span>
-				<span id="autosave-info-on" class="{% if page.id %}  {% else %} hide {% endif %}">{{ __('Autosave is on.')}}</span>
-				</p>
-	</div>
-		<div class="list-group-item col-md-12 clearfix"
-			style="background: #eee;">
-			<div class="col-xs-12 col-md-2">
-				<h4><span class="fa fa-list"></span>{{ __('Title')}}</h4>
-			</div>
-			<div class="col-xs-12 col-md-9">{{ form_widget(form.title, {'attr': {'class': 'input-lg' }}) }}</div>
-	</div>
-	<div class="list-group-item col-md-12" style="background: #eee;">
-			<div class="col-md-12 controls form-inline">
-				<p><strong>{{ __('Direct link')}}: </strong>/{{form_widget(form.urltitle, {'attr': {'class':'simplebox input-sm'}}) }}</p>
-			</div>
-	</div>
-	<div class="list-group-item col-md-12">	
-	{{ render(controller('KaikmediaGalleryModule:Plugin:gallery', {'obj_name': 'KaikmediaPagesModule', 'obj_id': page.id})) }}
-	</div>		
-	<div class="list-group-item col-md-12" style="background: #eee;">
-			<h4><span class="fa fa-file"></span> {{ __('Content')}}</h4>
-			{{ form_widget(form.content) }}
-	</div>	
-	<div class="list-group-item col-md-12" style="background: #eee;">
-		  <div class="row">
-			<div class="col-xs-12 col-md-6">
-			<h4><span class="fa fa-file"></span> {{ __('Description')}}</h4>
-			{{ form_widget(form.description, { 'attr': {'rows' : '10', 'cols' : '30' }} ) }}
-			</div>
-			<div class="col-xs-12 col-md-6">
-		    <h4><span class="fa fa-wrench"></span> {{ __('Options')}}</h4>
-			<div class="row">
-        		<div class="col-xs-12 col-md-6">
-        		{{ form_label(form.layout, 'Layout', { 'label_attr': {'class':'control-label'} }) }}
-        		{{ form_widget(form.layout,{'attr': {'class': 'control-label col-md-8'} }) }}
-        		
-                {{ form_label(form.author, 'Author', { 'label_attr': {'class': 'control-label'} }) }}
-                {{ form_widget(form.author,{ 'attr':{'class': 'control-label col-md-8'} }) }}        		
-        		
-                {{ form_label(form.views, 'Views', { 'label_attr': {'class': 'control-label'} }) }}
-                {{ form_widget(form.views,{ 'attr': {'class': 'control-label col-md-8'} }) }}        		
-        		</div>       			          			
-        		<div class="col-xs-12 col-md-6">
-        		{{ form_label(form.language, 'Language', { 'label_attr': {'class':'control-label'} }) }} 
-        		{{ form_widget(form.language,{'attr': {'class': 'control-label'} }) }}
-                {{ form_label(form.publishedAt, 'Published', { 'label_attr': {'class': 'control-label'} }) }}
-                {{ form_widget(form.publishedAt,{'attr': {'class': 'control-label col-md-8'} }) }}
-                {{ form_label(form.expiredAt, 'Expired', { 'label_attr': {'class': 'control-label'} }) }}
-                {{ form_widget(form.expiredAt,{ 'attr': {'class': 'control-label col-md-8'} }) }}
-        		</div>    	
-        	</div>			   			
-			</div>
-		</div>
-	</div>
-	<div class="list-group-item col-md-12 clearfix"
-		style="background: #eee;">
-		<h4><span class="fa fa-toggle-on"></span> {{ __('Publish settings')}}</h4>
-		<div class="col-xs-12 col-md-3 ">{{ form_widget(form.depot,
-			{'label_attr': {'class': 'btn btn-primary radio-inline' }}) }}</div>
-		<div class="col-xs-12 col-md-3">{{ form_widget(form.online,
-			{'label_attr': {'class': 'btn btn-primary radio-inline' }}) }}</div>
-		<div class="col-xs-12 col-md-3 ">{{ form_widget(form.inmenu,
-			{'label_attr': {'class': 'btn btn-primary radio-inline' }}) }}</div>
-		<div class="col-xs-12 col-md-3">{{ form_widget(form.inlist,
-			{'label_attr': {'class': 'btn btn-primary radio-inline' }}) }}</div>
-	</div>
+    <div class="row">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
 
-	<div class="list-group-item list-group-item-info col-md-12">{{ form_widget(form.save,
+        <div class="list-group col-md-12">
+            <div id="autosave-info" class="list-group-item col-md-12 {% if page.id %} list-group-item-success {% else %} list-group-item-warning {% endif %}" >
+                <p> <i class="fa fa-floppy-o"> </i>
+                    <span id="autosave-info-off" class="{% if page.id %} hide {% else %}  {% endif %}">{{ __('Autosave is off! Please enter title to turn on auto save feature.')}}</span>
+                    <span id="autosave-info-on" class="{% if page.id %}  {% else %} hide {% endif %}">{{ __('Autosave is on.')}}</span>
+                </p>
+            </div>
+            <div class="list-group-item col-md-12 clearfix"
+                 style="background: #eee;">
+                <div class="col-xs-12 col-md-2">
+                    <h4><span class="fa fa-list"></span>{{ __('Title')}}</h4>
+                </div>
+                <div class="col-xs-12 col-md-9">{{ form_widget(form.title, {'attr': {'class': 'input-lg' }}) }}</div>
+            </div>
+            <div class="list-group-item col-md-12" style="background: #eee;">
+                <div class="col-md-12 controls form-inline">
+                    <p><strong>{{ __('Direct link')}}: </strong>/{{form_widget(form.urltitle, {'attr': {'class':'simplebox input-sm'}}) }}</p>
+                </div>
+            </div>
+            <div class="list-group-item col-md-12">	
+                {{ render(controller('KaikmediaGalleryModule:Plugin:gallery', {'obj_name': 'KaikmediaPagesModule', 'obj_id': page.id})) }}
+            </div>		
+            <div class="list-group-item col-md-12" style="background: #eee;">
+                <h4><span class="fa fa-file"></span> {{ __('Content')}}</h4>
+                {{ form_widget(form.content) }}
+            </div>	
+            <div class="list-group-item col-md-12" style="background: #eee;">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <h4><span class="fa fa-file"></span> {{ __('Description')}}</h4>
+                        {{ form_widget(form.description, { 'attr': {'rows' : '10', 'cols' : '30' }} ) }}
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <h4><span class="fa fa-wrench"></span> {{ __('Options')}}</h4>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-6">
+                                {{ form_label(form.layout, 'Layout', { 'label_attr': {'class':'control-label'} }) }}
+                                {{ form_widget(form.layout,{'attr': {'class': 'control-label col-md-8'} }) }}
+
+                                {{ form_label(form.author, 'Author', { 'label_attr': {'class': 'control-label'} }) }}
+                                {{ form_widget(form.author,{ 'attr':{'class': 'control-label col-md-8'} }) }}        		
+
+                                {{ form_label(form.views, 'Views', { 'label_attr': {'class': 'control-label'} }) }}
+                                {{ form_widget(form.views,{ 'attr': {'class': 'control-label col-md-8'} }) }}        		
+                            </div>       			          			
+                            <div class="col-xs-12 col-md-6">
+                                {{ form_label(form.language, 'Language', { 'label_attr': {'class':'control-label'} }) }} 
+                                {{ form_widget(form.language,{'attr': {'class': 'control-label'} }) }}
+                                {{ form_label(form.publishedAt, 'Published', { 'label_attr': {'class': 'control-label'} }) }}
+                                {{ form_widget(form.publishedAt,{'attr': {'class': 'control-label col-md-8'} }) }}
+                                {{ form_label(form.expiredAt, 'Expired', { 'label_attr': {'class': 'control-label'} }) }}
+                                {{ form_widget(form.expiredAt,{ 'attr': {'class': 'control-label col-md-8'} }) }}
+                            </div>    	
+                        </div>			   			
+                    </div>
+                </div>
+            </div>
+            <div class="list-group-item col-md-12 clearfix"
+                 style="background: #eee;">
+                <h4><span class="fa fa-toggle-on"></span> {{ __('Publish settings')}}</h4>
+                <div class="col-xs-12 col-md-3 ">{{ form_widget(form.depot,
+			{'label_attr': {'class': 'btn btn-primary radio-inline' }}) }}</div>
+                <div class="col-xs-12 col-md-3">{{ form_widget(form.online,
+			{'label_attr': {'class': 'btn btn-primary radio-inline' }}) }}</div>
+                <div class="col-xs-12 col-md-3 ">{{ form_widget(form.inmenu,
+			{'label_attr': {'class': 'btn btn-primary radio-inline' }}) }}</div>
+                <div class="col-xs-12 col-md-3">{{ form_widget(form.inlist,
+			{'label_attr': {'class': 'btn btn-primary radio-inline' }}) }}</div>
+            </div>
+
+            <div class="list-group-item list-group-item-info col-md-12">{{ form_widget(form.save,
 		{'attr': {'class': 'btn btn-info pull-right'}}) }}</div>
-</div>
-{{ form_end(form) }}
-</div>
-</div>
-
-{% javascripts '@KaikmediaPagesModule/Resources/public/js/*' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %} {{
-render(controller('ZikulaAdminModule:Admin:adminfooter')) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>  
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+    {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }#}
+    {#{ pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
+    <script>
+    (function($) {
+            $(function(){
+                Zikula.Intercom.InboxManager.init();  
+            });
+    })(jQuery);
+    </script>
+    {#{ dump() }#}
+{% endblock %}

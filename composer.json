@@ -1,5 +1,6 @@
 {
 	"name" : "kaikmedia/pages-module",
+	"version" : "2.0.0",        
 	"description" : "Module to manage simple html pages",
 	"type" : "zikula-module",
 	"license" : "LGPL-3.0+",
@@ -15,12 +16,27 @@
 		}
 	},
 	"require" : {
-		"php" : ">5.3.3",
-		"tinymce/tinymce" : "4.1.9"
+		"php" : ">5.3.3"
 	},
 	"extra" : {
 		"zikula" : {
-			"class" : "Kaikmedia\\PagesModule\\KaikmediaPagesModule"
+			"core-compatibility" : ">=1.4.1",                   
+			"class" : "Kaikmedia\\PagesModule\\KaikmediaPagesModule",
+			"displayname" : "Pages",
+			"url" : "pages",
+			"oldnames" : [
+				"Pages"
+			],
+			"capabilities" : {
+                                "hook_subscriber": {"class": "Kaikmedia\\PagesModule\\Container\\HookContainer"},
+                                "searchable": {"class": "Kaikmedia\\PagesModule\\Helper\\SearchHelper"},
+                                "categorizable": ["Kaikmedia\\PagesModule\\Entity\\PageEntity"],                            
+				"user" : { "route" : "kaikmediapagesmodule_user_index"},
+				"admin" : {"route" : "kaikmediapagesmodule_admin_index"}
+			},
+			"securityschema" : {
+				"KaikmediaPagesModule::" : "::"
+			}                       
 		}
 	}
 }

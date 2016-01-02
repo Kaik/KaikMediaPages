@@ -4,7 +4,6 @@
  */
 namespace Kaikmedia\PagesModule\Entity;
 
-use UserUtil;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -175,7 +174,7 @@ class PagesQueryBuilder extends QueryBuilder
                 if (is_numeric($search)) {
                     return $this->filterAuthor($search);
                 } elseif (is_string($search)) {
-                    $uid = UserUtil::getIdFromName($search);
+                    $uid = \UserUtil::getIdFromName($search);
                     $uid = $uid !== false ? $uid : 0;
                     return $this->filterAuthor($uid);
                 }

@@ -1,7 +1,29 @@
- {{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
-
-<h3>
-	<span class="fa fa-dashboard"></span> {{ __('Informations')}}
-</h3>
-<div class="container-fluid"></div>
-{{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }}
+{% extends 'KaikmediaPagesModule:Base:admin.html.twig' %}
+{% block header %}
+    {% set settings='settings' %}
+    {{ parent() }}
+    {#{ pageAddAsset('stylesheet', zasset('@ZikulaIntercomModule:css/inbox.css')) }#}
+{% endblock %} 
+{% block title %}
+    {% set title_icon="<i class='fa fa-user-secret'></i>" %}
+    {% set title=__('Pages') %}
+    {{ parent() }}
+{% endblock %}
+{% block content %}
+    <div id="km_pages_admin_index" class="col-md-12 clearfix">    
+  
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+    {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }#}
+    {#{ pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
+    <script>
+    (function($) {
+            $(function(){
+                Zikula.Intercom.InboxManager.init();  
+            });
+    })(jQuery);
+    </script>
+    {#{ dump() }#}
+{% endblock %}

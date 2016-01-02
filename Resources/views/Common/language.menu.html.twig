@@ -15,6 +15,7 @@
         }
     }
 %}
+{% set selected = (selected == '') ? 'all' : selected %}
 {% set option = options[selected] %}
 <div id="{{ thisname }}-dropdown-{{ id }}" class="dropdown">
   	<a class="dropdown-toggle" id="{{ thisname }}-menu-{{ id }}" data-toggle="dropdown" aria-expanded="true">

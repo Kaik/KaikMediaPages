@@ -1,0 +1,30 @@
+<div id="km_pages">
+{% block header %}
+{#{ pageAddAsset('stylesheet', zasset('@KaikmediaKmdModule:css/style.css')) }#}
+{#{ pageAddAsset('javascript', zasset('@KaikmediaPagesModule:js/Kaikmedia.Kmd.Home.js')) }
+<script>
+(function($) {
+	$(function(){
+            //Zikula.Intercom.settings.set({{ settings|json_encode|raw }});  
+	});
+})(jQuery);
+</script>
+#}
+{% endblock %}
+<section class="content-header">
+{% block title %}
+      <h1>
+       {{ title_icon|raw }} {{ title }}
+        {{ pageSetVar('title', title) }}
+      </h1>
+{% endblock %} 
+</section> 
+<div id="km_pages_content">
+{% block content %}       
+{% endblock %}
+</div>
+
+
+{% block footer %}
+{% endblock %}
+</div>

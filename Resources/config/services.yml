@@ -1,9 +1,17 @@
 services:
-    pages.form.type.settings:
+    kaikmedia_pages_module.link_container:
+        class: Kaikmedia\PagesModule\Container\LinkContainer
+        lazy: true
+        tags:
+            - { name: zikula.link_container }
+        arguments: [@translator, @router]
+    kaikmedia_pages_module.access_manager:
+        class: Kaikmedia\PagesModule\Security\AccessManager    
+    kaikmedia_pages_module.form.type.settings:
         class: Kaikmedia\PagesModule\Form\Type\SettingsType
         tags:
             - { name: form.type, alias: settingsform }
-    pages.form.type.page:
+    kaikmedia_pages_module.form.type.page:
         class: Kaikmedia\PagesModule\Form\Type\PageType
         tags:
             - { name: form.type, alias: pageform }

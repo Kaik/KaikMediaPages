@@ -4,7 +4,6 @@
  */
 namespace Kaikmedia\PagesModule\Entity\Repository;
 
-use ServiceUtil;
 use Doctrine\ORM\EntityRepository;
 use Kaikmedia\PagesModule\Entity\PagesQueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -19,7 +18,7 @@ class PagesRepository extends EntityRepository
      */
     public function build()
     {
-        $em = ServiceUtil::getService('doctrine.entitymanager');
+        $em = \ServiceUtil::getService('doctrine.entitymanager');
         $qb = new PagesQueryBuilder($em);
         return $qb;
     }
@@ -37,7 +36,7 @@ class PagesRepository extends EntityRepository
     {
         $qb = $this->build();
         $qb->select('p');
-        $qb->from('Kaikmedia\PagesModule\Entity\PagesEntity', 'p');
+        $qb->from('Kaikmedia\PagesModule\Entity\PageEntity', 'p');
         // filters
         $qb->addFilters($f);
         // search

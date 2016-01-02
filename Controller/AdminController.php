@@ -4,11 +4,6 @@
  */
 namespace Kaikmedia\PagesModule\Controller;
 
-use ModUtil;
-use System;
-use SecurityUtil;
-use ServiceUtil;
-use UserUtil;
 use Zikula\Core\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -26,24 +21,8 @@ use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
 class AdminController extends AbstractController
 {
 
-    public function postInitialize()
-    {
-        $this->view->setCaching(false);
-    }
-
     /**
-     * Route not needed here because this is a legacy-only method
-     * The default entrypoint.
-     * 
-     * @return RedirectResponse
-     */
-    public function mainAction()
-    {
-        return new RedirectResponse($this->get('router')->generate('kaikmediapagesmodule_admin_manager', array(), RouterInterface::ABSOLUTE_URL));
-    }
-
-    /**
-     * @Route("")
+     * @Route("/index")
      * the main administration function
      * 
      * @return RedirectResponse
@@ -51,7 +30,7 @@ class AdminController extends AbstractController
     public function indexAction(Request $request)
     {
         // Security check
-        if (! SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
         
@@ -67,7 +46,7 @@ class AdminController extends AbstractController
     public function managerAction(Request $request, $page)
     {
         // Security check
-        if (! SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
         $a = array();
@@ -116,7 +95,7 @@ class AdminController extends AbstractController
         }
         
         // Get parameters from whatever input we need.
-        $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getAll($a);
+        $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getAll($a);
         
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
         return $this->render('KaikmediaPagesModule:Admin:manager.html.twig', array(
@@ -143,11 +122,11 @@ class AdminController extends AbstractController
     public function displayAction(Request $request, $id = null)
     {
         // Security check
-        if (! UserUtil::isLoggedIn() || ! SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+        if (!\UserUtil::isLoggedIn() || !\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
         // Get parameters from whatever input we need.
-        $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
+        $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getOneBy(array(
             'id' => $id
         ));
         
@@ -174,7 +153,7 @@ class AdminController extends AbstractController
     public function modifyAction(Request $request, $id = null)
     {
         // Security check
-        if (! UserUtil::isLoggedIn() || ! SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+        if (!\UserUtil::isLoggedIn() || !\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
         
@@ -182,7 +161,7 @@ class AdminController extends AbstractController
             // create a new customer
             $page = new Page();
         } else {
-            $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PagesEntity')->getOneBy(array(
+            $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getOneBy(array(
                 'id' => $id
             ));
         }
@@ -194,7 +173,7 @@ class AdminController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
             
-            $images = $form->get('images')->getData();
+            //$images = $form->get('images')->getData();
                         
             $em->persist($page);
             $em->flush();
@@ -203,12 +182,12 @@ class AdminController extends AbstractController
                 ->add('status', "Page saved!");
             
             
-            $gallery = new GalleryPlugin($this->container->get('doctrine.entitymanager'));
+            //$gallery = new GalleryPlugin($this->container->get('doctrine.entitymanager'));
             
-            $result = $gallery->assignMedia('KaikmediaPagesModule', $page->getId(), $images);
+            //$result = $gallery->assignMedia('KaikmediaPagesModule', $page->getId(), $images);
 
-            var_dump($result);
-            exit(0);
+            //var_dump($result);
+            //exit(0);
             
             return $this->redirect($this->generateUrl('kaikmediapagesmodule_admin_display', array(
                 'id' => $page->getId()
