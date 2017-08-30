@@ -20,7 +20,7 @@
 	},
 	"extra" : {
 		"zikula" : {
-			"core-compatibility" : ">=1.4.1",                   
+			"core-compatibility" : ">=1.5.0",                   
 			"class" : "Kaikmedia\\PagesModule\\KaikmediaPagesModule",
 			"displayname" : "Pages",
 			"url" : "pages",
@@ -28,9 +28,7 @@
 				"Pages"
 			],
 			"capabilities" : {
-                                "hook_subscriber": {"class": "Kaikmedia\\PagesModule\\Container\\HookContainer"},
-                                "searchable": {"class": "Kaikmedia\\PagesModule\\Helper\\SearchHelper"},
-                                "categorizable": ["Kaikmedia\\PagesModule\\Entity\\PageEntity"],                            
+                                "categorizable": {"entities": ["Kaikmedia\\PagesModule\\Entity\\PageEntity"]},                          
 				"user" : { "route" : "kaikmediapagesmodule_user_index"},
 				"admin" : {"route" : "kaikmediapagesmodule_admin_index"}
 			},

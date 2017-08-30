@@ -1,9 +1,13 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * KaikMedia PagesModule
+ *
+ * @package    KaikmediaPagesModule
+ * @author     Kaik <contact@kaikmedia.com>
+ * @copyright  KaikMedia
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @link       https://github.com/Kaik/KaikMediaPages.git
  */
 
 namespace Kaikmedia\PagesModule\Entity\Base;
@@ -17,12 +21,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Description of BaseEntity
  *
  * @ORM\MappedSuperclass()
- * 
+ *
  * @author Kaik
  */
-abstract class AbstractBaseEntity extends EntityAccess {
+abstract class AbstractBaseEntity extends EntityAccess
+{
     //put your code here
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -87,7 +91,7 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * The author uid
-     * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
+     * @ORM\ManyToOne(targetEntity="Zikula\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="author", referencedColumnName="uid")
      */
     private $author;
@@ -106,7 +110,7 @@ abstract class AbstractBaseEntity extends EntityAccess {
     /**
      * The user id of the creator of the category
      * @Gedmo\Blameable(on="create")
-     * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
+     * @ORM\ManyToOne(targetEntity="Zikula\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="createdBy", referencedColumnName="uid")
      */
     private $createdBy;
@@ -120,7 +124,7 @@ abstract class AbstractBaseEntity extends EntityAccess {
     /**
      * The user id of the last updater of the category
      * @Gedmo\Blameable(on="update")
-     * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
+     * @ORM\ManyToOne(targetEntity="Zikula\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="updatedBy", referencedColumnName="uid")
      */
     private $updatedBy;
@@ -136,13 +140,13 @@ abstract class AbstractBaseEntity extends EntityAccess {
     private $expiredAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Zikula\Module\UsersModule\Entity\UserEntity")
+     * @ORM\ManyToOne(targetEntity="Zikula\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="deletedBy", referencedColumnName="uid")
      */
     private $deletedBy;
 
     /**
-     * 
+     *
      * @ORM\Column(name="deletedAt", type="datetime", nullable=true, options={"default":null})
      */
     private $deletedAt;
@@ -150,19 +154,13 @@ abstract class AbstractBaseEntity extends EntityAccess {
     /**
      * constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->online = 0;
         $this->depot = 0;
         //$this->revision = 0;
         $this->inmenu = 1;
         $this->inlist = 1;
-        // $this->published = new \DateTime(null);
-        // $this->expired = new \DateTime(null);
-        $em = \ServiceUtil::getService('doctrine.entitymanager');
-        $this->author = $em->getRepository('Zikula\Module\UsersModule\Entity\UserEntity')->findOneBy(array(
-            'uid' => \UserUtil::getVar('uid')
-        ));
-
         $this->language = 'all';
         $this->layout = 'default';
         $this->views = 0;
@@ -176,7 +174,8 @@ abstract class AbstractBaseEntity extends EntityAccess {
      *
      * @return integer
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
@@ -187,17 +186,19 @@ abstract class AbstractBaseEntity extends EntityAccess {
      *
      * @return void
      */
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
     /**
      * Set title
-     * 
-     * @param string $title            
+     *
+     * @param string $title
      * @return Pages
      */
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->title = $title;
 
         return $this;
@@ -205,20 +206,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get title
-     * 
+     *
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->title;
     }
 
     /**
      * Set urltitle
-     * 
-     * @param string $urltitle            
+     *
+     * @param string $urltitle
      * @return Pages
      */
-    public function setUrltitle($urltitle) {
+    public function setUrltitle($urltitle)
+    {
         $this->urltitle = $urltitle;
 
         return $this;
@@ -226,20 +229,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get urltitle
-     * 
+     *
      * @return string
      */
-    public function getUrltitle() {
+    public function getUrltitle()
+    {
         return $this->urltitle;
     }
 
     /**
      * Set online
-     * 
-     * @param boolean $online            
+     *
+     * @param boolean $online
      * @return Pages
      */
-    public function setOnline($online) {
+    public function setOnline($online)
+    {
         $this->online = $online;
 
         return $this;
@@ -247,20 +252,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get online
-     * 
+     *
      * @return boolean
      */
-    public function getOnline() {
+    public function getOnline()
+    {
         return $this->online;
     }
 
     /**
      * Set depot
-     * 
-     * @param boolean $depot            
+     *
+     * @param boolean $depot
      * @return Pages
      */
-    public function setDepot($depot) {
+    public function setDepot($depot)
+    {
         $this->depot = $depot;
 
         return $this;
@@ -268,20 +275,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get depot
-     * 
+     *
      * @return boolean
      */
-    public function getDepot() {
+    public function getDepot()
+    {
         return $this->depot;
     }
 
     /**
      * Set inmenu
-     * 
-     * @param boolean $inmenu            
+     *
+     * @param boolean $inmenu
      * @return Pages
      */
-    public function setInmenu($inmenu) {
+    public function setInmenu($inmenu)
+    {
         $this->inmenu = $inmenu;
 
         return $this;
@@ -289,20 +298,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get inmenu
-     * 
+     *
      * @return boolean
      */
-    public function getInmenu() {
+    public function getInmenu()
+    {
         return $this->inmenu;
     }
 
     /**
      * Set inlist
-     * 
-     * @param boolean $inlist            
+     *
+     * @param boolean $inlist
      * @return Pages
      */
-    public function setInlist($inlist) {
+    public function setInlist($inlist)
+    {
         $this->inlist = $inlist;
 
         return $this;
@@ -310,20 +321,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get inlist
-     * 
+     *
      * @return boolean
      */
-    public function getInlist() {
+    public function getInlist()
+    {
         return $this->inlist;
     }
 
     /**
      * Set language
-     * 
-     * @param string $language            
+     *
+     * @param string $language
      * @return Pages
      */
-    public function setLanguage($language) {
+    public function setLanguage($language)
+    {
         $this->language = $language;
 
         return $this;
@@ -331,20 +344,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get language
-     * 
+     *
      * @return string
      */
-    public function getLanguage() {
+    public function getLanguage()
+    {
         return $this->language;
     }
 
     /**
      * Set layout
-     * 
-     * @param string $layout            
+     *
+     * @param string $layout
      * @return Pages
      */
-    public function setLayout($layout) {
+    public function setLayout($layout)
+    {
         $this->layout = $layout;
 
         return $this;
@@ -352,20 +367,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get layout
-     * 
+     *
      * @return string
      */
-    public function getLayout() {
+    public function getLayout()
+    {
         return $this->layout;
     }
 
     /**
      * Set views
-     * 
-     * @param integer $views            
+     *
+     * @param integer $views
      * @return Pages
      */
-    public function setViews($views) {
+    public function setViews($views)
+    {
         $this->views = $views;
 
         return $this;
@@ -373,20 +390,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get views
-     * 
+     *
      * @return integer
      */
-    public function getViews() {
+    public function getViews()
+    {
         return $this->views;
     }
 
     /**
      * Set author
-     * 
-     * @param integer $author            
+     *
+     * @param integer $author
      * @return Pages
      */
-    public function setAuthor(\Zikula\Module\UsersModule\Entity\UserEntity $author = null) {
+    public function setAuthor(Zikula\UsersModule\Entity\UserEntity $author = null)
+    {
         $this->author = $author;
 
         return $this;
@@ -394,92 +413,102 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get author
-     * 
+     *
      * @return integer
      */
-    public function getAuthor() {
+    public function getAuthor()
+    {
         return $this->author;
     }
 
     /**
      * Get createdBy
      *
-     * @return string 
+     * @return string
      */
-    public function getCreatedBy() {
+    public function getCreatedBy()
+    {
         return $this->createdBy;
     }
 
     /**
      * Set createdBy
      *
-     * @return $this 
+     * @return $this
      */
-    public function setCreatedBy($createdBy) {
+    public function setCreatedBy($createdBy)
+    {
         $this->createdBy = $createdBy;
     }
 
     /**
      * Get createdAt
      *
-     * @return string 
+     * @return string
      */
-    public function getCreatedAt() {
+    public function getCreatedAt()
+    {
         return $this->createdAt;
     }
 
     /**
      * Set createdAt
      *
-     * @return $this 
+     * @return $this
      */
-    public function setCreatedAt(\DateTime $createdAt) {
+    public function setCreatedAt(\DateTime $createdAt)
+    {
         $this->createdAt = $createdAt;
     }
 
     /**
      * Get updatedBy
      *
-     * @return string 
+     * @return string
      */
-    public function getUpdatedBy() {
+    public function getUpdatedBy()
+    {
         return $this->updatedBy;
     }
 
     /**
      * Set updatedBy
      *
-     * @return $this 
+     * @return $this
      */
-    public function setUpdatedBy($updatedBy) {
+    public function setUpdatedBy($updatedBy)
+    {
         $this->updatedBy = $updatedBy;
     }
 
     /**
      * Get updatedAt
      *
-     * @return string 
+     * @return string
      */
-    public function getUpdatedAt() {
+    public function getUpdatedAt()
+    {
         return $this->updatedAt;
     }
 
     /**
      * Set updatedAt
      *
-     * @return $this 
+     * @return $this
      */
-    public function setUpdatedAt(\DateTime $updatedAt) {
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
         $this->updatedAt = $updatedAt;
     }
-    
+
     /**
      * Set published
-     * 
-     * @param \DateTime $published            
+     *
+     * @param \DateTime $published
      * @return Pages
      */
-    public function setPublishedAt(\DateTime $publishedAt = null) {
+    public function setPublishedAt(\DateTime $publishedAt = null)
+    {
         $this->publishedAt = $publishedAt;
 
         return $this;
@@ -487,20 +516,22 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get published
-     * 
+     *
      * @return \DateTime
      */
-    public function getPublishedAt() {
+    public function getPublishedAt()
+    {
         return $this->publishedAt;
     }
 
     /**
      * Set expired
-     * 
-     * @param \DateTime $expired            
+     *
+     * @param \DateTime $expired
      * @return Pages
      */
-    public function setExpiredAt(\DateTime $expiredAt = null) {
+    public function setExpiredAt(\DateTime $expiredAt = null)
+    {
         $this->expiredAt = $expiredAt;
 
         return $this;
@@ -508,56 +539,62 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get expired
-     * 
+     *
      * @return \DateTime
      */
-    public function getExpiredAt() {
+    public function getExpiredAt()
+    {
         return $this->expiredAt;
-    }    
+    }
 
     /**
      * Get deletedBy
      *
-     * @return string 
+     * @return string
      */
-    public function getDeletedBy() {
+    public function getDeletedBy()
+    {
         return $this->deletedBy;
     }
 
     /**
      * Set deletedBy
      *
-     * @return $this 
+     * @return $this
      */
-    public function setDeletedBy($deletedBy) {
+    public function setDeletedBy($deletedBy)
+    {
         $this->deletedBy = $deletedBy;
     }
 
     /**
      * Get deletedAt
      *
-     * @return string 
+     * @return string
      */
-    public function getDeletedAt() {
+    public function getDeletedAt()
+    {
         return $this->deletedAt;
     }
 
     /**
      * Set deletedAt
      *
-     * @return $this 
+     * @return $this
      */
-    public function setDeletedAt($deletedAt) {
+    public function setDeletedAt($deletedAt)
+    {
         $this->deletedAt = $deletedAt;
     }
 
     /**
      * Set obj_status
-     * 
-     * @param string $obj_status            
+     *
+     * @param string $obj_status
      * @return Pages
      */
-    public function setStatus($status) {
+    public function setStatus($status)
+    {
         $this->status = $status;
 
         return $this;
@@ -565,10 +602,11 @@ abstract class AbstractBaseEntity extends EntityAccess {
 
     /**
      * Get obj_status
-     * 
+     *
      * @return string
      */
-    public function getStatus() {
+    public function getStatus()
+    {
         return $this->status;
     }
 
@@ -576,7 +614,8 @@ abstract class AbstractBaseEntity extends EntityAccess {
      * ToString interceptor implementation.
      * This method is useful for debugging purposes.
      */
-    public function __toString() {
+    public function __toString()
+    {
         return $this->getId();
     }
 
@@ -591,7 +630,8 @@ abstract class AbstractBaseEntity extends EntityAccess {
      * (3) http://stackoverflow.com/questions/185934/how-do-i-create-a-copy-of-an-object-in-php
      * (4) http://www.pantovic.com/article/26/doctrine2-entity-cloning
      */
-    public function __clone() {
+    public function __clone()
+    {
         // If the entity has an identity, proceed as normal.
         if ($this->id) {
             // unset identifiers
@@ -604,5 +644,4 @@ abstract class AbstractBaseEntity extends EntityAccess {
         }
         // otherwise do nothing, do NOT throw an exception!
     }
-
 }

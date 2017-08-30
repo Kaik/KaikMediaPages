@@ -1,19 +1,25 @@
 services:
     kaikmedia_pages_module.link_container:
         class: Kaikmedia\PagesModule\Container\LinkContainer
-        lazy: true
+        arguments:
+          - "@translator.default"
+          - "@router"
+          - "@zikula_permissions_module.api.permission"
+          - "@=service('zikula_extensions_module.api.variable').get('KaikmediaPagesModule', 'enablecategorization', true)"
         tags:
-            - { name: zikula.link_container }
-        arguments: [@translator, @router]
-    kaikmedia_pages_module.access_manager:
-        class: Kaikmedia\PagesModule\Security\AccessManager    
-    kaikmedia_pages_module.form.type.settings:
-        class: Kaikmedia\PagesModule\Form\Type\SettingsType
-        tags:
-            - { name: form.type, alias: settingsform }
-    kaikmedia_pages_module.form.type.page:
-        class: Kaikmedia\PagesModule\Form\Type\PageType
-        tags:
-            - { name: form.type, alias: pageform }
+          - { name: zikula.link_container }
+        
+#    kaikmedia_pages_module.access_manager:
+#        class: Kaikmedia\PagesModule\Security\AccessManager
+#        
+#    kaikmedia_pages_module.form.type.settings:
+#        class: Kaikmedia\PagesModule\Form\Type\SettingsType
+#        tags:
+#            - { name: form.type, alias: settingsform }
+#            
+#    kaikmedia_pages_module.form.type.page:
+#        class: Kaikmedia\PagesModule\Form\Type\PageType
+#        tags:
+#            - { name: form.type, alias: pageform }
 
             

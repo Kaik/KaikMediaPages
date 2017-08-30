@@ -1,120 +1,124 @@
 <?php
+
 /**
- * Copyright (c) KaikMedia.com 2014
+ * KaikMedia PagesModule
+ *
+ * @package    KaikmediaPagesModule
+ * @author     Kaik <contact@kaikmedia.com>
+ * @copyright  KaikMedia
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @link       https://github.com/Kaik/KaikMediaPages.git
  */
+
 namespace Kaikmedia\PagesModule\Form\Type;
 
-use ServiceUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
-use Kaikmedia\PagesModule\Form\DataTransformer\UserToIdTransformer;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PageType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // this assumes that the entity manager was passed in as an optio
-        $em = ServiceUtil::getService('doctrine.entitymanager');
-        // $entityManager = $options['em'];
-        $transformer = new UserToIdTransformer($em);
+//        // this assumes that the entity manager was passed in as an optio
+//        $em = ServiceUtil::getService('doctrine.entitymanager');
+//        // $entityManager = $options['em'];
+//        $transformer = new UserToIdTransformer($em);
         $builder->setMethod('POST')
-            ->add('online', 'choice', array(
-            'choices' => array(
+            ->add('online', 'choice', [
+            'choices' => [
                 '0' => 'Offline',
                 '1' => 'Online'
-            ),
+            ],
             'multiple' => false,
             'expanded' => true,
             'required' => true
-        ))            
+        ])
             ->add('images', 'hidden', [
                 'mapped' => false,
             ])
-            
-            ->add('depot', 'choice', array(
-            'choices' => array(
+
+            ->add('depot', 'choice', [
+            'choices' => [
                 '0' => 'Depot',
                 '1' => 'Allowed'
-            ),
+            ],
             'multiple' => false,
             'expanded' => true,
             'required' => true
-        ))
-            ->add('inmenu', 'choice', array(
-            'choices' => array(
+        ])
+            ->add('inmenu', 'choice', [
+            'choices' => [
                 '0' => 'Not in menus',
                 '1' => 'In menus'
-            ),
+            ],
             'multiple' => false,
             'expanded' => true,
             'required' => true
-        ))
-            ->add('inlist', 'choice', array(
-            'choices' => array(
+        ])
+            ->add('inlist', 'choice', [
+            'choices' => [
                 '0' => 'Not in list',
                 '1' => 'In List'
-            ),
+            ],
             'multiple' => false,
             'expanded' => true,
             'required' => true
-        ))
-            ->add('title', 'text', array(
+        ])
+            ->add('title', 'text', [
             'required' => false
-        ))
-            ->add('urltitle', 'text', array(
+        ])
+            ->add('urltitle', 'text', [
             'required' => false
-        ))
-            ->add($builder->create('author', 'text', ['attr' => ['class' => 'author_search'],
-            'required' => false])
-            ->addModelTransformer($transformer))
-                       
-            ->add('views', 'text', array(
-            'required' => false ))
-            
-            ->add('publishedAt', 'datetime', array(
+        ])
+//            ->add($builder->create('author', 'text', ['attr' => ['class' => 'author_search'],
+//            'required' => false])
+//            ->addModelTransformer($transformer))
+
+            ->add('views', 'text', [
+            'required' => false ])
+
+            ->add('publishedAt', 'datetime', [
             'format' => \IntlDateFormatter::SHORT,
             'input' => 'datetime',
             'required' => false,
             'widget' => 'single_text'
-        ))
-            ->add('expiredAt', 'datetime', array(
+        ])
+            ->add('expiredAt', 'datetime', [
             'format' => \IntlDateFormatter::SHORT,
             'input' => 'datetime',
             'required' => false,
             'widget' => 'single_text'
-        ))
-            ->add('layout', 'choice', array(
-            'choices' => array(
+        ])
+            ->add('layout', 'choice', [
+            'choices' => [
                 'default' => 'Default',
                 'slider' => 'Slider'
-            ),
+            ],
             'required' => false
-        ))
-            ->add('language', 'choice', array(
-            'choices' => array(
+        ])
+            ->add('language', 'choice', [
+            'choices' => [
                 'all' => 'All',
                 'en' => 'English',
                 'pl' => 'Polish'
-            ),'required' => false
-        ))
-            ->add('content', 'textarea', array(
+            ],'required' => false
+        ])
+            ->add('content', 'textarea', [
             'required' => false,
-            'attr' => array(
+            'attr' => [
                 'class' => 'tinymce'
-            )
-        ))
-            ->add('description', 'textarea', array(
+            ]
+        ])
+            ->add('description', 'textarea', [
             'required' => false,
-            'attr' => array(
+            'attr' => [
                 'class' => 'tinymc'
-            )
-        ))
-            ->add('save', 'submit', array(
+            ]
+        ])
+            ->add('save', 'submit', [
             'label' => 'Save'
-        ));
+        ]);
     }
 
     public function getName()
@@ -123,16 +127,13 @@ class PageType extends AbstractType
     }
 
     /**
-     * OptionsResolverInterface is @deprecated and is supposed to be replaced by
-     * OptionsResolver but docs not clear on implementation
-     * 
-     * @param OptionsResolverInterface $resolver            
+     * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'title' => null,
             'content' => null
-        ));
+        ]);
     }
 }

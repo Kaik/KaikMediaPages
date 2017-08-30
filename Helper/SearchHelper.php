@@ -1,6 +1,13 @@
 <?php
+
 /**
- * 
+ * KaikMedia PagesModule
+ *
+ * @package    KaikmediaPagesModule
+ * @author     Kaik <contact@kaikmedia.com>
+ * @copyright  KaikMedia
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @link       https://github.com/Kaik/KaikMediaPages.git
  */
 
 namespace Kaikmedia\PagesModule\Helper;
@@ -19,10 +26,10 @@ class SearchHelper extends AbstractSearchable
      */
     public function getOptions($active, $modVars = null)
     {
-        if (\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_READ)) {
-
-            return $this->getContainer()->get('templating')->renderResponse('KaikmediaPagesModule:Search:options.html.twig', array('active' => $active))->getContent();
-        }
+//        if (\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_READ)) {
+//
+//            return $this->getContainer()->get('templating')->renderResponse('KaikmediaPagesModule:Search:options.html.twig', array('active' => $active))->getContent();
+//        }
 
         return '';
     }
@@ -37,42 +44,41 @@ class SearchHelper extends AbstractSearchable
      */
     function getResults(array $words, $searchType = 'AND', $modVars = null)
     {
-        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_READ)) {
-            return array();
-        }
+//        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_READ)) {
+//            return array();
+//        }
+//
+//        $qb = $this->entityManager->createQueryBuilder();
+//        $qb->select('p')->from('Kaikmedia\PagesModule\Entity\PageEntity', 'p');
+//        $whereExpr = $this->formatWhere($qb, $words, array('p.title', 'p.content'), $searchType);
+//        $qb->andWhere($whereExpr);
+//        $pages = $qb->getQuery()->getResult();
+//
+//        $sessionId = session_id();
+//        $enableCategorization = \ModUtil::getVar($this->name, 'enablecategorization');
+//
+//        $records = array();
+//        foreach ($pages as $page) {
+//            /** @var $page \Zikula\PagesModule\Entity\PageEntity */
+//
+//            $pagePermissionCheck = \SecurityUtil::checkPermission($this->name . '::', $page->getTitle() . '::' . $page->getPageid(), ACCESS_OVERVIEW);
+//            if ($enableCategorization) {
+//                $pagePermissionCheck = $pagePermissionCheck && \CategoryUtil::hasCategoryAccess($page->getCategories(), $this->name);
+//            }
+//            if (!$pagePermissionCheck) {
+//                continue;
+//            }
+//
+//            $records[] = array(
+//                'title' => $page->getTitle(),
+//                'text' => $page->getContent(),
+//                'created' => $page->getCr_date(),
+//                'module' => $this->name,
+//                'sesid' => $sessionId,
+//                'url' => RouteUrl::createFromRoute('zikulapagesmodule_user_display', array('urltitle' => $page->getUrltitle()))
+//            );
+//        }
 
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('p')->from('Kaikmedia\PagesModule\Entity\PageEntity', 'p');
-        $whereExpr = $this->formatWhere($qb, $words, array('p.title', 'p.content'), $searchType);
-        $qb->andWhere($whereExpr);
-        $pages = $qb->getQuery()->getResult();
-
-        $sessionId = session_id();
-        $enableCategorization = \ModUtil::getVar($this->name, 'enablecategorization');
-
-        $records = array();
-        foreach ($pages as $page) {
-            /** @var $page \Zikula\PagesModule\Entity\PageEntity */
-
-            $pagePermissionCheck = \SecurityUtil::checkPermission($this->name . '::', $page->getTitle() . '::' . $page->getPageid(), ACCESS_OVERVIEW);
-            if ($enableCategorization) {
-                $pagePermissionCheck = $pagePermissionCheck && \CategoryUtil::hasCategoryAccess($page->getCategories(), $this->name);
-            }
-            if (!$pagePermissionCheck) {
-                continue;
-            }
-
-            $records[] = array(
-                'title' => $page->getTitle(),
-                'text' => $page->getContent(),
-                'created' => $page->getCr_date(),
-                'module' => $this->name,
-                'sesid' => $sessionId,
-                'url' => RouteUrl::createFromRoute('zikulapagesmodule_user_display', array('urltitle' => $page->getUrltitle()))
-            );
-        }
-
-        return $records;
+        return [];
     }
-
 }

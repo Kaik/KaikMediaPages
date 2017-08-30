@@ -1,28 +1,33 @@
 <?php
+
 /**
- * Copyright (c) KaikMedia.com 2014
+ * KaikMedia PagesModule
+ *
+ * @package    KaikmediaPagesModule
+ * @author     Kaik <contact@kaikmedia.com>
+ * @copyright  KaikMedia
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @link       https://github.com/Kaik/KaikMediaPages.git
  */
+
 namespace Kaikmedia\PagesModule\Form\Type;
 
-use ServiceUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SettingsType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $em = ServiceUtil::getService('doctrine.entitymanager');
         $builder->setMethod('GET')
-            ->add('itemsperpage', 'text', array(
+        ->add('itemsperpage', 'text', [
             'required' => false,
             'data' => $options['itemsperpage']
-        ))
-            ->add('save', 'submit', array(
+        ])
+        ->add('save', 'submit', [
             'label' => 'Save'
-        ));
+        ]);
     }
 
     public function getName()
@@ -31,15 +36,12 @@ class SettingsType extends AbstractType
     }
 
     /**
-     * OptionsResolverInterface is @deprecated and is supposed to be replaced by
-     * OptionsResolver but docs not clear on implementation
-     * 
-     * @param OptionsResolverInterface $resolver            
+     * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'itemsperpage' => null
-        ));
+        ]);
     }
 }

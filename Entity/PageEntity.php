@@ -1,7 +1,13 @@
 <?php
 
 /**
- * Copyright (c) KaikMedia.com 2014
+ * KaikMedia PagesModule
+ *
+ * @package    KaikmediaPagesModule
+ * @author     Kaik <contact@kaikmedia.com>
+ * @copyright  KaikMedia
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @link       https://github.com/Kaik/KaikMediaPages.git
  */
 
 namespace Kaikmedia\PagesModule\Entity;
@@ -13,12 +19,13 @@ use Kaikmedia\PagesModule\Entity\Base\AbstractBaseEntity;
 
 /**
  * Pages
+ *
  * @ORM\Entity
  * @ORM\Table(name="km_pages")
  * @ORM\Entity(repositoryClass="Kaikmedia\PagesModule\Entity\Repository\PagesRepository")
  */
-class PageEntity extends AbstractBaseEntity {
-
+class PageEntity extends AbstractBaseEntity
+{
     /**
      * @ORM\Column(type="text")
      */
@@ -41,8 +48,8 @@ class PageEntity extends AbstractBaseEntity {
     /**
      * constructor
      */
-    public function __construct() {
-
+    public function __construct()
+    {
         parent::__construct();
 
         $this->categoryAssignments = new ArrayCollection();
@@ -50,29 +57,32 @@ class PageEntity extends AbstractBaseEntity {
 
     /**
      * Get description
-     * 
+     *
      * @return string
      */
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
     /**
      * Set description
-     * 
+     *
      * @return $this
      */
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->description = $description;
     }
 
     /**
      * Set content
-     * 
-     * @param string $content            
+     *
+     * @param string $content
      * @return Pages
      */
-    public function setContent($content) {
+    public function setContent($content)
+    {
         $this->content = $content;
 
         return $this;
@@ -80,10 +90,11 @@ class PageEntity extends AbstractBaseEntity {
 
     /**
      * Get content
-     * 
+     *
      * @return string
      */
-    public function getContent() {
+    public function getContent()
+    {
         return $this->content;
     }
 
@@ -92,7 +103,8 @@ class PageEntity extends AbstractBaseEntity {
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function getCategoryAssignments() {
+    public function getCategoryAssignments()
+    {
         return $this->categoryAssignments;
     }
 
@@ -101,7 +113,8 @@ class PageEntity extends AbstractBaseEntity {
      *
      * @param ArrayCollection $assignments
      */
-    public function setCategoryAssignments(ArrayCollection $assignments) {
+    public function setCategoryAssignments(ArrayCollection $assignments)
+    {
         foreach ($this->categoryAssignments as $categoryAssignment) {
             if (false === $key = $this->collectionContains($assignments, $categoryAssignment)) {
                 $this->categoryAssignments->removeElement($categoryAssignment);
@@ -109,9 +122,9 @@ class PageEntity extends AbstractBaseEntity {
                 $assignments->remove($key);
             }
         }
+
         foreach ($assignments as $assignment) {
             $this->categoryAssignments->add($assignment);
         }
     }
-
 }

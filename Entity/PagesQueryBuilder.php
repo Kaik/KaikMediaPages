@@ -1,19 +1,26 @@
 <?php
+
 /**
- * Copyright (c) KaikMedia.com 2014
+ * KaikMedia PagesModule
+ *
+ * @package    KaikmediaPagesModule
+ * @author     Kaik <contact@kaikmedia.com>
+ * @copyright  KaikMedia
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @link       https://github.com/Kaik/KaikMediaPages.git
  */
+
 namespace Kaikmedia\PagesModule\Entity;
 
 use Doctrine\ORM\QueryBuilder;
 
 /**
  * Description of PagesQueryBuilder
- * 
+ *
  * @author Kaik
  */
 class PagesQueryBuilder extends QueryBuilder
 {
-
     public function filterId($id)
     {
         if (is_array($id)) {
@@ -164,21 +171,21 @@ class PagesQueryBuilder extends QueryBuilder
     {
         $search = $s['search'];
         $search_field = $s['search_field'];
-        
+
         if ($search === false || $search_field === false) {
             return;
         }
-        
+
         switch ($search_field) {
-            case 'author':
-                if (is_numeric($search)) {
-                    return $this->filterAuthor($search);
-                } elseif (is_string($search)) {
-                    $uid = \UserUtil::getIdFromName($search);
-                    $uid = $uid !== false ? $uid : 0;
-                    return $this->filterAuthor($uid);
-                }
-                break;
+//            case 'author':
+//                if (is_numeric($search)) {
+//                    return $this->filterAuthor($search);
+//                } elseif (is_string($search)) {
+//                    $uid = \UserUtil::getIdFromName($search);
+//                    $uid = $uid !== false ? $uid : 0;
+//                    return $this->filterAuthor($uid);
+//                }
+//                break;
             case 'title':
                 return $this->andWhere('p.title LIKE :search')->setParameter('search', '%' . $search . '%');
             case 'urltitle':

@@ -1,7 +1,15 @@
 <?php
+
 /**
- * Copyright (c) KaikMedia.com 2014
+ * KaikMedia PagesModule
+ *
+ * @package    KaikmediaPagesModule
+ * @author     Kaik <contact@kaikmedia.com>
+ * @copyright  KaikMedia
+ * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @link       https://github.com/Kaik/KaikMediaPages.git
  */
+
 namespace Kaikmedia\PagesModule\Controller;
 
 use Zikula\Core\Controller\AbstractController;
@@ -14,13 +22,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Kaikmedia\PagesModule\Entity\PageEntity;
-use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
+//use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
+
 /**
  * @Route("/admin")
  */
 class AdminController extends AbstractController
 {
-
     /**
      * @Route("/index")
      * the main administration function
@@ -29,12 +37,12 @@ class AdminController extends AbstractController
      */
     public function indexAction(Request $request)
     {
-        // Security check
-        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+//        // Security check
+//        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+//            throw new AccessDeniedException();
+//        }
 
-        return new RedirectResponse($this->get('router')->generate('kaikmediapagesmodule_admin_manager', array(), RouterInterface::ABSOLUTE_URL));
+        return new RedirectResponse($this->get('router')->generate('kaikmediapagesmodule_admin_manager', [], RouterInterface::ABSOLUTE_URL));
     }
 
     /**
@@ -45,11 +53,11 @@ class AdminController extends AbstractController
      */
     public function managerAction(Request $request, $page)
     {
-        // Security check
-        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
-        $a = array();
+//        // Security check
+//        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+//            throw new AccessDeniedException();
+//        }
+        $a = [];
         // Get startnum and perpage parameter for pager
         $a['page'] = $page;
         $a['limit'] = $request->query->get('limit', 15);
@@ -63,20 +71,20 @@ class AdminController extends AbstractController
         $a['author'] = $request->query->get('author', '');
 
         $form = $this->createFormBuilder($a)
-        ->setAction($this->get('router')->generate('kaikmediapagesmodule_admin_manager', array(), RouterInterface::ABSOLUTE_URL))
+        ->setAction($this->get('router')->generate('kaikmediapagesmodule_admin_manager', [], RouterInterface::ABSOLUTE_URL))
         ->setMethod('GET')
-        ->add('limit', 'choice', array('choices' => array('10' => '10','15' => '15','25' => '25','50' => '50','100'=> '100'), 'required' => false))
-        ->add('title', 'text', array('required' => false))
-        ->add('online', 'choice', array('choices' => array('1' => 'Online','0' => 'Offline'),'required' => false))
-        ->add('depot', 'choice', array('choices' => array('1' => 'Allowed','0' => 'Depot'),'required' => false))
-        ->add('inlist', 'choice', array('choices' => array('1' => 'In List','0' => 'Not in list'),'required' => false))
-        ->add('inmenu', 'choice', array('choices' => array('1' => 'In Menu','0' => 'Not in menu'),'required' => false))
+        ->add('limit', 'choice', ['choices' => ['10' => '10', '15' => '15', '25' => '25', '50' => '50', '100' => '100'], 'required' => false])
+        ->add('title', 'text', ['required' => false])
+        ->add('online', 'choice', ['choices' => ['1' => 'Online', '0' => 'Offline'], 'required' => false])
+        ->add('depot', 'choice', ['choices' => ['1' => 'Allowed', '0' => 'Depot'], 'required' => false])
+        ->add('inlist', 'choice', ['choices' => ['1' => 'In List', '0' => 'Not in list'], 'required' => false])
+        ->add('inmenu', 'choice', ['choices' => ['1' => 'In Menu', '0' => 'Not in menu'], 'required' => false])
         //todo add language detection
-        ->add('language', 'choice', array('choices' => array('any' => 'Any','en' => 'English' ,'pl' => 'Polish'),'required' => false))
+        ->add('language', 'choice', ['choices' => ['any' => 'Any', 'en' => 'English', 'pl' => 'Polish'], 'required' => false])
         //todo add layout detection
-        ->add('layout', 'choice', array('choices' => array('default' => 'Default','slider' => 'Slider'),'required' => false))
-        ->add('author', 'text', array('required' => false))
-        ->add('filter', 'submit', array('label' => 'Filter'))
+        ->add('layout', 'choice', ['choices' => ['default' => 'Default', 'slider' => 'Slider'], 'required' => false])
+        ->add('author', 'text', ['required' => false])
+        ->add('filter', 'submit', ['label' => 'Filter'])
         ->getForm();
 
         $form->handleRequest($request);
@@ -97,13 +105,12 @@ class AdminController extends AbstractController
         // Get parameters from whatever input we need.
         $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getAll($a);
 
-        $request->attributes->set('_legacy', true); // forces template to render inside old theme
-        return $this->render('KaikmediaPagesModule:Admin:manager.html.twig', array(
+        return $this->render('KaikmediaPagesModule:Admin:manager.html.twig', [
             'pages' => $pages,
             'form' => $form->createView(),
             'thisPage' => $a['page'],
             'maxPages' => ceil($pages->count() / $a['limit'])
-        ));
+        ]);
     }
 
     /**
@@ -121,20 +128,18 @@ class AdminController extends AbstractController
      */
     public function displayAction(Request $request, $id = null)
     {
-        // Security check
-        if (!\UserUtil::isLoggedIn() || !\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+//        // Security check
+//        if (!\UserUtil::isLoggedIn() || !\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+//            throw new AccessDeniedException();
+//        }
         // Get parameters from whatever input we need.
-        $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getOneBy(array(
+        $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getOneBy([
             'id' => $id
-        ));
+        ]);
 
-        $request->attributes->set('_legacy', true); // forces template to render inside old theme
-        return $this->render('KaikmediaPagesModule:Admin:display.html.twig', array(
-            'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
+        return $this->render('KaikmediaPagesModule:Admin:display.html.twig', [
             'page' => $page
-        ));
+        ]);
     }
 
     /**
@@ -152,18 +157,18 @@ class AdminController extends AbstractController
      */
     public function modifyAction(Request $request, $id = null)
     {
-        // Security check
-        if (!\UserUtil::isLoggedIn() || !\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+//        // Security check
+//        if (!\UserUtil::isLoggedIn() || !\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+//            throw new AccessDeniedException();
+//        }
 
         if ($id == null) {
             // create a new customer
             $page = new PageEntity();
         } else {
-            $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getOneBy(array(
+            $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getOneBy([
                 'id' => $id
-            ));
+            ]);
         }
 
         $form = $this->createForm('pageform', $page);
@@ -178,27 +183,23 @@ class AdminController extends AbstractController
             $em->persist($page);
             $em->flush();
             $request->getSession()
-                ->getFlashBag()
-                ->add('status', "Page saved!");
-
+            ->getFlashBag()
+            ->add('status', "Page saved!");
 
             //$gallery = new GalleryPlugin($this->container->get('doctrine.entitymanager'));
-
             //$result = $gallery->assignMedia('KaikmediaPagesModule', $page->getId(), $images);
-
             //var_dump($result);
             //exit(0);
 
-            return $this->redirect($this->generateUrl('kaikmediapagesmodule_admin_display', array(
+            return $this->redirect($this->generateUrl('kaikmediapagesmodule_admin_display', [
                 'id' => $page->getId()
-            )));
+            ]));
         }
 
-        $request->attributes->set('_legacy', true); // forces template to render inside old theme
-        return $this->render('KaikmediaPagesModule:Admin:modify.html.twig', array(
+        return $this->render('KaikmediaPagesModule:Admin:modify.html.twig', [
             'form' => $form->createView(),
             'page' => $page
-        ));
+        ]);
     }
 
     /**
@@ -209,31 +210,29 @@ class AdminController extends AbstractController
      */
     public function preferencesAction(Request $request)
     {
-        // Security check
-        if (! SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+//        // Security check
+//        if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
+//            throw new AccessDeniedException();
+//        }
 
-        $mod_vars = ModUtil::getVar($this->name);
+        $mod_vars = [];
 
-        $form = $this->createForm('settingsform', $settings = array(), array(
+        $form = $this->createForm('settingsform', $settings = [], [
             'action' => $this->get('router')
-                ->generate('kaikmediapagesmodule_admin_preferences', array(), RouterInterface::ABSOLUTE_URL),
+            ->generate('kaikmediapagesmodule_admin_preferences', [], RouterInterface::ABSOLUTE_URL),
             'itemsperpage' => isset($mod_vars['itemsperpage']) ? $mod_vars['itemsperpage'] : 25
-        ));
+        ]);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $data = $form->getData();
             foreach ($data as $key => $value) {
-                ModUtil::setVar($this->name, $key, $value);
+
             }
         }
 
-        $request->attributes->set('_legacy', true); // forces template to render inside old them
-        return $this->render('KaikmediaPagesModule:Admin:preferences.html.twig', array(
-            'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
+        return $this->render('KaikmediaPagesModule:Admin:preferences.html.twig', [
             'form' => $form->createView()
-        ));
+        ]);
     }
 }
