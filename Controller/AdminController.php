@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
-use Kaikmedia\PagesModule\Entity\PagesEntity as Page;
+use Kaikmedia\PagesModule\Entity\PageEntity;
 use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
 /**
  * @Route("/admin")
@@ -24,7 +24,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/index")
      * the main administration function
-     * 
+     *
      * @return RedirectResponse
      */
     public function indexAction(Request $request)
@@ -33,14 +33,14 @@ class AdminController extends AbstractController
         if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
-        
+
         return new RedirectResponse($this->get('router')->generate('kaikmediapagesmodule_admin_manager', array(), RouterInterface::ABSOLUTE_URL));
     }
 
     /**
      * @Route("/manager/{page}", requirements={"page" = "\d*"}, defaults={"page" = 1})
      * the main administration function
-     * 
+     *
      * @return RedirectResponse
      */
     public function managerAction(Request $request, $page)
@@ -61,10 +61,10 @@ class AdminController extends AbstractController
         $a['language'] = $request->query->get('language', '');
         $a['layout'] = $request->query->get('layout', '');
         $a['author'] = $request->query->get('author', '');
-        
+
         $form = $this->createFormBuilder($a)
         ->setAction($this->get('router')->generate('kaikmediapagesmodule_admin_manager', array(), RouterInterface::ABSOLUTE_URL))
-        ->setMethod('GET')      
+        ->setMethod('GET')
         ->add('limit', 'choice', array('choices' => array('10' => '10','15' => '15','25' => '25','50' => '50','100'=> '100'), 'required' => false))
         ->add('title', 'text', array('required' => false))
         ->add('online', 'choice', array('choices' => array('1' => 'Online','0' => 'Offline'),'required' => false))
@@ -77,10 +77,10 @@ class AdminController extends AbstractController
         ->add('layout', 'choice', array('choices' => array('default' => 'Default','slider' => 'Slider'),'required' => false))
         ->add('author', 'text', array('required' => false))
         ->add('filter', 'submit', array('label' => 'Filter'))
-        ->getForm();        
-        
+        ->getForm();
+
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
             $data = $form->getData();
             $a['limit'] = $data['limit'] ? $data['limit'] : $a['limit'];
@@ -93,10 +93,10 @@ class AdminController extends AbstractController
             $a['layout'] = $data['layout'] ? $data['layout'] : $a['layout'];
             $a['author'] = $data['author'] ? $data['author'] : $a['author'];
         }
-        
+
         // Get parameters from whatever input we need.
         $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getAll($a);
-        
+
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
         return $this->render('KaikmediaPagesModule:Admin:manager.html.twig', array(
             'pages' => $pages,
@@ -109,8 +109,8 @@ class AdminController extends AbstractController
     /**
      * @Route("manager/display/{id}", requirements={"id" = "\d+"})
      * Modify site information.
-     * 
-     * @param Request $request            
+     *
+     * @param Request $request
      * @param integer $id
      *            Parameters passed via GET:
      *            --------------------------------------------------
@@ -129,7 +129,7 @@ class AdminController extends AbstractController
         $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getOneBy(array(
             'id' => $id
         ));
-        
+
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
         return $this->render('KaikmediaPagesModule:Admin:display.html.twig', array(
             'ZUserLoggedIn' => \UserUtil::isLoggedIn(),
@@ -140,8 +140,8 @@ class AdminController extends AbstractController
     /**
      * @Route("manager/modify/{id}", requirements={"id" = "\d+"})
      * Modify site information.
-     * 
-     * @param Request $request            
+     *
+     * @param Request $request
      * @param integer $id
      *            Parameters passed via GET:
      *            --------------------------------------------------
@@ -156,44 +156,44 @@ class AdminController extends AbstractController
         if (!\UserUtil::isLoggedIn() || !\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
-        
+
         if ($id == null) {
             // create a new customer
-            $page = new Page();
+            $page = new PageEntity();
         } else {
             $page = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getOneBy(array(
                 'id' => $id
             ));
         }
-        
+
         $form = $this->createForm('pageform', $page);
-        
+
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();
         if ($form->isValid()) {
-            
+
             //$images = $form->get('images')->getData();
-                        
+
             $em->persist($page);
             $em->flush();
             $request->getSession()
                 ->getFlashBag()
                 ->add('status', "Page saved!");
-            
-            
+
+
             //$gallery = new GalleryPlugin($this->container->get('doctrine.entitymanager'));
-            
+
             //$result = $gallery->assignMedia('KaikmediaPagesModule', $page->getId(), $images);
 
             //var_dump($result);
             //exit(0);
-            
+
             return $this->redirect($this->generateUrl('kaikmediapagesmodule_admin_display', array(
                 'id' => $page->getId()
             )));
         }
-        
+
         $request->attributes->set('_legacy', true); // forces template to render inside old theme
         return $this->render('KaikmediaPagesModule:Admin:modify.html.twig', array(
             'form' => $form->createView(),
@@ -203,7 +203,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/preferences")
-     * 
+     *
      * @return Response symfony response object
      * @throws AccessDeniedException Thrown if the user doesn't have admin access to the module
      */
@@ -213,23 +213,23 @@ class AdminController extends AbstractController
         if (! SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
             throw new AccessDeniedException();
         }
-        
+
         $mod_vars = ModUtil::getVar($this->name);
-        
+
         $form = $this->createForm('settingsform', $settings = array(), array(
             'action' => $this->get('router')
                 ->generate('kaikmediapagesmodule_admin_preferences', array(), RouterInterface::ABSOLUTE_URL),
             'itemsperpage' => isset($mod_vars['itemsperpage']) ? $mod_vars['itemsperpage'] : 25
         ));
         $form->handleRequest($request);
-        
+
         if ($form->isValid()) {
             $data = $form->getData();
             foreach ($data as $key => $value) {
                 ModUtil::setVar($this->name, $key, $value);
             }
         }
-        
+
         $request->attributes->set('_legacy', true); // forces template to render inside old them
         return $this->render('KaikmediaPagesModule:Admin:preferences.html.twig', array(
             'ZUserLoggedIn' => \UserUtil::isLoggedIn(),

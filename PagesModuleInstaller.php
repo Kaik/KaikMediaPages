@@ -6,98 +6,25 @@
 
 namespace Kaikmedia\PagesModule;
 
-use Zikula\Core\AbstractBundle;
-use Zikula\Core\ExtensionInstallerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Zikula\Common\Translator\TranslatorTrait;
+use CategoryRegistryUtil;
+use CategoryUtil;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Zikula\Component\HookDispatcher\AbstractContainer;
-use Zikula\Component\HookDispatcher\SubscriberBundle;
+use Zikula\CategoriesModule\Entity\CategoryAttributeEntity;
+use Zikula\CategoriesModule\Entity\CategoryEntity;
+use Zikula\CategoriesModule\Entity\CategoryRegistryEntity;
+use Zikula\Core\AbstractExtensionInstaller;
+use Kaikmedia\PagesModule\Entity\CategoryAssignmentEntity;
+use Kaikmedia\PagesModule\Entity\PageEntity;
 
-class PagesModuleInstaller implements ExtensionInstallerInterface, ContainerAwareInterface {
-    
-    use TranslatorTrait;
-    //use ExtensionVariablesTrait;
-
-    /**
-     * @var string the bundle name.
-     */
-    protected $name;
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    protected $container;
-    /**
-     * @var AbstractBundle
-     */
-    protected $bundle;
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
-    protected $entityManager;
-    /**
-     * @var \Zikula\Core\Doctrine\Helper\SchemaHelper
-     */
-    protected $schemaTool;
-    /**
-     * @var \Zikula\ExtensionsModule\Api\HookApi
-     */
-    protected $hookApi;
-  
+class PagesModuleInstaller extends AbstractExtensionInstaller
+{
     /**
      * @var \
      */
-    private $entities = array(
-        'Kaikmedia\PagesModule\Entity\PageEntity',
-        'Kaikmedia\PagesModule\Entity\CategoryAssignmentEntity'
-    );    
-
-    public function setBundle(AbstractBundle $bundle)
-    {
-        $this->bundle = $bundle;
-        $this->name = $bundle->getName();
-        if ($this->container) {
-            // both here and in `setContainer` so either method can be called first.
-            $this->container->get('translator')->setDomain($this->bundle->getTranslationDomain());
-        }
-    }
-
-    /**
-     * @param ContainerInterface|null $container
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-        $this->setTranslator($container->get('translator'));
-        $this->entityManager = $container->get('doctrine.entitymanager');
-        $this->schemaTool = $container->get('zikula.doctrine.schema_tool');
-        $this->extensionName = $this->name; // for ExtensionVariablesTrait
-        $this->variableApi = $container->get('zikula_extensions_module.api.variable'); // for ExtensionVariablesTrait
-        $this->hookApi = $container->get('zikula_extensions_module.api.hook');
-        if ($this->bundle) {
-            $container->get('translator')->setDomain($this->bundle->getTranslationDomain());
-        }
-    }
-
-    public function setTranslator($translator)
-    {
-        $this->translator = $translator;
-    }
-
-    /**
-     * Convenience shortcut to add a session flash message.
-     * @param $type
-     * @param $message
-     */
-    public function addFlash($type, $message)
-    {
-        if (!$this->container->has('session')) {
-            throw new \LogicException('You can not use the addFlash method if sessions are disabled.');
-        }
-
-        $this->container->get('session')->getFlashBag()->add($type, $message);
-    }
+    private $entities = [
+        PageEntity::class,
+        CategoryAssignmentEntity::class
+    ];
 
     public function install() {
 
@@ -112,27 +39,27 @@ class PagesModuleInstaller implements ExtensionInstallerInterface, ContainerAwar
         try {
             $this->createCategoryTree();
         } catch (\Exception $e) {
-            $this->addFlash('error', $this->__f('Did not create default categories (%s).', $e->getMessage()));
+            $this->addFlash('error', $this->__f('Did not create default categories (%s).', ['%s' => $e->getMessage()]));
         }
         // set up config variables
-        $modvars = array(
+        $modvars = [
             'itemsperpage' => 25,
             'enablecategorization' => true
-        );
-        $this->variableApi->setAll($this->name, $modvars);
-        $hookContainer = $this->hookApi->getHookContainerInstance($this->bundle->getMetaData());
-        \HookUtil::registerSubscriberBundles($hookContainer->getHookSubscriberBundles());
+        ];
+        $this->setVars($modvars);
+        $this->hookApi->installSubscriberHooks($this->bundle->getMetaData());
+        $this->hookApi->installProviderHooks($this->bundle->getMetaData());
 
-        
+
         // initialisation successful
-        return true;       
+        return true;
     }
 
     public function upgrade($oldversion) {
         /*
         // return false;
         $connection = $this->entityManager->getConnection();
-        
+
         $sqla = 'SELECT * FROM pages';
         $stmt = $connection->prepare($sqla);
         try {
@@ -143,7 +70,7 @@ class PagesModuleInstaller implements ExtensionInstallerInterface, ContainerAwar
                     ->add('error', $e->getMessage());
             return false;
         }
-        
+
         $sql[] = 'ALTER TABLE pages CHANGE urltitle urltitle VARCHAR(250) AFTER id';
         $sql[] = 'ALTER TABLE pages DROP COLUMN pid';
         $sql[] = 'ALTER TABLE pages CHANGE indepot depot TINYINT(1) AFTER urltitle';
@@ -180,7 +107,7 @@ class PagesModuleInstaller implements ExtensionInstallerInterface, ContainerAwar
                 return false;
             }
         }
-        
+
         // update all the tables to 3.0.0
         try {
             \DoctrineHelper::createSchema($this->entityManager, $this->_entities);
@@ -190,7 +117,7 @@ class PagesModuleInstaller implements ExtensionInstallerInterface, ContainerAwar
                     ->add('error', $e->getMessage());
             return false;
         }
-       
+
         // insert default category
         try {
             $this->createCategoryTree();
@@ -198,27 +125,103 @@ class PagesModuleInstaller implements ExtensionInstallerInterface, ContainerAwar
             $this->request->getSession()
                     ->getFlashBag()
                     ->add('error', $e->getMessage());
-        }         
+        }
          */
         //$hookContainer = $this->hookApi->getHookContainerInstance($this->bundle->getMetaData());
-        //HookUtil::registerSubscriberBundles($hookContainer->getHookSubscriberBundles());        
+        //HookUtil::registerSubscriberBundles($hookContainer->getHookSubscriberBundles());
 
         return true;
     }
 
     public function uninstall() {
         // drop table
-        $this->schemaTool->drop($this->entities);
-        // Delete any module variables
-        $this->variableApi->delAll($this->name);
+        try {
+            $this->schemaTool->drop($this->entities);
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
+
+            return false;
+        }
+        // remove module vars
+        $this->delVars();
         // Delete entries from category registry
-        \CategoryRegistryUtil::deleteEntry($this->bundle->getName());
-        $hookContainer = $this->hookApi->getHookContainerInstance($this->bundle->getMetaData());
-        \HookUtil::unregisterSubscriberBundles($hookContainer->getHookSubscriberBundles());
+        CategoryRegistryUtil::deleteEntry($this->bundle->getName());
+        // unregister hooks
+        $this->hookApi->uninstallSubscriberHooks($this->bundle->getMetaData());
+        $this->hookApi->uninstallProviderHooks($this->bundle->getMetaData());
         // Deletion successful
+
+//        $registries = $this->container->get('zikula_categories_module.category_registry_repository')->findBy(['modname' => $this->bundle->getName()]);
+//        foreach ($registries as $registry) {
+//            $this->entityManager->remove($registry);
+//        }
+//        $this->entityManager->flush();
+
         return true;
     }
-    
+
+    /**
+     * create the category tree
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If Root category not found
+     * @throws \Exception
+     *
+     * @return boolean
+     */
+//    private function createCategoryTree()
+//    {
+//        $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+//        $repo = $this->container->get('zikula_categories_module.category_repository');
+//        // create pages root category
+//        $parent = $repo->findOneBy(['name' => 'Modules']);
+//        $pagesRoot = new CategoryEntity();
+//        $pagesRoot->setParent($parent);
+//        $pagesRoot->setName($this->bundle->getName());
+//        $pagesRoot->setDisplay_name([
+//            $locale => $this->__('Pages', 'kaikmediapagesmodule', $locale)
+//        ]);
+//        $pagesRoot->setDisplay_desc([
+//            $locale => $this->__('Static Pages', 'kaikmediapagesmodule', $locale)
+//        ]);
+//        $this->entityManager->persist($pagesRoot);
+//        // create children
+//        $category1 = new CategoryEntity();
+//        $category1->setParent($pagesRoot);
+//        $category1->setName('Category1');
+//        $category1->setDisplay_name([
+//            $locale => $this->__('Category 1', 'kaikmediapagesmodule', $locale)
+//        ]);
+//        $category1->setDisplay_desc([
+//            $locale => $this->__('Initial sub-category created on install', 'kaikmediapagesmodule', $locale)
+//        ]);
+//        $attribute = new CategoryAttributeEntity();
+//        $attribute->setAttribute('color', '#99ccff');
+//        $category1->addAttribute($attribute);
+//        $this->entityManager->persist($category1);
+//        $category2 = new CategoryEntity();
+//        $category2->setParent($pagesRoot);
+//        $category2->setName('Category2');
+//        $category2->setDisplay_name([
+//            $locale => $this->__('Category 2', 'kaikmediapagesmodule', $locale)
+//        ]);
+//        $category2->setDisplay_desc([
+//            $locale => $this->__('Initial sub-category created on install', 'kaikmediapagesmodule', $locale)
+//        ]);
+//        $attribute = new CategoryAttributeEntity();
+//        $attribute->setAttribute('color', '#cceecc');
+//        $category2->addAttribute($attribute);
+//        $this->entityManager->persist($category2);
+//        // create Registry
+//        $registry = new CategoryRegistryEntity();
+//        $registry->setCategory($pagesRoot);
+//        $registry->setEntityname('PageEntity');
+//        $registry->setModname($this->bundle->getName());
+//        $registry->setProperty('Main');
+//        $this->entityManager->persist($registry);
+//        $this->entityManager->flush();
+//        return true;
+//    }
+
     /**
      * create the category tree
      *
@@ -232,8 +235,8 @@ class PagesModuleInstaller implements ExtensionInstallerInterface, ContainerAwar
         // create category
         \CategoryUtil::createCategory('/__SYSTEM__/Modules', $this->bundle->getName(), null, $this->__('Pages'), $this->__('Static pages'));
         // create subcategory
-        \CategoryUtil::createCategory('/__SYSTEM__/Modules/KaikmediaPagesModule', 'Category1', null, $this->__('Category 1'), $this->__('Initial sub-category created on install'), array('color' => '#99ccff'));
-        \CategoryUtil::createCategory('/__SYSTEM__/Modules/KaikmediaPagesModule', 'Category2', null, $this->__('Category 2'), $this->__('Initial sub-category created on install'), array('color' => '#cceecc'));
+        \CategoryUtil::createCategory('/__SYSTEM__/Modules/KaikmediaPagesModule', 'Category1', null, $this->__('Category 1'), $this->__('Initial sub-category created on install'), ['color' => '#99ccff']);
+        \CategoryUtil::createCategory('/__SYSTEM__/Modules/KaikmediaPagesModule', 'Category2', null, $this->__('Category 2'), $this->__('Initial sub-category created on install'), ['color' => '#cceecc']);
         // get the category path to insert Pages categories
         $rootcat = \CategoryUtil::getCategoryByPath('/__SYSTEM__/Modules/KaikmediaPagesModule');
         if ($rootcat) {
@@ -245,6 +248,6 @@ class PagesModuleInstaller implements ExtensionInstallerInterface, ContainerAwar
             throw new NotFoundHttpException('Root category not found.');
         }
         return true;
-    }    
+    }
 
 }
