@@ -22,6 +22,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Kaikmedia\PagesModule\Entity\PageEntity;
+use Kaikmedia\PagesModule\Form\Type\PageType;
+use Kaikmedia\PagesModule\Form\Type\PageFilterType;
 //use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
 
 /**
@@ -70,23 +72,11 @@ class AdminController extends AbstractController
         $a['layout'] = $request->query->get('layout', '');
         $a['author'] = $request->query->get('author', '');
 
-        $form = $this->createFormBuilder($a)
-        ->setAction($this->get('router')->generate('kaikmediapagesmodule_admin_manager', [], RouterInterface::ABSOLUTE_URL))
-        ->setMethod('GET')
-        ->add('limit', 'choice', ['choices' => ['10' => '10', '15' => '15', '25' => '25', '50' => '50', '100' => '100'], 'required' => false])
-        ->add('title', 'text', ['required' => false])
-        ->add('online', 'choice', ['choices' => ['1' => 'Online', '0' => 'Offline'], 'required' => false])
-        ->add('depot', 'choice', ['choices' => ['1' => 'Allowed', '0' => 'Depot'], 'required' => false])
-        ->add('inlist', 'choice', ['choices' => ['1' => 'In List', '0' => 'Not in list'], 'required' => false])
-        ->add('inmenu', 'choice', ['choices' => ['1' => 'In Menu', '0' => 'Not in menu'], 'required' => false])
-        //todo add language detection
-        ->add('language', 'choice', ['choices' => ['any' => 'Any', 'en' => 'English', 'pl' => 'Polish'], 'required' => false])
-        //todo add layout detection
-        ->add('layout', 'choice', ['choices' => ['default' => 'Default', 'slider' => 'Slider'], 'required' => false])
-        ->add('author', 'text', ['required' => false])
-        ->add('filter', 'submit', ['label' => 'Filter'])
-        ->getForm();
+        $formBuilder = $this->get('form.factory')->createBuilder(PageFilterType::class, $a)
+                ->setAction($this->get('router')->generate('kaikmediapagesmodule_admin_manager', [], RouterInterface::ABSOLUTE_URL))
+                ->setMethod('GET');
 
+        $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -103,18 +93,18 @@ class AdminController extends AbstractController
         }
 
         // Get parameters from whatever input we need.
-        $pages = $this->get('doctrine.entitymanager')->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->getAll($a);
+        $pages = $this->getDoctrine()->getManager()->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')->findAll($a);
 
         return $this->render('KaikmediaPagesModule:Admin:manager.html.twig', [
             'pages' => $pages,
             'form' => $form->createView(),
             'thisPage' => $a['page'],
-            'maxPages' => ceil($pages->count() / $a['limit'])
+            'maxPages' => 5 //ceil($pages / $a['limit'])
         ]);
     }
 
     /**
-     * @Route("manager/display/{id}", requirements={"id" = "\d+"})
+     * @Route("/manager/display/{id}", requirements={"id" = "\d+"})
      * Modify site information.
      *
      * @param Request $request
@@ -143,7 +133,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("manager/modify/{id}", requirements={"id" = "\d+"})
+     * @Route("/manager/modify/{id}", requirements={"id" = "\d+"})
      * Modify site information.
      *
      * @param Request $request
@@ -171,8 +161,11 @@ class AdminController extends AbstractController
             ]);
         }
 
-        $form = $this->createForm('pageform', $page);
+        $formBuilder = $this->get('form.factory')->createBuilder(PageType::class, $page)
+                ->setAction($this->get('router')->generate('kaikmediapagesmodule_admin_manager', [], RouterInterface::ABSOLUTE_URL))
+                ->setMethod('GET');
 
+        $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         $em = $this->getDoctrine()->getManager();

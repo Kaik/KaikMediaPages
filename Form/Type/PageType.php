@@ -13,6 +13,14 @@
 namespace Kaikmedia\PagesModule\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+//use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+//use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -25,7 +33,7 @@ class PageType extends AbstractType
 //        // $entityManager = $options['em'];
 //        $transformer = new UserToIdTransformer($em);
         $builder->setMethod('POST')
-            ->add('online', 'choice', [
+            ->add('online', ChoiceType::class, [
             'choices' => [
                 '0' => 'Offline',
                 '1' => 'Online'
@@ -34,11 +42,11 @@ class PageType extends AbstractType
             'expanded' => true,
             'required' => true
         ])
-            ->add('images', 'hidden', [
+            ->add('images', HiddenType::class, [
                 'mapped' => false,
             ])
 
-            ->add('depot', 'choice', [
+            ->add('depot', ChoiceType::class, [
             'choices' => [
                 '0' => 'Depot',
                 '1' => 'Allowed'
@@ -47,7 +55,7 @@ class PageType extends AbstractType
             'expanded' => true,
             'required' => true
         ])
-            ->add('inmenu', 'choice', [
+            ->add('inmenu', ChoiceType::class, [
             'choices' => [
                 '0' => 'Not in menus',
                 '1' => 'In menus'
@@ -56,7 +64,7 @@ class PageType extends AbstractType
             'expanded' => true,
             'required' => true
         ])
-            ->add('inlist', 'choice', [
+            ->add('inlist', ChoiceType::class, [
             'choices' => [
                 '0' => 'Not in list',
                 '1' => 'In List'
@@ -65,58 +73,58 @@ class PageType extends AbstractType
             'expanded' => true,
             'required' => true
         ])
-            ->add('title', 'text', [
+            ->add('title', TextType::class, [
             'required' => false
         ])
-            ->add('urltitle', 'text', [
+            ->add('urltitle', TextType::class, [
             'required' => false
         ])
 //            ->add($builder->create('author', 'text', ['attr' => ['class' => 'author_search'],
 //            'required' => false])
 //            ->addModelTransformer($transformer))
 
-            ->add('views', 'text', [
+            ->add('views', TextType::class, [
             'required' => false ])
 
-            ->add('publishedAt', 'datetime', [
+            ->add('publishedAt', DateType::class, [
             'format' => \IntlDateFormatter::SHORT,
             'input' => 'datetime',
             'required' => false,
             'widget' => 'single_text'
         ])
-            ->add('expiredAt', 'datetime', [
+            ->add('expiredAt', DateType::class, [
             'format' => \IntlDateFormatter::SHORT,
             'input' => 'datetime',
             'required' => false,
             'widget' => 'single_text'
         ])
-            ->add('layout', 'choice', [
+            ->add('layout', ChoiceType::class, [
             'choices' => [
                 'default' => 'Default',
                 'slider' => 'Slider'
             ],
             'required' => false
         ])
-            ->add('language', 'choice', [
+            ->add('language', ChoiceType::class, [
             'choices' => [
                 'all' => 'All',
                 'en' => 'English',
                 'pl' => 'Polish'
             ],'required' => false
         ])
-            ->add('content', 'textarea', [
+            ->add('content', TextareaType::class, [
             'required' => false,
             'attr' => [
                 'class' => 'tinymce'
             ]
         ])
-            ->add('description', 'textarea', [
+            ->add('description', TextareaType::class, [
             'required' => false,
             'attr' => [
                 'class' => 'tinymc'
             ]
         ])
-            ->add('save', 'submit', [
+            ->add('save', SubmitType::class, [
             'label' => 'Save'
         ]);
     }
