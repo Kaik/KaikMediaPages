@@ -127,4 +127,23 @@ class PageEntity extends AbstractBaseEntity
             $this->categoryAssignments->add($assignment);
         }
     }
+
+    /**
+     * Check if a collection contains an element based only on two criteria (categoryRegistryId, category).
+     * @param ArrayCollection $collection
+     * @param CategoryAssignmentEntity $element
+     * @return bool|int
+     */
+    private function collectionContains(ArrayCollection $collection, CategoryAssignmentEntity $element)
+    {
+        foreach ($collection as $key => $collectionAssignment) {
+            /** @var \Kaikmedia\PagesModule\Entity\CategoryAssignmentEntity $collectionAssignment */
+            if ($collectionAssignment->getCategoryRegistryId() == $element->getCategoryRegistryId()
+                && $collectionAssignment->getCategory() == $element->getCategory()
+            ) {
+                return $key;
+            }
+        }
+        return false;
+    }
 }

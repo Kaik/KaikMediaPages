@@ -1,0 +1,120 @@
+{% extends 'KaikmediaPagesModule:Base:admin.html.twig' %}
+{% block header %}
+    {% set settings='settings' %}
+    {{ parent() }}
+    {#{ pageAddAsset('stylesheet', zasset('@ZikulaIntercomModule:css/inbox.css')) }#}
+{% endblock %} 
+{% block title %}
+    {% set title_icon="" %}
+    {% set title='Manager' %}
+    {#    {{ parent() }}#}
+{% endblock %}
+{% block content %}
+    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+    <h3>
+        <span class="fa fa-list"></span> {{ __('List')}}
+    </h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="list-group col-md-12">
+                <div class="list-group-item col-md-12" style="background: #d9edf7;">
+                    {{ form_start(form) }} {{ form_errors(form) }}
+                    <div class="form-group-sm clearfix">
+                        <div class="col-md-4">{{ form_label(form.title) }} {{ form_widget(form.title) }}</div>            		               
+                        <div id="all_filters" class="collapse">			                	
+                            <div class="col-md-2">{{ form_label(form.online) }}{{ form_widget(form.online) }}</div>			
+                            <div class="col-md-2">{{ form_label(form.depot) }}{{ form_widget(form.depot) }}</div>				
+                            <div class="col-md-2">{{ form_label(form.inmenu) }}{{ form_widget(form.inmenu) }}</div>	
+                            <div class="col-md-2">{{ form_label(form.inlist) }}{{ form_widget(form.inlist) }}</div>	
+                            <div class="col-md-2">{{ form_label(form.layout) }}{{ form_widget(form.layout) }}</div>	
+                            <div class="col-md-2">{{ form_label(form.language) }}{{ form_widget(form.language) }}</div>
+                            <div class="col-md-3">{{ form_label(form.author) }}{{ form_widget(form.author) }}</div>	
+                        </div>	
+                        <div class="col-md-1">{{ form_label(form.limit) }} {{ form_widget(form.limit) }}</div>	        					
+                        <div class="col-md-6 col-xs-12 pull-right text-right">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <a data-toggle="collapse" data-target="#all_filters" class="btn btn-sm btn-warning" href="#" >{{ __('Show/hide all filters') }} <i class="fa fa-filter fa-1x" title="{{ __('Show all filters') }}"> </i></a>
+                                {{ form_widget(form.filter, {'attr': {'class': 'btn btn-sm btn-info'}}) }}
+                            </div>	
+                        </div>	
+                    </div>	
+                    {{ form_end(form) }}
+                </div>
+                <div class="list-group-item col-md-12 clearfix hidden-xs hidden-sm" style="background: #eee;">
+                    <div class="col-md-4">{{ __('Title')}}</div>		
+                    <div class="col-md-1">{{ __('Online')}}</div>
+                    <div class="col-md-1">{{ __('Depot')}}</div>
+                    <div class="col-md-1">{{ __('In list')}}</div>
+                    <div class="col-md-1">{{ __('In menu')}}</div>
+                    <div class="col-md-1">{{ __('Layout')}}</div>
+                    <div class="col-md-1">{{ __('Language')}}</div>
+                    <div class="col-md-1">{{ __('Author')}}</div>
+                    <div class="col-md-1 pull-right text-right">{{ __('Options')}}</div>
+                </div>
+                {%for page in pages %}
+                    <div class="list-group-item col-md-12 clearfix">
+                        <div class="col-md-4">
+                            <a href="{{ path('kaikmediapagesmodule_manager_display', {'id': page.id}) }}"><h4
+                                    class="list-group-item-heading">{{ page.title }}</h4></a>
+                            <p class="list-group-item-text"><i title="{{ __('Id') }} {{ page.id }}" class="fa fa-key "> </i> <i title="{{ __('Url') }}" class="fa fa-link"> </i> {{ page.urltitle }}</p>
+                        </div>
+                        <div class="col-xs-3 col-md-1">		
+                            {% include "KaikmediaPagesModule:Common:online.menu.html.twig" with {'id': page.id, 'selected': page.online} %}
+                        </div>	
+                        <div class="col-xs-3 col-md-1">			            
+                            {% include "KaikmediaPagesModule:Common:depot.menu.html.twig" with {'id': page.id, 'selected': page.depot} %}	
+                        </div>	
+                        <div class="col-xs-3 col-md-1">		
+                            {% include "KaikmediaPagesModule:Common:inlist.menu.html.twig" with {'id': page.id, 'selected': page.inlist} %}
+                        </div>	
+                        <div class="col-xs-3 col-md-1">			            
+                            {% include "KaikmediaPagesModule:Common:inmenu.menu.html.twig" with {'id': page.id, 'selected': page.inmenu} %}	
+                        </div>            
+                        <div class="col-xs-3 col-md-1">
+                            {% include "KaikmediaPagesModule:Common:layout.menu.html.twig" with {'id': page.id, 'selected': page.layout} %}	
+                        </div>
+                        <div class="col-xs-3 col-md-1">
+                            {% include "KaikmediaPagesModule:Common:language.menu.html.twig" with {'id': page.id, 'selected': page.language} %}	
+                        </div>
+                        <div class="col-xs-3 col-md-1">
+                            {#                            <p class="list-group-item-text">{{ page.author.get.uname }}</p>#}
+                        </div>						
+                        <div class="col-xs-2 col-md-1 pull-right text-right">
+                            <a href="{{ path('kaikmediapagesmodule_manager_modify', {'id': page.id}) }}"><i
+                                    class="fa fa-pencil"></i></a>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="list-group-item col-md-12">
+                    {% if maxPages > 1 %}
+                        <ul class="pagination pagination-sm">
+                            {# `«` arrow #}
+                            <li  {{ thisPage == 1 ? 'class="disabled"' }}><a
+                                    href="{{ path('kaikmediapagesmodule_manager_list', {page: thisPage-1 < 1 ? 1 : thisPage-1}) }}">«</a>
+                            </li> {# Render each page number #} {% for i in 1..maxPages %}
+                            <li  {{ thisPage == i ? 'class="active"' }}><a
+                                    href="{{ path('kaikmediapagesmodule_manager_list', {page: i}) }}">{{
+						i }}</a></li> {% endfor %} {# `»` arrow #}
+                            <li  {{ thisPage == maxPages ? 'class="disabled"' }}><a
+                                    href="{{ path('kaikmediapagesmodule_manager_list', {page: thisPage+1 <= maxPages ? thisPage+1 : thisPage}) }}">»</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+    {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }#}
+    {#{ pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
+    <script>
+    (function($) {
+            $(function(){
+                Zikula.Intercom.InboxManager.init();  
+            });
+    })(jQuery);
+    </script>
+    {#{ dump() }#}
+{% endblock %}

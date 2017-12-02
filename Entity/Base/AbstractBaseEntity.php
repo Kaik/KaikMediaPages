@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Zikula\Core\Doctrine\EntityAccess;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Zikula\UsersModule\Entity\UserEntity;
 /**
  * Description of BaseEntity
  *
@@ -91,6 +91,7 @@ abstract class AbstractBaseEntity extends EntityAccess
 
     /**
      * The author uid
+     *
      * @ORM\ManyToOne(targetEntity="Zikula\UsersModule\Entity\UserEntity")
      * @ORM\JoinColumn(name="author", referencedColumnName="uid")
      */
@@ -404,7 +405,7 @@ abstract class AbstractBaseEntity extends EntityAccess
      * @param integer $author
      * @return Pages
      */
-    public function setAuthor(Zikula\UsersModule\Entity\UserEntity $author = null)
+    public function setAuthor(UserEntity $author = null)
     {
         $this->author = $author;
 

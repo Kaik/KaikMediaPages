@@ -1,0 +1,37 @@
+{% extends 'ZikulaFormExtensionBundle:Form:bootstrap_3_zikula_admin_layout.html.twig' %}
+{# user live search input widget #}
+{% block zikulausersmodule_userlivesearch_widget %}
+    <div id="{{ id }}LiveSearch" class="autocomplete-user hidden">
+        <noscript><p>{{ __('This function requires JavaScript activated!') }}</p></noscript>
+        <input type="hidden" {{ block('widget_attributes') }} value="{{ value }}" />
+        <div class="form-group col-md-12">
+          <div class="input-group">
+{#            <div class="input-group-addon">
+                <span id="{{ id }}Avatar" class="help-block avatar">
+                {% if value %}
+                    {{ userAvatar(value, { class: 'g' }) }} 
+                {% endif %}
+                </span>
+            </div>#}
+            <input type="text" id="{{ id }}Selector" name="{{ id }}Selector" autocomplete="off" value="{{ user_name|e('html_attr') }}" title="{{ __('Enter a part of the user name to search') }}" class="form-control user-selector" />
+{#            <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">#}
+            <div class="input-group-addon"><i class="fa fa-search" title="{{ __('Enter a part of the user name to search') }}"></i></div>
+          </div>
+        </div>
+    </div>
+    {% if not required %}
+        <span class="help-block"><a id="{{ id }}ResetVal" href="javascript:void(0);" class="hidden">{{ __('Reset to empty value') }}</a></span>
+    {% endif %}
+    {% if value and not inline_usage %}
+        {% if hasPermission('ZikulaUsersModule::', '::', 'ACCESS_ADMIN') %}
+            <span class="help-block"><a href="{{ path('zikulausersmodule_useradministration_modify', { 'user': value }) }}" title="{{ __('Switch to users administration') }}">{{ __('Manage user') }}</a></span>
+        {% endif %}
+    {% endif %}
+    {# load required assets: jQuery UI + custom search code #}
+    {{ pageAddAsset('stylesheet', asset('jquery-ui/themes/base/jquery-ui.min.css')) }}
+    {{ pageAddAsset('stylesheet', asset('bootstrap-jqueryui/bootstrap-jqueryui.min.css')) }}
+    {{ pageAddAsset('javascript', asset('jquery-ui/jquery-ui.min.js')) }}
+    {{ pageAddAsset('javascript', asset('bootstrap-jqueryui/bootstrap-jqueryui.min.js')) }}
+    {{ pageAddAsset('stylesheet', zasset('@ZikulaUsersModule:css/livesearch.css')) }}
+    {{ pageAddAsset('javascript', zasset('@ZikulaUsersModule:js/Zikula.Users.LiveSearch.js')) }}
+{% endblock %}

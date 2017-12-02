@@ -29,8 +29,8 @@
 			],
 			"capabilities" : {
                                 "categorizable": {"entities": ["Kaikmedia\\PagesModule\\Entity\\PageEntity"]},                          
-				"user" : { "route" : "kaikmediapagesmodule_user_index"},
-				"admin" : {"route" : "kaikmediapagesmodule_admin_index"}
+				"user" : { "route" : "kaikmediapagesmodule_page_view"},
+				"admin" : {"route" : "kaikmediapagesmodule_manager_list"}
 			},
 			"securityschema" : {
 				"KaikmediaPagesModule::" : "::"

@@ -1,14 +1,15 @@
 {% block header %}
-{{ render(controller('ZikulaAdminModule:Admin:adminheader')) }}
+    {{ adminHeader() }}
+    {{ pageAddAsset('stylesheet', zasset('@KaikmediaPagesModule:css/common.css')) }}
 {% endblock %}
 {% block title %}
-      <h1>
-       {{ title_icon|raw }} {{ title }}
+    <h1>
+        {{ title_icon|raw }} {{ title }}
         {{ pageSetVar('title', title) }}
-      </h1>
+    </h1>
 {% endblock %} 
 {% block content %}{% endblock %}
 
 {% block footer %}
-{{ render(controller('ZikulaAdminModule:Admin:adminfooter')) }}
-{% endblock %}{# empty Twig template #}
+    {{ adminFooter() }}
+{% endblock %}

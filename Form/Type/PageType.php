@@ -1,5 +1,4 @@
 <?php
-
 /**
  * KaikMedia PagesModule
  *
@@ -13,125 +12,146 @@
 namespace Kaikmedia\PagesModule\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-//use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-//use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Zikula\Bundle\FormExtensionBundle\Form\DataTransformer\NullToEmptyTransformer;
+use Zikula\CategoriesModule\Form\Type\CategoriesType;
+use Zikula\Common\Translator\IdentityTranslator;
+use Kaikmedia\PagesModule\Entity\CategoryAssignmentEntity;
+use Kaikmedia\PagesModule\Entity\PageEntity;
+use Zikula\UsersModule\Form\Type\UserLiveSearchType;
 
 class PageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        // this assumes that the entity manager was passed in as an optio
-//        $em = ServiceUtil::getService('doctrine.entitymanager');
-//        // $entityManager = $options['em'];
-//        $transformer = new UserToIdTransformer($em);
-        $builder->setMethod('POST')
-            ->add('online', ChoiceType::class, [
+        $translator = $options['translator'];
+        $builder
+        ->add('online', ChoiceType::class, [
             'choices' => [
-                '0' => 'Offline',
-                '1' => 'Online'
+                'Offline' => '0',
+                'Online' => '1'
             ],
             'multiple' => false,
             'expanded' => true,
             'required' => true
         ])
-            ->add('images', HiddenType::class, [
-                'mapped' => false,
-            ])
+        ->add('depot', ChoiceType::class, [
+            'choices' => [
+                'Depot' => '0',
+                'Allowed' => '1'
+            ],
+            'multiple' => false,
+            'expanded' => true,
+            'required' => true
+        ])
+        ->add('inmenu', ChoiceType::class, [
+            'choices' => [
+                'Not in menus' => '0',
+                'In menus' => '1'
+            ],
+            'multiple' => false,
+            'expanded' => true,
+            'required' => true
+        ])
+        ->add('inlist', ChoiceType::class, [
+            'choices' => [
+                'Not in list' => '0',
+                'In List' => '1'
+            ],
+            'multiple' => false,
+            'expanded' => true,
+            'required' => true
+        ])
+        ->add('title', TextType::class, [
+            'required' => false
+        ])
+        ->add('urltitle', TextType::class, [
+            'required' => false
+        ])
 
-            ->add('depot', ChoiceType::class, [
-            'choices' => [
-                '0' => 'Depot',
-                '1' => 'Allowed'
-            ],
-            'multiple' => false,
-            'expanded' => true,
-            'required' => true
-        ])
-            ->add('inmenu', ChoiceType::class, [
-            'choices' => [
-                '0' => 'Not in menus',
-                '1' => 'In menus'
-            ],
-            'multiple' => false,
-            'expanded' => true,
-            'required' => true
-        ])
-            ->add('inlist', ChoiceType::class, [
-            'choices' => [
-                '0' => 'Not in list',
-                '1' => 'In List'
-            ],
-            'multiple' => false,
-            'expanded' => true,
-            'required' => true
-        ])
-            ->add('title', TextType::class, [
-            'required' => false
-        ])
-            ->add('urltitle', TextType::class, [
-            'required' => false
-        ])
 //            ->add($builder->create('author', 'text', ['attr' => ['class' => 'author_search'],
 //            'required' => false])
 //            ->addModelTransformer($transformer))
 
-            ->add('views', TextType::class, [
-            'required' => false ])
-
-            ->add('publishedAt', DateType::class, [
+        ->add('categoryAssignments', CategoriesType::class, [
+            'required' => true,
+            'multiple' => false,
+            'module' => 'KaikmediaPagesModule',
+            'entity' => 'PageEntity',
+            'entityCategoryClass' => CategoryAssignmentEntity::class,
+        ])
+        ->add('views', TextType::class, [
+            'required' => false])
+        ->add('publishedAt', DateType::class, [
             'format' => \IntlDateFormatter::SHORT,
             'input' => 'datetime',
             'required' => false,
             'widget' => 'single_text'
         ])
-            ->add('expiredAt', DateType::class, [
+        ->add('expiredAt', DateType::class, [
             'format' => \IntlDateFormatter::SHORT,
             'input' => 'datetime',
             'required' => false,
             'widget' => 'single_text'
         ])
-            ->add('layout', ChoiceType::class, [
+        ->add('layout', ChoiceType::class, [
             'choices' => [
                 'default' => 'Default',
                 'slider' => 'Slider'
             ],
             'required' => false
         ])
-            ->add('language', ChoiceType::class, [
-            'choices' => [
-                'all' => 'All',
-                'en' => 'English',
-                'pl' => 'Polish'
-            ],'required' => false
-        ])
-            ->add('content', TextareaType::class, [
+        ->add(
+                $builder->create('language', ChoiceType::class, [
+                    'choices' => $options['locales'],
+                    'required' => false,
+                    'placeholder' =>  $translator->__('All')
+                ])->addModelTransformer(new NullToEmptyTransformer())
+            )
+        ->add('content', TextareaType::class, [
             'required' => false,
             'attr' => [
                 'class' => 'tinymce'
             ]
         ])
-            ->add('description', TextareaType::class, [
+        ->add('description', TextareaType::class, [
             'required' => false,
             'attr' => [
                 'class' => 'tinymc'
             ]
         ])
-            ->add('save', SubmitType::class, [
+        ->add('save', SubmitType::class, [
             'label' => 'Save'
+        ]);
+        // gallery
+        $builder->add('images', HiddenType::class, [
+            'mapped' => false,
+        ]);
+        $builder->add('author', UserLiveSearchType::class, [
+            'mapped' => true,
+//            'label' => $this->__('Creator') . ':',
+            'attr' => [
+                'maxlength' => 11,
+//                'title' => $this->__('Here you can choose a user which will be set as creator')
+            ],
+            'empty_data' => 0,
+            'inline_usage' => true,
+            'required' => true,
+//            'help' => $this->__('Here you can choose a user which will be set as creator')
         ]);
     }
 
     public function getName()
     {
-        return 'pageform';
+        return 'kaikmediapagesmodule_page';
     }
 
     /**
@@ -139,9 +159,15 @@ class PageType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+//        $resolver->setDefaults([
+//            'title' => null,
+//            'content' => null
+//        ]);
         $resolver->setDefaults([
-            'title' => null,
-            'content' => null
+            'translator' => new IdentityTranslator(),
+            'data_class' => PageEntity::class,
+            'locales' => ['English' => 'en']
         ]);
     }
+
 }

@@ -8,10 +8,16 @@ services:
           - "@=service('zikula_extensions_module.api.variable').get('KaikmediaPagesModule', 'enablecategorization', true)"
         tags:
           - { name: zikula.link_container }
-        
-#    kaikmedia_pages_module.access_manager:
-#        class: Kaikmedia\PagesModule\Security\AccessManager
-#        
+
+    kaikmedia_pages_module.access_manager:
+        class: Kaikmedia\PagesModule\Security\AccessManager
+        arguments: 
+            - "@request_stack"
+            - "@doctrine.orm.default_entity_manager"
+            - "@translator.default"
+            - "@zikula_permissions_module.api.permission"
+            - "@zikula_extensions_module.api.variable"
+
 #    kaikmedia_pages_module.form.type.settings:
 #        class: Kaikmedia\PagesModule\Form\Type\SettingsType
 #        tags:
