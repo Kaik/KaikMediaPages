@@ -177,15 +177,6 @@ class PagesQueryBuilder extends QueryBuilder
         }
 
         switch ($search_field) {
-//            case 'author':
-//                if (is_numeric($search)) {
-//                    return $this->filterAuthor($search);
-//                } elseif (is_string($search)) {
-//                    $uid = \UserUtil::getIdFromName($search);
-//                    $uid = $uid !== false ? $uid : 0;
-//                    return $this->filterAuthor($uid);
-//                }
-//                break;
             case 'title':
                 return $this->andWhere('p.title LIKE :search')->setParameter('search', '%' . $search . '%');
             case 'urltitle':

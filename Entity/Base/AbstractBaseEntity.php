@@ -17,6 +17,7 @@ use Zikula\Core\Doctrine\EntityAccess;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Zikula\UsersModule\Entity\UserEntity;
+
 /**
  * Description of BaseEntity
  *
@@ -183,7 +184,7 @@ abstract class AbstractBaseEntity extends EntityAccess
     /**
      * Set id.
      *
-     * @param integer $id.
+     * @param integer $id
      *
      * @return void
      */
@@ -505,7 +506,7 @@ abstract class AbstractBaseEntity extends EntityAccess
     /**
      * Set published
      *
-     * @param \DateTime $published
+     * @param \DateTime $publishedAt
      * @return Pages
      */
     public function setPublishedAt(\DateTime $publishedAt = null)
@@ -528,7 +529,7 @@ abstract class AbstractBaseEntity extends EntityAccess
     /**
      * Set expired
      *
-     * @param \DateTime $expired
+     * @param \DateTime $expiredAt
      * @return Pages
      */
     public function setExpiredAt(\DateTime $expiredAt = null)
@@ -589,9 +590,9 @@ abstract class AbstractBaseEntity extends EntityAccess
     }
 
     /**
-     * Set obj_status
+     * Set status
      *
-     * @param string $obj_status
+     * @param string $status
      * @return Pages
      */
     public function setStatus($status)
@@ -602,7 +603,7 @@ abstract class AbstractBaseEntity extends EntityAccess
     }
 
     /**
-     * Get obj_status
+     * Get status
      *
      * @return string
      */

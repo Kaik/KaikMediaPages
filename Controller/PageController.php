@@ -76,6 +76,7 @@ class PageController extends AbstractController
 
     /**
      * @Route("/display/{urltitle}", options={"zkNoBundlePrefix"=1})
+     * 
      * Display item.
      *
      * @throws AccessDeniedException on failed permission check

@@ -13,15 +13,32 @@
                 {% endif %}
                 </span>
             </div>#}
+            <div class="input-group-btn">
+                <button class="btn btn-default {{ btn_size|default(' ') }}" type="button">
+                    <i class="fa fa-search" title="{{ __('Enter a part of the user name to search') }}"></i>
+                </button>
+            </div>
+{#            <div class="input-group-addon"><i class="fa fa-search" title="{{ __('Enter a part of the user name to search') }}"></i></div>#}
             <input type="text" id="{{ id }}Selector" name="{{ id }}Selector" autocomplete="off" value="{{ user_name|e('html_attr') }}" title="{{ __('Enter a part of the user name to search') }}" class="form-control user-selector" />
-{#            <input type="text" class="form-control" id="exampleInputAmount" placeholder="Amount">#}
-            <div class="input-group-addon"><i class="fa fa-search" title="{{ __('Enter a part of the user name to search') }}"></i></div>
-          </div>
+            {% if not required %}
+            <div class="input-group-btn">
+                <a id="{{ id }}ResetVal" href="javascript:void(0);" class="btn btn-default {{ btn_size|default(' ') }} hidden">
+                <i class="fa fa-eraser" title="{{ __('Reset to empty value') }}"></i>
+                </a>
+            </div>
+{#            <div class="input-group-addon">
+                <a id="{{ id }}ResetVal" href="javascript:void(0);" class="hidden">
+                <i class="fa fa-eraser" title="{{ __('Reset to empty value') }}"></i>
+                </a>
+            </div>#}
+            {% endif %}
+{#            {{ dump() }}#}
+            </div>
         </div>
     </div>
-    {% if not required %}
+{#    {% if not required %}
         <span class="help-block"><a id="{{ id }}ResetVal" href="javascript:void(0);" class="hidden">{{ __('Reset to empty value') }}</a></span>
-    {% endif %}
+    {% endif %}#}
     {% if value and not inline_usage %}
         {% if hasPermission('ZikulaUsersModule::', '::', 'ACCESS_ADMIN') %}
             <span class="help-block"><a href="{{ path('zikulausersmodule_useradministration_modify', { 'user': value }) }}" title="{{ __('Switch to users administration') }}">{{ __('Manage user') }}</a></span>

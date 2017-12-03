@@ -2,7 +2,6 @@
 {% block header %}
     {% set settings='settings' %}
     {{ parent() }}
-    {#{ pageAddAsset('stylesheet', zasset('@ZikulaIntercomModule:css/inbox.css')) }#}
 {% endblock %} 
 {% block title %}
     {% set title_icon="<i class='fa fa-user-secret'></i>" %}
@@ -11,7 +10,11 @@
 {% endblock %}
 {% block content %}
     <div id="km_pages_admin_index" class="col-md-12 clearfix">    
-        {% form_theme form with ['KaikmediaPagesModule:Form:zikula.form.extensions.html.twig', 'bootstrap_3_horizontal_layout.html.twig', 'KaikmediaPagesModule:Form:radio.html.twig'] %}
+{% form_theme form with [
+            '@KaikmediaPagesModule/Form/bootstrap_3_horizontal_layout.html.twig',
+            '@KaikmediaPagesModule/Form/bootstrap_3_zikula_admin_layout.html.twig',
+            '@KaikmediaPagesModule/Form/radio.html.twig'
+] %}
         {#        <h3>
                     <span class="fa fa-list"></span> {{ __('Add')}}
                 </h3>#}
@@ -60,20 +63,20 @@
                                 <div class="row">
                                     <div class="col-xs-12 col-md-6">
                                         {{ form_label(form.author, __('Author'), { 'label_attr': {'class': 'control-label'} }) }}
-                                        {{ form_widget(form.author, { 'attr': {'class': ''} }) }}
+                                        {{ form_widget(form.author, { 'attr': {'class': ''}, 'btn_size': ''}) }}
                                         {{ form_label(form.categoryAssignments, __('Category'), { 'label_attr': {'class': ''} }) }}
                                         {{ form_widget(form.categoryAssignments, { 'attr': {'class': ''} }) }}
-                                        {{ form_label(form.layout, 'Layout', { 'label_attr': {'class':'control-label'} }) }}
+                                        {{ form_label(form.layout, __('Layout'), { 'label_attr': {'class':'control-label'} }) }}
                                         {{ form_widget(form.layout, {'attr': {'class': 'control-label col-md-8'} }) }}
-                                        {{ form_label(form.views, 'Views', { 'label_attr': {'class': 'control-label'} }) }}
+                                        {{ form_label(form.views, __('Views'), { 'label_attr': {'class': 'control-label'} }) }}
                                         {{ form_widget(form.views,{ 'attr': {'class': 'control-label col-md-8'} }) }}
                                     </div>       			          			
                                     <div class="col-xs-12 col-md-6">
-                                        {{ form_label(form.language, 'Language', { 'label_attr': {'class':'control-label'} }) }} 
-                                        {{ form_widget(form.language,{'attr': {'class': 'control-label'} }) }}
-                                        {{ form_label(form.publishedAt, 'Published', { 'label_attr': {'class': 'control-label'} }) }}
+                                        {{ form_label(form.language, __('Language'), { 'label_attr': {'class':'control-label'} }) }}
+                                        {{ form_widget(form.language,{'attr': {'class': 'control-label','placeholder': __('All')} }) }}
+                                        {{ form_label(form.publishedAt, __('Published'), { 'label_attr': {'class': 'control-label'} }) }}
                                         {{ form_widget(form.publishedAt,{'attr': {'class': 'control-label col-md-8'} }) }}
-                                        {{ form_label(form.expiredAt, 'Expired', { 'label_attr': {'class': 'control-label'} }) }}
+                                        {{ form_label(form.expiredAt, __('Expired'), { 'label_attr': {'class': 'control-label'} }) }}
                                         {{ form_widget(form.expiredAt,{ 'attr': {'class': 'control-label col-md-8'} }) }}
                                     </div>    	
                                 </div>			   			

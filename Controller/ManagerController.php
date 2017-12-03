@@ -24,6 +24,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Routing\RouterInterface;
 use Zikula\Core\Controller\AbstractController;
+use Zikula\Component\SortableColumns\SortableColumns;
+use Zikula\Component\SortableColumns\Column;
 use Zikula\ThemeModule\Engine\Annotation\Theme;
 
 /**
@@ -94,50 +96,55 @@ class ManagerController extends AbstractController
             throw new AccessDeniedException();
         }
 
-        $a = [];
-        $a['page'] = $page;
-        $a['limit'] = $request->query->get('limit', 15);
-        $a['title'] = $request->query->get('title', '');
-        $a['online'] = $request->query->get('online', '');
-        $a['depot'] = $request->query->get('depot', '');
-        $a['inlist'] = $request->query->get('inlist', '');
-        $a['inmenu'] = $request->query->get('inmenu', '');
-        $a['language'] = $request->query->get('language', '');
-        $a['layout'] = $request->query->get('layout', '');
-        $a['author'] = $request->query->get('author', '');
+        $filters = $request->get('page_filter', []);
+        //need to unset because form expects it to be an object
+        $category = '';
+        if (array_key_exists('categoryAssignments', $filters)) {
+            $category = $filters['categoryAssignments'];
+            unset($filters['categoryAssignments']);
+        }
+        $limit = array_key_exists('limit', $filters) ? $filters['limit'] : 5;
+        $sortBy = array_key_exists('sortby', $filters) ? $filters['sortby'] : $request->query->get('sortby', 'id');
+        $sortOrder = array_key_exists('sortorder', $filters) ? $filters['sortorder'] : $request->query->get('sortorder', Column::DIRECTION_DESCENDING);
+        $filtered_user_name = $request->get('page_filter_authorSelector', '');
 
+        $languages = $this->get('zikula_settings_module.locale_api')->getSupportedLocaleNames(null, $request->getLocale());
+        //todo add layout detection array_merge($filters, ['page' => $page, 'sortby' => $sortBy, 'sortorder' => $sortOrder, 'limit' => $limit])
         $formBuilder = $this->get('form.factory')
-            ->createBuilder(PageFilterType::class, $a)
-                ->setAction($this->get('router')->generate('kaikmediapagesmodule_manager_list', [], RouterInterface::ABSOLUTE_URL))
+            ->createBuilder(PageFilterType::class, array_merge($filters, ['page' => $page, 'sortby' => $sortBy, 'sortorder' => $sortOrder, 'limit' => $limit]), ['locales' => $languages])
+                ->setAction($this->get('router')->generate('kaikmediapagesmodule_manager_list', ['page' => $page], RouterInterface::ABSOLUTE_URL))
                 ->setMethod('GET');
 
         $form = $formBuilder->getForm();
-
         $form->handleRequest($request);
+        $sortableColumns = new SortableColumns(
+            $this->get('router'),
+            'kaikmediapagesmodule_manager_list',
+            'sortby',
+            'sortorder'
+        );
 
-        if ($form->isValid()) {
-            $data = $form->getData();
-            $a['limit'] = $data['limit'] ? $data['limit'] : $a['limit'];
-            $a['title'] = $data['title'] ? $data['title'] : $a['title'];
-            $a['online'] = $data['online'] ? $data['online'] : $a['online'];
-            $a['depot'] = $data['depot'] ? $data['depot'] : $a['depot'];
-            $a['inlist'] = $data['inlist'] ? $data['inlist'] : $a['inlist'];
-            $a['inmenu'] = $data['inmenu'] ? $data['inmenu'] : $a['inmenu'];
-            $a['language'] = $data['language'] ? $data['language'] : $a['language'];
-            $a['layout'] = $data['layout'] ? $data['layout'] : $a['layout'];
-            $a['author'] = $data['author'] ? $data['author'] : $a['author'];
-        }
+        $sortableColumns->addColumns([
+            new Column('id'),
+            new Column('title'),
+            new Column('author'),
+            new Column('createdAt')
+        ]);
+
+        $sortableColumns->setOrderBy($sortableColumns->getColumn($sortBy), $sortOrder);
+        $sortableColumns->setAdditionalUrlParameters($request->query->all());
 
         $pages = $this->getDoctrine()
             ->getManager()
             ->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')
-            ->findAll($a);
+            ->getAll(array_merge($filters, ['limit' => $limit, 'page' => $page, 'sortby' => $sortBy, 'sortorder' => $sortOrder, 'categoryAssignments' => $category]));
 
         return $this->render('KaikmediaPagesModule:Manager:manager.html.twig', [
-            'pages' => $pages,
-            'form' => $form->createView(),
-            'thisPage' => $a['page'],
-            'maxPages' => ceil(count($pages) / $a['limit'])
+            'pages'              => $pages,
+            'form'               => $form->createView(),
+            'limit'              => $limit,
+            'filtered_user_name' => $filtered_user_name,
+            'sort'               => $sortableColumns->generateSortableColumns()
         ]);
     }
 

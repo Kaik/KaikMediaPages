@@ -38,7 +38,7 @@ class PagesRepository extends EntityRepository
      *            The total number per page
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
-    public function getOneOrAll($onlyone = false, $f, $s, $sortby, $sortorder, $page = 1, $limit)
+    public function getOneOrAll($onlyone = false, $f, $s, $sortby, $sortorder, $page, $limit)
     {
         $qb = $this->build();
         $qb->select('p');
@@ -54,8 +54,10 @@ class PagesRepository extends EntityRepository
 
         if ($onlyone) {
             $item = $query->getOneOrNullResult();
+
             return $item;
         }
+
         $paginator = $this->paginate($query, $page, $limit);
 
         return $paginator;
@@ -78,15 +80,12 @@ class PagesRepository extends EntityRepository
      *            The total number per page (defaults to 5)
      * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
-    public function paginate($dql, $page = 1, $limit = 15)
+    public function paginate($dql, $page = 1, $limit = 5)
     {
         $paginator = new Paginator($dql);
-
         $paginator->getQuery()
-        ->setFirstResult($limit * ($page - 1))
-        ->
-        // Offset
-        setMaxResults($limit); // Limit
+            ->setFirstResult($page - 1)
+            ->setMaxResults($limit);
 
         return $paginator;
     }
@@ -104,22 +103,20 @@ class PagesRepository extends EntityRepository
      * @return \Doctrine\ORM\Tools\Pagination\Paginator or
      *         object
      */
-    public function getAll($args = array())
+    public function getAll($args = [])
     {
         // internall
         $onlyone = isset($args['onlyone']) ? $args['onlyone'] : false;
         // pager
-        $page = isset($args['page']) ? $args['page'] : 1;
-        $page = $page < 1 ? 1 : $page;
+        $page = (isset($args['page']) && $args['page'] > 1) ? $args['page'] : 1;
         $limit = isset($args['limit']) ? $args['limit'] : 25;
         // sort
-        $sortby = isset($args['sortby']) ? $args['sortby'] : 'createdAt';
+        $sortby = isset($args['sortby']) ? $args['sortby'] : 'id';
         $sortorder = isset($args['sortorder']) ? $args['sortorder'] : 'DESC';
         // filter's
         $f['id'] = isset($args['id']) && $args['id'] !== '' ? $args['id'] : false;
         $f['urltitle'] = isset($args['urltitle']) && $args['urltitle'] !== '' ? $args['urltitle'] : false;
         $f['title'] = isset($args['title']) && $args['title'] !== '' ? $args['title'] : false;
-
         $f['online'] = isset($args['online']) && $args['online'] !== '' ? $args['online'] : false;
         // search
         $s['search'] = isset($args['search']) && $args['search'] !== '' ? $args['search'] : false;
