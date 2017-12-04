@@ -76,7 +76,8 @@ class ManagerController extends AbstractController
         }
 
         return $this->render('KaikmediaPagesModule:Manager:display.html.twig', [
-            'page' => $page
+            'page'      => $page,
+            'languages' => $this->get('zikula_settings_module.locale_api')->getSupportedLocaleNames(null, $request->getLocale())
         ]);
     }
 
@@ -144,7 +145,8 @@ class ManagerController extends AbstractController
             'form'               => $form->createView(),
             'limit'              => $limit,
             'filtered_user_name' => $filtered_user_name,
-            'sort'               => $sortableColumns->generateSortableColumns()
+            'sort'               => $sortableColumns->generateSortableColumns(),
+            'languages'          => $languages
         ]);
     }
 

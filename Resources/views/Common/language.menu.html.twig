@@ -1,4 +1,3 @@
-{# todo add languages detection #}
 {% set thisname = 'language' %}
 {% set options = {
         'all' : {
@@ -8,14 +7,10 @@
         'en' : {
             'id' : 'en',
             'name' : 'English'
-        },
-        'pl' : {
-            'id' : 'pl',
-            'name' : 'Polish'
         }
     }
 %}
-{#{% set selected = (selected == '') ? 'all' : selected %}
+{% set selected = (selected == '') ? 'all' : selected %}
 {% set option = options[selected] %}
 <div id="{{ thisname }}-dropdown-{{ id }}" class="dropdown">
         <a class="dropdown-toggle" id="{{ thisname }}-menu-{{ id }}" data-toggle="dropdown" aria-expanded="true">
@@ -31,4 +26,5 @@
                 </li>		
                 {% endfor %}
         </ul>
-</div>#}
+</div>
+{#{{ dump() }}#}

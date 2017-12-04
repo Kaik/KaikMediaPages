@@ -6,13 +6,9 @@
 {% block title %}
     {% set title_icon="<i class='fa fa-user-secret'></i>" %}
     {% set title=__('Pages') %}
-    {{ parent() }}
+{#    {{ parent() }}#}
 {% endblock %}
 {% block content %}
-    <h3>
-        <span class="fa fa-list"></span>
-        {{ __('Manager')}}
-    </h3> 
     <div class="container-fluid"> 
         <div class="row">   
             <div class="list-group col-md-12">
@@ -39,7 +35,17 @@
                     </div>
                     <div class="col-xs-3 col-md-1">
                         {% include "KaikmediaPagesModule:Common:language.menu.html.twig" with {'id': page.id, 'selected': page.language} %}	
-                    </div>              
+                    </div>
+                    {% if page.categoryAssignments is not null %}
+                    <div class="col-xs-3 col-md-1">
+                        {% for assignment in page.categoryAssignments %}
+                            {{ assignment.category.display_name[app.request.getLocale()] }}{% if not loop.last %}, {% endif %}
+                        {% else %}
+                            {{  __('No category') }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
                     <div class="col-md-2 pull-right text-right">
                         <div class="dropdown">
                             <button class="btn btn-default dropdown-toggle" type="button" id="options-menu" data-toggle="dropdown" aria-expanded="true">
@@ -62,14 +68,14 @@
 {% endblock %}
 {% block footer %}
     {{ parent() }}
-    {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }#}
-    {#{ pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
+    {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }
+    { pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
     <script>
     (function($) {
             $(function(){
                 Zikula.Intercom.InboxManager.init();  
             });
     })(jQuery);
-    </script>
-    {#{ dump() }#}
+    </script>#}
+{#    {{ dump(page) }}#}
 {% endblock %}

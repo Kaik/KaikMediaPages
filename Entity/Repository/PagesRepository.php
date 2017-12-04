@@ -43,6 +43,7 @@ class PagesRepository extends EntityRepository
         $qb = $this->build();
         $qb->select('p');
         $qb->from('Kaikmedia\PagesModule\Entity\PageEntity', 'p');
+        $qb->leftJoin('p.categoryAssignments', 'c');
         // filters
         $qb->addFilters($f);
         // search
@@ -106,6 +107,7 @@ class PagesRepository extends EntityRepository
     public function getAll($args = [])
     {
         // internall
+        dump($args);
         $onlyone = isset($args['onlyone']) ? $args['onlyone'] : false;
         // pager
         $page = (isset($args['page']) && $args['page'] > 1) ? $args['page'] : 1;
@@ -113,17 +115,31 @@ class PagesRepository extends EntityRepository
         // sort
         $sortby = isset($args['sortby']) ? $args['sortby'] : 'id';
         $sortorder = isset($args['sortorder']) ? $args['sortorder'] : 'DESC';
-        // filter's
-        $f['id'] = isset($args['id']) && $args['id'] !== '' ? $args['id'] : false;
-        $f['urltitle'] = isset($args['urltitle']) && $args['urltitle'] !== '' ? $args['urltitle'] : false;
-        $f['title'] = isset($args['title']) && $args['title'] !== '' ? $args['title'] : false;
-        $f['online'] = isset($args['online']) && $args['online'] !== '' ? $args['online'] : false;
-        // search
-        $s['search'] = isset($args['search']) && $args['search'] !== '' ? $args['search'] : false;
-        $s['search_field'] = isset($args['search_field']) && $args['search_field'] !== '' ? $args['search_field'] : false;
+        // filter's - sql = exact search apart from title field
+        // basics
+        $f['id']        = isset($args['id']) && $args['id'] !== '' ? $args['id'] : false;
+        $f['title']     = isset($args['title']) && $args['title'] !== '' ? $args['title'] : false;
+        $f['urltitle']  = isset($args['urltitle']) && $args['urltitle'] !== '' ? $args['urltitle'] : false;
+        $f['author']    = isset($args['author']) && $args['author'] !== '' && $args['author'] != 0 ? $args['author'] : false;
+        // statuses
+        $f['online']    = isset($args['online']) && $args['online'] !== '' ? $args['online'] : false;
+        $f['depot']     = isset($args['depot']) && $args['depot'] !== '' ? $args['depot'] : false;
+        $f['showinmenu'] = isset($args['inmenu']) && $args['inmenu'] !== '' ? $args['inmenu'] : false;
+        $f['showinlist'] = isset($args['inlist']) && $args['inlist'] !== '' ? $args['inlist'] : false;
+        // dates
+        $f['expired']   = isset($args['expired']) && $args['expired'] !== '' ? $args['expired'] : false;
+        $f['published'] = isset($args['published']) && $args['published'] !== '' ? $args['published'] : false;
+        $f['deleted']   = isset($args['deleted']) && $args['deleted'] !== '' ? $args['deleted'] : false;
+        // other
+        $f['category']  = isset($args['categoryAssignments']) && $args['categoryAssignments'] !== '' ? $args['categoryAssignments'] : false;
+        $f['language']  = isset($args['language']) && $args['language'] !== '' ? $args['language'] : false;
+        $f['layout']  = isset($args['layout']) && $args['layout'] !== '' ? $args['layout'] : false;
 
-        $f['language'] = isset($args['language']) && $args['language'] !== '' ? $args['language'] : false;
-        $f['template'] = isset($args['template']) && $args['template'] !== '' ? $args['template'] : false;
+        // search sql like%
+        $s['search']        = isset($args['search']) && $args['search'] !== '' ? $args['search'] : false;
+        $s['search_field']  = isset($args['search_field']) && $args['search_field'] !== '' ? $args['search_field'] : false;
+
+
 
         return $this->getOneOrAll($onlyone, $f, $s, $sortby, $sortorder, $page, $limit);
     }

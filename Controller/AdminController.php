@@ -12,16 +12,15 @@
 
 namespace Kaikmedia\PagesModule\Controller;
 
-use Zikula\Core\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Kaikmedia\PagesModule\Form\Type\SettingsType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route; // used in annotations - do not remove
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method; // used in annotations - do not remove
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
-
+use Zikula\Core\Controller\AbstractController;
+use Zikula\ThemeModule\Engine\Annotation\Theme;
 //use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
 
 /**
@@ -31,16 +30,18 @@ class AdminController extends AbstractController
 {
     /**
      * @Route("/index")
+     *
+     * @Theme("admin")
+     *
      * the main administration function
      *
      * @return RedirectResponse
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-//        // Security check
-//        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-//            throw new AccessDeniedException();
-//        }
+        if (!$this->hasPermission($this->name.'::', '::', ACCESS_ADMIN)) {
+            throw new AccessDeniedException();
+        }
 
         return new RedirectResponse($this->get('router')->generate('kaikmediapagesmodule_manager_list', [], RouterInterface::ABSOLUTE_URL));
     }
@@ -48,33 +49,30 @@ class AdminController extends AbstractController
     /**
      * @Route("/preferences")
      *
+     * @Theme("admin")
+     *
      * @return Response symfony response object
      * @throws AccessDeniedException Thrown if the user doesn't have admin access to the module
      */
     public function preferencesAction(Request $request)
     {
-//        // Security check
-//        if (!SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_ADMIN)) {
-//            throw new AccessDeniedException();
-//        }
+        if (!$this->hasPermission($this->name.'::', '::', ACCESS_ADMIN)) {
+            throw new AccessDeniedException();
+        }
 
-        $mod_vars = [];
-
-        $form = $this->createForm('settingsform', $settings = [], [
-            'action' => $this->get('router')
-            ->generate('kaikmediapagesmodule_admin_preferences', [], RouterInterface::ABSOLUTE_URL),
-            'itemsperpage' => isset($mod_vars['itemsperpage']) ? $mod_vars['itemsperpage'] : 25
+        $form = $this->createForm(SettingsType::class, $settings = [], [
+            'action' => $this->get('router')->generate('kaikmediapagesmodule_admin_preferences', [], RouterInterface::ABSOLUTE_URL),
         ]);
+
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $data = $form->getData();
             foreach ($data as $key => $value) {
-
             }
         }
 
-        return $this->render('KaikmediaPagesModule:Admin:preferences.html.twig', [
+        return $this->render('@KaikmediaPagesModule/Admin/preferences.html.twig', [
             'form' => $form->createView()
         ]);
     }

@@ -32,72 +32,86 @@ class PageFilterType extends AbstractType
         ->add('sortby', HiddenType::class)
         ->add('sortorder', HiddenType::class)
         ->add('limit', ChoiceType::class, [
-            'choices' => [
-                '5'   => '5',
-                '10'  => '10',
-                '15'  => '15',
-                '25'  => '25',
-                '50'  => '50',
-                '100' => '100'
+            'choices'   => [
+                '5'     => '5',
+                '10'    => '10',
+                '15'    => '15',
+                '25'    => '25',
+                '50'    => '50',
+                '100'   => '100'
                 ],
-            'required' => true
+            'required'  => true
         ])
         ->add('title', TextType::class, [
-            'required' => false
+            'required'  => false
         ])
         ->add('online', ChoiceType::class, [
             'choices' => [
-                'Offline' => '0',
-                'Online' => '1'
+                'Offline'   => '0',
+                'Online'    => '1'
             ],
             'required' => false
         ])
         ->add('depot', ChoiceType::class, [
             'choices' => [
-                'Depot' => '0',
-                'Allowed' => '1'
+                'Depot'     => '0',
+                'Allowed'   => '1'
                 ],
             'required' => false
         ])
         ->add('inlist', ChoiceType::class, [
             'choices' => [
-                'Not in list' => '0',
-                'In List' => '1'
+                'Not in list'   => '0',
+                'In List'       => '1'
                 ],
             'required' => false
         ])
         ->add('inmenu', ChoiceType::class, [
             'choices' => [
-                'Not in menus' => '0',
-                'In menus' => '1'
+                'Not in menus'  => '0',
+                'In menus'      => '1'
+                ],
+            'required' => false
+        ])
+        ->add('published', ChoiceType::class, [
+            'choices' => [
+                'Not defined'   => 'unset',
+                'Awaiting'      => 'awaiting',
+                'Published'     => 'published'
+                ],
+            'required' => false
+        ])
+        ->add('expired', ChoiceType::class, [
+            'choices' => [
+                'Not defined'   => 'unset',
+                'Awaiting'      => 'awaiting',
+                'Expired'       => 'expired',
+                'Published'     => 'published'
                 ],
             'required' => false
         ])
         ->add('categoryAssignments', CategoriesType::class, [
-//            'mapped' => false,
-            'required'  => false,
-            'multiple'  => false,
-            'module'    => 'KaikmediaPagesModule',
-            'entity'    => 'PageEntity',
-            'entityCategoryClass' => CategoryAssignmentEntity::class,
+            'required'              => false,
+            'multiple'              => false,
+            'module'                => 'KaikmediaPagesModule',
+            'entity'                => 'PageEntity',
+            'entityCategoryClass'   => CategoryAssignmentEntity::class,
         ])
         ->add('author', UserLiveSearchType::class, [
-            'empty_data' => 0,
-            'inline_usage' => true,
-            'required' => false,
+            'empty_data'    => 0,
+            'inline_usage'  => true,
+            'required'      => false,
         ])
         ->add('language', LocaleType::class, [
-            'choices' => $options['locales'],
-            'required' => false,
+            'choices'   => $options['locales'],
+            'required'  => false,
         ])
         ->add('layout', ChoiceType::class, [
-            'choices' => $options['layouts'],
-            'required' => false
+            'choices'   => $options['layouts'],
+            'required'  => false
             ])
-
         ->add('filter', SubmitType::class, [])
         ;
-
     }
 
     public function getName()
@@ -111,9 +125,9 @@ class PageFilterType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'csrf_protection' => false,
-            'locales' => ['English' => 'en'],
-            'layouts' => ['Default' => 'default']
+            'csrf_protection'   => false,
+            'locales'           => ['English' => 'en'],
+            'layouts'           => ['Default' => 'default']
         ]);
     }
 }

@@ -15,7 +15,7 @@ namespace Kaikmedia\PagesModule\Entity;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * Description of PagesQueryBuilder
+ * PagesQueryBuilder
  *
  * @author Kaik
  */
@@ -30,12 +30,26 @@ class PagesQueryBuilder extends QueryBuilder
         }
     }
 
+    public function filterTitle($title)
+    {
+        if ($title !== false) {
+            return $this->andWhere('p.title LIKE :title')->setParameter('title', '%' . $title . '%');
+        }
+    }
+
     public function filterUrltitle($urltitle)
     {
         if (is_array($urltitle)) {
             return $this->andWhere('p.urltitle IN (:urltitle)')->setParameter('urltitle', $urltitle);
         } elseif ($urltitle !== false) {
             return $this->andWhere('p.urltitle = :urltitle')->setParameter('urltitle', $urltitle);
+        }
+    }
+
+    public function filterAuthor($author)
+    {
+        if ($author !== false) {
+            return $this->andWhere('p.author = :author')->setParameter('author', $author);
         }
     }
 
@@ -49,56 +63,7 @@ class PagesQueryBuilder extends QueryBuilder
     public function filterOnline($online)
     {
         if ($online !== false) {
-            switch ($online) {
-                case 'all':
-                    return $this;
-                case 'online':
-                    return $this->andWhere('p.online = :online')->setParameter('online', 1);
-                case 'offline':
-                    return $this->andWhere('p.online = :online')->setParameter('online', 0);
-            }
-        }
-    }
-
-    public function filterPublished($published)
-    {
-        switch ($published) {
-            case 'published':
-                return $this->andWhere($this->expr()
-                    ->orx($this->expr()
-                    ->lte('p.published', ':date_now'), $this->expr()
-                    ->isNull('p.published')))
-                    ->setParameter('date_now', new \DateTime('now'));
-            case 'awaiting':
-                return $this->andWhere($this->expr()
-                    ->gte('p.published', ':date_now'))
-                    ->setParameter('date_now', new \DateTime('now'));
-            case 'unset':
-                return $this->andWhere($this->expr()
-                    ->isNull('p.published'));
-        }
-    }
-
-    public function filterExpired($expired)
-    {
-        switch ($expired) {
-            case 'published':
-                return $this->andWhere($this->expr()
-                    ->orx($this->expr()
-                    ->gte('p.expired', ':date_now'), $this->expr()
-                    ->isNull('p.expired')))
-                    ->setParameter('date_now', new \DateTime('now'));
-            case 'expired':
-                return $this->andWhere($this->expr()
-                    ->lte('p.expired', ':date_now'))
-                    ->setParameter('date_now', new \DateTime('now'));
-            case 'awaiting':
-                return $this->andWhere($this->expr()
-                    ->gte('p.expired', ':date_now'))
-                    ->setParameter('date_now', new \DateTime('now'));
-            case 'unset':
-                return $this->andWhere($this->expr()
-                    ->isNull('p.expired'));
+            return $this->andWhere('p.online = :online')->setParameter('online', $online);
         }
     }
 
@@ -116,6 +81,70 @@ class PagesQueryBuilder extends QueryBuilder
         }
     }
 
+    public function filterPublished($published)
+    {
+        switch ($published) {
+            case 'published':
+                return $this->andWhere($this->expr()
+                    ->orx($this->expr()
+                    ->lte('p.publishedAt', ':date_now'), $this->expr()
+                    ->isNull('p.publishedAt')))
+                    ->setParameter('date_now', new \DateTime('now'));
+            case 'awaiting':
+                return $this->andWhere($this->expr()
+                    ->gte('p.publishedAt', ':date_now'))
+                    ->setParameter('date_now', new \DateTime('now'));
+            case 'unset':
+                return $this->andWhere($this->expr()
+                    ->isNull('p.publishedAt'));
+        }
+    }
+
+    public function filterExpired($expired)
+    {
+        switch ($expired) {
+            case 'published':
+                return $this->andWhere($this->expr()
+                    ->orx($this->expr()
+                    ->gte('p.expiredAt', ':date_now'), $this->expr()
+                    ->isNull('p.expiredAt')))
+                    ->setParameter('date_now', new \DateTime('now'));
+            case 'expired':
+                return $this->andWhere($this->expr()
+                    ->lte('p.expiredAt', ':date_now'))
+                    ->setParameter('date_now', new \DateTime('now'));
+            case 'awaiting':
+                return $this->andWhere($this->expr()
+                    ->gte('p.expiredAt', ':date_now'))
+                    ->setParameter('date_now', new \DateTime('now'));
+            case 'unset':
+                return $this->andWhere($this->expr()
+                    ->isNull('p.expiredAt'));
+        }
+    }
+
+    public function filterDeleted($deletedAt)
+    {
+        if ($deletedAt === false) {
+            switch ($deletedAt) {
+                case 'deleted':
+                    return $this->andWhere($this->expr()
+                        ->isNotNull('p.deletedAt'));
+                case 'notdeleted':
+                    return $this->andWhere($this->expr()
+                        ->isNull('p.deletedAt'));
+            }
+        }
+    }
+
+    public function filterCategory($category)
+    {
+        dump($category);
+//        if ($category !== false) {
+//            return $this->andWhere('c.category = :category')->setParameter('category', $category);
+//        }
+    }
+
     public function filterLanguage($language)
     {
         if ($language !== false) {
@@ -123,32 +152,10 @@ class PagesQueryBuilder extends QueryBuilder
         }
     }
 
-    public function filterViews($views)
+    public function filterLayout($layout)
     {
-        if ($views !== false) {
-            return $this->andWhere('p.views = :views')->setParameter('views', $views);
-        }
-    }
-
-    public function filterAuthor($author)
-    {
-        if ($author !== false) {
-            return $this->andWhere('p.author = :author')->setParameter('author', $author);
-        }
-    }
-
-    public function filterTitle($title)
-    {
-        if ($title !== false) {
-            return $this->andWhere('p.title = :title')->setParameter('title', $title);
-        }
-    }
-
-    public function filterDeleted($deletedAt)
-    {
-        if ($deletedAt === false) {
-            return $this->andWhere($this->expr()
-                ->isNull('p.deletedAt'));
+        if ($layout !== false) {
+            return $this->andWhere('p.layout = :layout')->setParameter('layout', $layout);
         }
     }
 

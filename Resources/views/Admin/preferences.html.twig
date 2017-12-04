@@ -2,52 +2,35 @@
 {% block header %}
     {% set settings='settings' %}
     {{ parent() }}
-    {#{ pageAddAsset('stylesheet', zasset('@ZikulaIntercomModule:css/inbox.css')) }#}
 {% endblock %} 
 {% block title %}
     {% set title_icon="<i class='fa fa-user-secret'></i>" %}
-    {% set title=__('Pages') %}
-    {{ parent() }}
+    {% set title=__('Pages config') %}
+{#    {{ parent() }}#}
 {% endblock %}
 {% block content %}
-    <div id="km_pages_admin_index" class="col-md-12 clearfix">    
+<div id="km_pages_admin_index" class="col-md-12 clearfix">
+    <div class="container-fluid">
+        <div class="row">
         {% form_theme form 'bootstrap_3_layout.html.twig' %}
-        <h3>
-            <span class="fa fa-wrench"></span>
-            {{  __('Settings')}}
-        </h3>       
-        <div class="container-fluid">
-            {{ form_start(form) }}
-            {{ form_errors(form) }}
-            <div class="col-md-12">
-                <div class="col-md-6">
-                    <h3>{{  __('General settings') }}</h3>    
-                    <div class="col-md-6">
-                        <p>{{  __('Items per page') }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        {{ form_widget(form.itemsperpage) }}
-                    </div> 
-                </div>         
-
-                <div class="col-md-12">
-                    {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
-                </div>
-
-                {{ form_end(form) }} 
-            </div>   
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <fieldset>
+            <legend>{{ __('Listing settings') }}</legend>
+            <div class="col-md-3">
+                {{ form_label(form.itemsperpage, __('Items per page'), { 'label_attr': {'class': ''} }) }}
+                {{ form_widget(form.itemsperpage, {'attr': {'class': '' }}) }}
+                {{ form_errors(form.itemsperpage) }}
+            </div>
+        </fieldset>
+        <div class="col-md-12 text-center" style="margin-top:20px;">
+            {{ form_widget(form.save, {'attr': {'class': 'btn btn-success'}}) }}
         </div>
-    {% endblock %}
-    {% block footer %}
-        {{ parent() }}
-        {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }#}
-        {#{ pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
-        <script>
-        (function($) {
-                $(function(){
-                    Zikula.Intercom.InboxManager.init();  
-                });
-        })(jQuery);
-        </script>
-        {#{ dump() }#}
-    {% endblock %}
+        {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+{% endblock %}

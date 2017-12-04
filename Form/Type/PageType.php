@@ -15,7 +15,7 @@ use Kaikmedia\PagesModule\Entity\CategoryAssignmentEntity;
 use Kaikmedia\PagesModule\Entity\PageEntity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -23,14 +23,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Zikula\Bundle\FormExtensionBundle\Form\DataTransformer\NullToEmptyTransformer;
 use Zikula\CategoriesModule\Form\Type\CategoriesType;
-use Zikula\Common\Translator\IdentityTranslator;
 use Zikula\UsersModule\Form\Type\UserLiveSearchType;
 
 class PageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $translator = $options['translator'];
         $builder
         ->add('online', ChoiceType::class, [
             'choices' => [
@@ -43,8 +41,8 @@ class PageType extends AbstractType
         ])
         ->add('depot', ChoiceType::class, [
             'choices' => [
-                'Depot' => '0',
-                'Allowed' => '1'
+                'Depot' => 1,
+                'Allowed' => 0
             ],
             'multiple' => false,
             'expanded' => true,
@@ -82,25 +80,23 @@ class PageType extends AbstractType
             'entityCategoryClass' => CategoryAssignmentEntity::class,
         ])
         ->add('views', TextType::class, [
-            'required' => false])
-        ->add('publishedAt', DateType::class, [
-            'format' => \IntlDateFormatter::SHORT,
-            'input' => 'datetime',
+            'required' => false
+            ])
+        ->add('publishedAt', DateTimeType::class, [
             'required' => false,
-            'widget' => 'single_text'
+            'date_widget' => 'single_text',
+            'time_widget' => 'single_text',
         ])
-        ->add('expiredAt', DateType::class, [
-            'format' => \IntlDateFormatter::SHORT,
-            'input' => 'datetime',
+        ->add('expiredAt', DateTimeType::class, [
             'required' => false,
-            'widget' => 'single_text'
+            'date_widget' => 'single_text',
+            'time_widget' => 'single_text',
         ])
         ->add('layout', ChoiceType::class, [
             'choices' => $options['layouts'],
             'required' => true
         ])
-        ->add(
-                $builder->create('language', ChoiceType::class, [
+        ->add($builder->create('language', ChoiceType::class, [
                     'choices' => $options['locales'],
                     'required' => false,
                 ])->addModelTransformer(new NullToEmptyTransformer())
@@ -136,7 +132,6 @@ class PageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'translator' => new IdentityTranslator(),
             'data_class' => PageEntity::class,
             'locales' => ['English' => 'en'],
             'layouts' => ['Default' => 'default']

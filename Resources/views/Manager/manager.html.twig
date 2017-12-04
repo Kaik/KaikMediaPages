@@ -8,35 +8,37 @@
     {% set title='Manager' %}
 {% endblock %}
 {% block content %}
-{% form_theme form with [
-            '@KaikmediaPagesModule/Form/bootstrap_3_horizontal_layout.html.twig',
-            '@KaikmediaPagesModule/Form/bootstrap_3_zikula_admin_layout.html.twig',
-            '@KaikmediaPagesModule/Form/radio.html.twig'
-] %}
-{#    <h3>
-        <span class="fa fa-list"></span> {{ __('List')}}
-    </h3>#}
+<div id="km_pages_admin_index" class="col-md-12 clearfix">
     <div class="container-fluid">
         <div class="row">
             <div class="list-group col-md-12">
                 <div class="list-group-item col-md-12" style="background: #d9edf7;">
-                    {{ form_start(form) }} {{ form_errors(form) }}
+                    {% form_theme form with [
+                        '@KaikmediaPagesModule/Form/bootstrap_3_horizontal_layout.html.twig',
+                        '@KaikmediaPagesModule/Form/bootstrap_3_zikula_admin_layout.html.twig',
+                        '@KaikmediaPagesModule/Form/radio.html.twig'
+                    ] %}
+                    {{ form_start(form) }}
+                    {{ form_errors(form) }}
                     <div class="form-group-sm clearfix">
                         <div class="col-md-4">{{ form_label(form.title) }} {{ form_widget(form.title) }}</div>            		               
-                        <div id="all_filters" class="collapse">			                	
+                        <div id="all_filters" class="collapse">
                             <div class="col-md-2">{{ form_label(form.online) }}{{ form_widget(form.online) }}</div>			
                             <div class="col-md-2">{{ form_label(form.depot) }}{{ form_widget(form.depot) }}</div>				
                             <div class="col-md-2">{{ form_label(form.inmenu) }}{{ form_widget(form.inmenu) }}</div>	
-                            <div class="col-md-2">{{ form_label(form.inlist) }}{{ form_widget(form.inlist) }}</div>	
-                            <div class="col-md-2">{{ form_label(form.layout) }}{{ form_widget(form.layout) }}</div>	
+                            <div class="col-md-2">{{ form_label(form.inlist) }}{{ form_widget(form.inlist) }}</div>
+                            <div class="col-md-2">{{ form_label(form.author) }}{{ form_widget(form.author, {'btn_size': 'btn-sm', 'user_name': filtered_user_name }) }}</div>
+                            <div class="col-md-2">{{ form_label(form.layout) }}{{ form_widget(form.layout) }}</div>
+                            <div class="col-md-2">{{ form_label(form.expired) }}{{ form_widget(form.expired) }}</div>
+                            <div class="col-md-2">{{ form_label(form.published) }}{{ form_widget(form.published) }}</div>
                             <div class="col-md-2">{{ form_label(form.language) }}{{ form_widget(form.language) }}</div>
                             <div class="col-md-2">{{ form_label(form.categoryAssignments, __('Category')) }}{{ form_widget(form.categoryAssignments) }}</div>
-                            <div class="col-md-3">{{ form_label(form.author) }}{{ form_widget(form.author, {'btn_size': 'btn-sm', 'user_name': filtered_user_name }) }}</div>
                         </div>	
                         <div class="col-md-1">{{ form_label(form.limit) }} {{ form_widget(form.limit) }}</div>	        					
-                        <div class="col-md-6 col-xs-12 pull-right text-right">
+                        <div class="col-md-offset-6 col-md-6 col-xs-12 text-right">
                             <div class="btn-group" role="group" aria-label="...">
-                                <a data-toggle="collapse" data-target="#all_filters" class="btn btn-sm btn-warning" href="#" >{{ __('Show/hide all filters') }} <i class="fa fa-filter fa-1x" title="{{ __('Show all filters') }}"> </i></a>
+                                <a class="btn btn-sm btn-default" href="{{ path('kaikmediapagesmodule_manager_list') }}" >{{ __('Clear filters') }} <i class="fa fa-eraser fa-1x" title="{{ __('Clear filters') }}"></i></a>
+                                <a data-toggle="collapse" data-target="#all_filters" class="btn btn-sm btn-warning" href="#" >{{ __('All filters') }} <i class="fa fa-filter fa-1x" title="{{ __('All filters') }}"></i></a>
                                 {{ form_widget(form.filter, {'attr': {'class': 'btn btn-sm btn-info'}}) }}
                             </div>	
                         </div>	
@@ -44,21 +46,22 @@
                     {{ form_end(form) }}
                 </div>
                 <div class="list-group-item col-md-12 clearfix hidden-xs hidden-sm" style="background: #eee;">
-                    <div class="col-md-4"><a class='{{ sort.title.class }}' href='{{ sort.title.url }}'>{{ __('Title') }}</a></div>
+                    <div class="col-md-3"><a class='{{ sort.title.class }}' href='{{ sort.title.url }}'>{{ __('Title') }}</a></div>
                     <div class="col-md-1">{{ __('Online')}}</div>
                     <div class="col-md-1">{{ __('Depot')}}</div>
                     <div class="col-md-1">{{ __('In list')}}</div>
                     <div class="col-md-1">{{ __('In menu')}}</div>
-                    <div class="col-md-1">{{ __('Layout')}}</div>
-                    <div class="col-md-1">{{ __('Language')}}</div>
-                    <div class="col-md-1">{{ __('Author')}}</div>
-                    <div class="col-md-1 pull-right text-right">{{ __('Options')}}</div>
+                    <div class="hidden-xs col-md-1">{{ __('Layout')}}</div>
+                    <div class="hidden-xs col-md-1">{{ __('Language')}}</div>
+                    <div class="hidden-xs col-md-1">{{ __('Author')}}</div>
+                    <div class="hidden-xs col-md-1">{{ __('Category')}}</div>
+                    <div class="hidden-xs col-md-1 pull-right text-right">{{ __('Options')}}</div>
                 </div>
                 {% for page in pages %}
                     <div class="list-group-item col-md-12 clearfix">
-                        <div class="col-md-4">
-                            <a href="{{ path('kaikmediapagesmodule_manager_display', {'id': page.id}) }}"><h4
-                                    class="list-group-item-heading">{{ page.title }}</h4></a>
+                        <div class="col-md-3">
+                            <a href="{{ path('kaikmediapagesmodule_manager_display', {'id': page.id}) }}">
+                                <h4 class="list-group-item-heading">{{ page.title }}</h4></a>
                             <p class="list-group-item-text"><i title="{{ __('Id') }} {{ page.id }}" class="fa fa-key "> </i> <i title="{{ __('Url') }}" class="fa fa-link"> </i> {{ page.urltitle }}</p>
                         </div>
                         <div class="col-xs-3 col-md-1">		
@@ -73,18 +76,29 @@
                         <div class="col-xs-3 col-md-1">			            
                             {% include "KaikmediaPagesModule:Common:inmenu.menu.html.twig" with {'id': page.id, 'selected': page.inmenu} %}	
                         </div>            
-                        <div class="col-xs-3 col-md-1">
-                            {% include "KaikmediaPagesModule:Common:layout.menu.html.twig" with {'id': page.id, 'selected': page.layout} %}	
+                        <div class="hidden-xs col-xs-3 col-md-1">
+{#                            {% include "KaikmediaPagesModule:Common:layout.menu.html.twig" with {'id': page.id, 'selected': page.layout} %}#}
                         </div>
-                        <div class="col-xs-3 col-md-1">
+                        <div class="hidden-xs col-xs-3 col-md-1">
                             {% include "KaikmediaPagesModule:Common:language.menu.html.twig" with {'id': page.id, 'selected': page.language} %}	
                         </div>
-                        <div class="col-xs-3 col-md-1">
-                                                        <p class="list-group-item-text">{{ page.author.uname }}</p>
-                        </div>						
-                        <div class="col-xs-2 col-md-1 pull-right text-right">
-                            <a href="{{ path('kaikmediapagesmodule_manager_modify', {'id': page.id}) }}"><i
-                                    class="fa fa-pencil"></i></a>
+                        <div class="hidden-xs hidden-sm col-md-1">
+                            <p class="list-group-item-text">{{ page.author.uname }}</p>
+                        </div>
+                        <div class="hidden-xs hidden-sm col-md-1">
+                        {% if page.categoryAssignments is not null %}
+                            {% for assignment in page.categoryAssignments %}
+                                {{ assignment.category.display_name[app.request.getLocale()] }}{% if not loop.last %}, {% endif %}
+                            {% else %}
+                                {{  __('No category') }}
+                            {% endfor %}
+                        {% endif %}
+                        </div>
+                        <div class="hidden-xs col-md-1 pull-right text-right">
+                            <a href="{{ path('kaikmediapagesmodule_manager_modify', {'id': page.id}) }}"><i class="fa fa-pencil"></i></a>
+                        </div>
+                        <div class="visible-xs-block text-center">
+                            <a class="btn btn-defaul" href="{{ path('kaikmediapagesmodule_manager_modify', {'id': page.id}) }}"><i class="fa fa-pencil"></i></a>
                         </div>
                     </div>
                 {% endfor %}
@@ -94,19 +108,10 @@
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 {% block footer %}
     {{ parent() }}
-    {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }#}
-    {#{ pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
-    <script>
-    (function($) {
-            $(function(){
-                Zikula.Intercom.InboxManager.init();  
-            });
-    })(jQuery);
-    </script>
-    {#{ dump() }#}
     {% set formInitScript %}
         <script type="text/javascript">
             /* <![CDATA[ */
