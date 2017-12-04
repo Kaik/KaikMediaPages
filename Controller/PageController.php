@@ -76,7 +76,7 @@ class PageController extends AbstractController
 
     /**
      * @Route("/display/{urltitle}", options={"zkNoBundlePrefix"=1})
-     * 
+     *
      * Display item.
      *
      * @throws AccessDeniedException on failed permission check
@@ -95,7 +95,7 @@ class PageController extends AbstractController
         $page = $this->getDoctrine()
             ->getManager()
             ->getRepository('Kaikmedia\PagesModule\Entity\PageEntity')
-            ->getOneBy([$a]);
+            ->getOneBy($a);
 
         if (!$page) {
             throw new NotFoundHttpException();

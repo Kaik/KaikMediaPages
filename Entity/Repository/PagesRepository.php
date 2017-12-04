@@ -107,7 +107,6 @@ class PagesRepository extends EntityRepository
     public function getAll($args = [])
     {
         // internall
-        dump($args);
         $onlyone = isset($args['onlyone']) ? $args['onlyone'] : false;
         // pager
         $page = (isset($args['page']) && $args['page'] > 1) ? $args['page'] : 1;
