@@ -59,7 +59,7 @@ class AccessManager
         PermissionApi $permissionApi,
         VariableApi $variableApi
     ) {
-        $this->name = 'ZikulaPagesModule';
+        $this->name = 'KaikmediaPagesModule';
         $this->requestStack = $requestStack;
         $this->request = $requestStack->getMasterRequest();
         $this->entityManager = $entityManager;
