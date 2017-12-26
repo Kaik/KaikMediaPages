@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Zikula\Core\Controller\AbstractController;
 use Zikula\ThemeModule\Engine\Annotation\Theme;
-//use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
 
 /**
  * @Route("/admin")
@@ -39,9 +38,8 @@ class AdminController extends AbstractController
      */
     public function indexAction()
     {
-        if (!$this->hasPermission($this->name.'::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+        // access throw component instance user
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_ADMIN, true);
 
         return new RedirectResponse($this->get('router')->generate('kaikmediapagesmodule_manager_list', [], RouterInterface::ABSOLUTE_URL));
     }
@@ -56,9 +54,8 @@ class AdminController extends AbstractController
      */
     public function preferencesAction(Request $request)
     {
-        if (!$this->hasPermission($this->name.'::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+        // access throw component instance user
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_ADMIN, true);
 
         $form = $this->createForm(SettingsType::class, $settings = [], [
             'action' => $this->get('router')->generate('kaikmediapagesmodule_admin_preferences', [], RouterInterface::ABSOLUTE_URL),

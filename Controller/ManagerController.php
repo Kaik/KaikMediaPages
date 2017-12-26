@@ -60,9 +60,8 @@ class ManagerController extends AbstractController
      */
     public function displayAction(Request $request, $id = null)
     {
-        if (!$this->hasPermission($this->name.'::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+        // access throw component instance user
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_ADD, true, ':manager:display');
 
         $page = $this->getDoctrine()
             ->getManager()
@@ -93,9 +92,8 @@ class ManagerController extends AbstractController
      */
     public function listAction(Request $request, $page)
     {
-        if (!$this->hasPermission($this->name.'::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+        // access throw component instance user
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_ADD, true, ':manager:list');
 
         $filters = $request->get('page_filter', []);
         //need to unset because form expects it to be an object
@@ -165,9 +163,8 @@ class ManagerController extends AbstractController
      */
     public function modifyAction(Request $request, $id = null)
     {
-        if (!$this->hasPermission($this->name.'::', '::', ACCESS_ADMIN)) {
-            throw new AccessDeniedException();
-        }
+        // access throw component instance user
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_ADD, true, ':manager:modify');
 
         $em = $this->getDoctrine()->getManager();
         if ($id == null) {
