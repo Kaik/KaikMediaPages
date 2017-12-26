@@ -12,10 +12,10 @@
 
 namespace Kaikmedia\PagesModule\Security;
 
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zikula\Common\Translator\TranslatorInterface;
-use Zikula\ExtensionsModule\Api\VariableApi;
+//use Zikula\ExtensionsModule\Api\VariableApi;
 use Zikula\PermissionsModule\Api\PermissionApi;
 
 /**
@@ -31,11 +31,6 @@ class AccessManager
     private $requestStack;
 
     /**
-     * @var EntityManager
-     */
-    private $entityManager;
-
-    /**
      * @var TranslatorInterface
      */
     private $translator;
@@ -46,26 +41,20 @@ class AccessManager
     private $permissionApi;
 
     /**
-     * @var VariableApi
-     */
-    private $variableApi;
-
+     * @var CurrentUser
+    */
     private $user;
 
     public function __construct(
         RequestStack $requestStack,
-        EntityManager $entityManager,
         TranslatorInterface $translator,
-        PermissionApi $permissionApi,
-        VariableApi $variableApi
+        PermissionApi $permissionApi
     ) {
         $this->name = 'KaikmediaPagesModule';
         $this->requestStack = $requestStack;
         $this->request = $requestStack->getMasterRequest();
-        $this->entityManager = $entityManager;
         $this->translator = $translator;
         $this->permissionApi = $permissionApi;
-        $this->variableApi = $variableApi;
         $this->user = $this->request->getSession()->get('uid') > 1 ? $this->request->getSession()->get('uid') : 1;
     }
 
@@ -77,19 +66,29 @@ class AccessManager
      * Returns false if use has permissions.
      * On exit, $uid has the user's UID if logged in.
      */
-    public function hasPermission($access = ACCESS_READ)
+    public function hasPermission($level = ACCESS_READ, $throw = true, $component = null, $instance = null, $user = null)
     {
-        // If not logged in, redirect to login screen
-        if ($this->user <= 1) {
-            return false;
-        }
+        $comp = null === $component ? '::' : $component;
+        $inst = null === $instance ? '::' : $instance;
 
-        // Return user uid to signify everything is OK.
-        return $this->user;
+        // @todo module enabled/disabled check
+
+        // Zikula perms check
+        $zkPerms = $this->hasPermissionRaw($comp, $inst, $level, $user);
+
+        // if needed additional conditions here
+        $allowed = $this->user > 1 && $zkPerms;
+
+        // Return status or throw exception
+        if (!$allowed && $throw) {
+            throw new AccessDeniedException();
+        } else {
+            return $allowed;
+        }
     }
 
-    public function hasPermissionRaw($component, $instance, $level)
+    private function hasPermissionRaw($component, $instance, $level, $user)
     {
-        return $this->permissionApi->hasPermission($this->name.'::', $component.'::'.$instance, $level);
+        return $this->permissionApi->hasPermission($this->name.$component, $instance, $level, $user);
     }
 }

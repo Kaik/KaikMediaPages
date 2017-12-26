@@ -53,9 +53,8 @@ class PageController extends AbstractController
      */
     public function viewAction(Request $request, $page)
     {
-        if (!$this->hasPermission($this->name.'::', '::view', ACCESS_READ)) {
-            throw new AccessDeniedException();
-        }
+        // access throw component instance user
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_READ, true, '::view');
 
         $a = [];
         $a['page'] = $page;
@@ -83,9 +82,8 @@ class PageController extends AbstractController
      */
     public function displayAction(Request $request, $urltitle)
     {
-        if (!$this->hasPermission($this->name.'::', '::display', ACCESS_READ)) {
-            throw new AccessDeniedException();
-        }
+        // access throw component instance user
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_READ, true, '::display');
 
         $a = [];
         $a['online'] = 1;

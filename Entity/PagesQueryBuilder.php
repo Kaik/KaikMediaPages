@@ -139,7 +139,7 @@ class PagesQueryBuilder extends QueryBuilder
 
     public function filterCategory($category)
     {
-        dump($category);
+//        dump($category);
 //        if ($category !== false) {
 //            return $this->andWhere('c.category = :category')->setParameter('category', $category);
 //        }
