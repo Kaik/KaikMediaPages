@@ -4,7 +4,7 @@ services:
         arguments:
           - "@translator.default"
           - "@router"
-          - "@zikula_permissions_module.api.permission"
+          - "@kaikmedia_pages_module.access_manager"
           - "@=service('zikula_extensions_module.api.variable').get('KaikmediaPagesModule', 'enablecategorization', true)"
         tags:
           - { name: zikula.link_container }
@@ -15,17 +15,3 @@ services:
           - "@request_stack"
           - "@translator.default"
           - "@zikula_permissions_module.api.permission"
-            
-#            - "@zikula_extensions_module.api.variable"
-
-#    kaikmedia_pages_module.form.type.settings:
-#        class: Kaikmedia\PagesModule\Form\Type\SettingsType
-#        tags:
-#            - { name: form.type, alias: settingsform }
-#            
-#    kaikmedia_pages_module.form.type.page:
-#        class: Kaikmedia\PagesModule\Form\Type\PageType
-#        tags:
-#            - { name: form.type, alias: pageform }
-
-            

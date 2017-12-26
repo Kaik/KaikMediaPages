@@ -15,7 +15,7 @@ namespace Kaikmedia\PagesModule\Container;
 use Symfony\Component\Routing\RouterInterface;
 use Zikula\Common\Translator\TranslatorInterface;
 use Zikula\Core\LinkContainer\LinkContainerInterface;
-use Zikula\PermissionsModule\Api\ApiInterface\PermissionApiInterface;
+use Kaikmedia\PagesModule\Security\AccessManager;
 
 class LinkContainer implements LinkContainerInterface
 {
@@ -30,9 +30,9 @@ class LinkContainer implements LinkContainerInterface
     private $router;
 
     /**
-     * @var PermissionApiInterface
+     * @var AccessManager
      */
-    private $permissionApi;
+    private $accessManager;
 
     /**
      * @var bool
@@ -43,17 +43,17 @@ class LinkContainer implements LinkContainerInterface
      * LinkContainer constructor.
      * @param TranslatorInterface $translator
      * @param RouterInterface $router
-     * @param PermissionApiInterface $permissionApi
+     * @param AccessManager $accessManager
      */
     public function __construct(
         TranslatorInterface $translator,
         RouterInterface $router,
-        PermissionApiInterface $permissionApi,
+        AccessManager $accessManager,
         $enableCategorization
     ) {
         $this->translator = $translator;
         $this->router = $router;
-        $this->permissionApi = $permissionApi;
+        $this->accessManager = $accessManager;
         $this->enableCategorization = $enableCategorization;
     }
 
@@ -85,28 +85,34 @@ class LinkContainer implements LinkContainerInterface
     {
         $links = [];
 
-        if ($this->permissionApi->hasPermission($this->getBundleName().'::', '::', ACCESS_EDIT)) {
+        if ($this->accessManager->hasPermission(ACCESS_EDIT, false, ':manager:list')) {
             $links[] = [
                     'url' => $this->router->generate('kaikmediapagesmodule_manager_list'),
                     'text' => $this->translator->__('List'),
                     'title' => $this->translator->__('Pages manager list'),
                     'icon' => 'list'];
             }
-            if ($this->permissionApi->hasPermission('KaikmediaPagesModule::', '::', ACCESS_ADD)) {
+            if ($this->accessManager->hasPermission(ACCESS_ADD, false, ':manager:modify')) {
                 $links[] = [
                     'url' => $this->router->generate('kaikmediapagesmodule_manager_modify'),
                     'text' => $this->translator->__('New'),
                     'title' => $this->translator->__('Add a new Page'),
                     'icon' => 'plus'];
             }
-            if ($this->permissionApi->hasPermission('KaikmediaPagesModule::', '::', ACCESS_ADMIN)) {
+            if ($this->accessManager->hasPermission(ACCESS_ADMIN, false)) {
                 $links[] = [
                     'url' => $this->router->generate('kaikmediapagesmodule_admin_preferences'),
                     'text' => $this->translator->__('Modify Config'),
                     'title' => $this->translator->__('Modify Config'),
                     'icon' => 'wrench'];
             }
-
+            if ($this->accessManager->hasPermission(ACCESS_ADMIN, false)) {
+                $links[] = [
+                    'url' => $this->router->generate('kaikmediapagesmodule_import_index'),
+                    'text' => $this->translator->__('Import'),
+                    'title' => $this->translator->__('Import'),
+                    'icon' => 'download'];
+            }
         return $links;
     }
 
