@@ -15,3 +15,10 @@ services:
           - "@request_stack"
           - "@translator.default"
           - "@zikula_permissions_module.api.permission"
+
+    kaikmedia_pages_module.import_helper:
+        class: Kaikmedia\PagesModule\Helper\ImportHelper
+        arguments:
+            - "@request_stack"
+            - "@doctrine.orm.default_entity_manager"
+            - "@zikula_extensions_module.api.variable"

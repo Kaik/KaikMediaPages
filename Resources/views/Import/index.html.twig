@@ -1,0 +1,78 @@
+{% extends 'KaikmediaPagesModule:Base:admin.html.twig' %}
+{% block header %}
+    {% set settings='settings' %}
+    {{ parent() }}
+    {#{ pageAddAsset('stylesheet', zasset('@KaikmediaPagesModule:css/import.css')) }#}
+{% endblock %} 
+{% block title %}
+    {% set title_icon="<i class='fa fa-download'></i>" %}
+    {% set title=__('Import') %}
+    {{ parent() }}
+{% endblock %}
+{% block content %}
+    <div id="km_pages_admin_index" class="col-md-12 clearfix">    
+        <div class="row">
+            <div class="col-md-4">
+                <h4> {{ __('1. Select table to import') }}</h4>
+                <div class="input-group">
+                    <select id="table-selector" class="form-control">
+                    {% for table in importHelper.getTables() %}
+                        <option value="{{ table }}">{{ table }}</option>
+                    {% endfor %}
+                    </select>
+                    <span class="input-group-btn">
+                      <button id="table-selector-check" class="btn btn-default" type="button" tabindex="-1" disabled="disabled"><span class="fa fa-info" aria-hidden="true"></span> {{ __('Check') }}</button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h4> {{ __('2. Import settings') }}</h4>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default">{{ __('Items per page:') }}</button>
+                        </span>
+                        <input id="import_limit" type="integer" class="form-control" value="100">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default">{{ __('Ajax timeout:') }}</button>
+                        </span>
+                        <input id="import_ajax_timeout" type="integer" class="form-control" value="10000">
+                        <span class="input-group-btn">
+                            <button id="start_import_yes" type="button" class="btn btn-default" disabled="disabled">{{ __('Start importing!') }}</button>
+                        </span>
+                    </div><!-- /input-group -->
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px;">
+            <div class="col-md-12">
+                <div id="import_progress" class="progress hide">
+                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ __('objects.') }}" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px;">
+            <div class="col-md-4">
+                <h5>{{ __('Status') }}</h5>
+                <div id="import_logs"></div>
+            </div>
+            <div class="col-md-4">
+                <div id="import_rejected" class="hide">
+                    <p class="text-muted"><i class="fa fa-trash-o" aria-hidden="true"></i> {{ __('Rejected items ids:') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+    {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }#}
+    {{ pageAddAsset('javascript', zasset('@KaikmediaPagesModule:js/Kaikmedia.Pages.import.js')) }}
+{#    <script>
+    (function($) {
+            $(function(){
+                Zikula.Intercom.InboxManager.init();  
+            });
+    })(jQuery);
+    </script>#}
+    
+{#    {{ dump() }}#}
+{% endblock %}

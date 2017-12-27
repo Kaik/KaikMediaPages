@@ -57,6 +57,119 @@ class PagesModuleInstaller extends AbstractExtensionInstaller
 
     public function upgrade($oldversion)
     {
+        // this module does not have released previous versions this upgrade is just installing module in place of old Pages
+        // use import to collect data from other modules
+        // create table
+        
+        try {
+            $this->schemaTool->create($this->entities);
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
+            return false;
+        }
+        // insert default category
+        try {
+            $this->createCategoryTree();
+        } catch (\Exception $e) {
+            $this->addFlash('error', $this->__f('Did not create default categories (%s).', ['%s' => $e->getMessage()]));
+        }
+        // set up config variables
+        $modvars = [
+            'itemsperpage' => 25,
+            'enablecategorization' => true
+        ];
+        $this->setVars($modvars);
+
+        // initialisation successful
+        return true;
+    }
+
+    public function uninstall()
+    {
+        // drop table
+        try {
+            $this->schemaTool->drop($this->entities);
+        } catch (\Exception $e) {
+            $this->addFlash('error', $e->getMessage());
+
+            return false;
+        }
+        // remove module vars
+        $this->delVars();
+        // Delete entries from category registry
+        $registries = $this->container->get('zikula_categories_module.category_registry_repository')->findBy(['modname' => $this->bundle->getName()]);
+        foreach ($registries as $registry) {
+            $this->entityManager->remove($registry);
+        }
+        $this->entityManager->flush();
+        // Deletion successful
+
+        return true;
+    }
+
+    /**
+     * create the category tree
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If Root category not found
+     * @throws \Exception
+     *
+     * @return boolean
+     */
+    private function createCategoryTree()
+    {
+        $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
+        $repo = $this->container->get('zikula_categories_module.category_repository');
+        // create pages root category
+        $parent = $repo->findOneBy(['name' => 'Modules']);
+        $pagesRoot = new CategoryEntity();
+        $pagesRoot->setParent($parent);
+        $pagesRoot->setName($this->bundle->getName());
+        $pagesRoot->setDisplay_name([
+            $locale => $this->__('Pages', 'kaikmediapagesmodule', $locale)
+        ]);
+        $pagesRoot->setDisplay_desc([
+            $locale => $this->__('Static Pages', 'kaikmediapagesmodule', $locale)
+        ]);
+        $this->entityManager->persist($pagesRoot);
+        // create children
+        $category1 = new CategoryEntity();
+        $category1->setParent($pagesRoot);
+        $category1->setName('Default');
+        $category1->setDisplay_name([
+            $locale => $this->__('Default', 'kaikmediapagesmodule', $locale)
+        ]);
+        $category1->setDisplay_desc([
+            $locale => $this->__('Initial sub-category created on install', 'kaikmediapagesmodule', $locale)
+        ]);
+        $attribute = new CategoryAttributeEntity();
+        $attribute->setAttribute('color', '#99ccff');
+        $category1->addAttribute($attribute);
+        $this->entityManager->persist($category1);
+        $category2 = new CategoryEntity();
+        $category2->setParent($pagesRoot);
+        $category2->setName('Internal');
+        $category2->setDisplay_name([
+            $locale => $this->__('Internal', 'kaikmediapagesmodule', $locale)
+        ]);
+        $category2->setDisplay_desc([
+            $locale => $this->__('Initial sub-category created on install', 'kaikmediapagesmodule', $locale)
+        ]);
+        $attribute = new CategoryAttributeEntity();
+        $attribute->setAttribute('color', '#cceecc');
+        $category2->addAttribute($attribute);
+        $this->entityManager->persist($category2);
+        // create Registry
+        $registry = new CategoryRegistryEntity();
+        $registry->setCategory($pagesRoot);
+        $registry->setEntityname('PageEntity');
+        $registry->setModname($this->bundle->getName());
+        $registry->setProperty('Main');
+        $this->entityManager->persist($registry);
+        $this->entityManager->flush();
+        return true;
+    }
+}
+
         /*
           // return false;
           $connection = $this->entityManager->getConnection();
@@ -131,94 +244,6 @@ class PagesModuleInstaller extends AbstractExtensionInstaller
         //$hookContainer = $this->hookApi->getHookContainerInstance($this->bundle->getMetaData());
         //HookUtil::registerSubscriberBundles($hookContainer->getHookSubscriberBundles());
 
-        return true;
-    }
-
-    public function uninstall()
-    {
-        // drop table
-        try {
-            $this->schemaTool->drop($this->entities);
-        } catch (\Exception $e) {
-            $this->addFlash('error', $e->getMessage());
-
-            return false;
-        }
-        // remove module vars
-        $this->delVars();
-        // Delete entries from category registry
-        $registries = $this->container->get('zikula_categories_module.category_registry_repository')->findBy(['modname' => $this->bundle->getName()]);
-        foreach ($registries as $registry) {
-            $this->entityManager->remove($registry);
-        }
-        $this->entityManager->flush();
-        // Deletion successful
-
-        return true;
-    }
-
-    /**
-     * create the category tree
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException If Root category not found
-     * @throws \Exception
-     *
-     * @return boolean
-     */
-    private function createCategoryTree()
-    {
-        $locale = $this->container->get('request_stack')->getCurrentRequest()->getLocale();
-        $repo = $this->container->get('zikula_categories_module.category_repository');
-        // create pages root category
-        $parent = $repo->findOneBy(['name' => 'Modules']);
-        $pagesRoot = new CategoryEntity();
-        $pagesRoot->setParent($parent);
-        $pagesRoot->setName($this->bundle->getName());
-        $pagesRoot->setDisplay_name([
-            $locale => $this->__('Pages', 'kaikmediapagesmodule', $locale)
-        ]);
-        $pagesRoot->setDisplay_desc([
-            $locale => $this->__('Static Pages', 'kaikmediapagesmodule', $locale)
-        ]);
-        $this->entityManager->persist($pagesRoot);
-        // create children
-        $category1 = new CategoryEntity();
-        $category1->setParent($pagesRoot);
-        $category1->setName('Category1');
-        $category1->setDisplay_name([
-            $locale => $this->__('Category 1', 'kaikmediapagesmodule', $locale)
-        ]);
-        $category1->setDisplay_desc([
-            $locale => $this->__('Initial sub-category created on install', 'kaikmediapagesmodule', $locale)
-        ]);
-        $attribute = new CategoryAttributeEntity();
-        $attribute->setAttribute('color', '#99ccff');
-        $category1->addAttribute($attribute);
-        $this->entityManager->persist($category1);
-        $category2 = new CategoryEntity();
-        $category2->setParent($pagesRoot);
-        $category2->setName('Category2');
-        $category2->setDisplay_name([
-            $locale => $this->__('Category 2', 'kaikmediapagesmodule', $locale)
-        ]);
-        $category2->setDisplay_desc([
-            $locale => $this->__('Initial sub-category created on install', 'kaikmediapagesmodule', $locale)
-        ]);
-        $attribute = new CategoryAttributeEntity();
-        $attribute->setAttribute('color', '#cceecc');
-        $category2->addAttribute($attribute);
-        $this->entityManager->persist($category2);
-        // create Registry
-        $registry = new CategoryRegistryEntity();
-        $registry->setCategory($pagesRoot);
-        $registry->setEntityname('PageEntity');
-        $registry->setModname($this->bundle->getName());
-        $registry->setProperty('Main');
-        $this->entityManager->persist($registry);
-        $this->entityManager->flush();
-        return true;
-    }
-
 //    /**
 //     * create the category tree
 //     *
@@ -246,4 +271,3 @@ class PagesModuleInstaller extends AbstractExtensionInstaller
 //        }
 //        return true;
 //    }
-}
