@@ -77,7 +77,7 @@ class AccessManager
         $zkPerms = $this->hasPermissionRaw($comp, $inst, $level, $user);
 
         // if needed additional conditions here
-        $allowed = $this->user > 1 && $zkPerms;
+        $allowed = $zkPerms;
 
         // Return status or throw exception
         if (!$allowed && $throw) {

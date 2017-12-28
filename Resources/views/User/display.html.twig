@@ -9,7 +9,7 @@
     {{ parent() }}
 {% endblock %}
 {% block content %}
-    {% if hasPermission('ZikulaPagesModule::', '::modify', 'ACCESS_EDIT') %}
+    {% if hasPermission('KaikmediaPagesModule:manager:modify', '::', 'ACCESS_EDIT') %}
         <div class="col-md-2 pull-right text-right">
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="options-menu" data-toggle="dropdown" aria-expanded="true">
@@ -18,7 +18,7 @@
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
                     <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_manager_modify', {'id': page.id}) }}">{{ __('Edit')}}</a></li>
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>
+{#                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>#}
                 </ul>
             </div>
         </div>

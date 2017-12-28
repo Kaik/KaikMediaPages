@@ -54,7 +54,7 @@ class PageController extends AbstractController
     public function viewAction(Request $request, $page)
     {
         // access throw component instance user
-        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_READ, true, '::view');
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_OVERVIEW, true, '::view');
 
         $a = [];
         $a['page'] = $page;
@@ -83,7 +83,7 @@ class PageController extends AbstractController
     public function displayAction(Request $request, $urltitle)
     {
         // access throw component instance user
-        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_READ, true, '::display');
+        $this->get('kaikmedia_pages_module.access_manager')->hasPermission(ACCESS_OVERVIEW, true, '::display');
 
         $a = [];
         $a['online'] = 1;
