@@ -12,73 +12,122 @@
 
 namespace Kaikmedia\PagesModule\Helper;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Kaikmedia\PagesModule\Security\AccessManager;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Zikula\CategoriesModule\Api\ApiInterface\CategoryPermissionApiInterface;
 use Zikula\Core\RouteUrl;
-use Zikula\SearchModule\AbstractSearchable;
+use Zikula\SearchModule\Entity\SearchResultEntity;
+use Zikula\SearchModule\SearchableInterface;
 
-class SearchHelper extends AbstractSearchable
+class SearchHelper implements SearchableInterface
 {
     /**
-     * get the UI options for search form
-     *
-     * @param boolean $active if the module should be checked as active
-     * @param array|null $modVars module form vars as previously set
-     * @return string
+     * @var bool
      */
-    public function getOptions($active, $modVars = null)
-    {
-//        if (\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_READ)) {
-//
-//            return $this->getContainer()->get('templating')->renderResponse('KaikmediaPagesModule:Search:options.html.twig', array('active' => $active))->getContent();
-//        }
+    private $enableCategorization;
 
-        return '';
+    /**
+     * @var EntityManagerInterface
+     */
+    private $entityManager;
+
+    /**
+     * @var CategoryPermissionApiInterface
+     */
+    private $categoryPermissionApi;
+
+    /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
+     * @var AccessManager
+     */
+    private $accessManager;
+
+    /**
+     * SearchHelper constructor.
+     * @param EntityManagerInterface $entityManager
+     * @param CategoryPermissionApiInterface $categoryPermissionApi
+     * @param SessionInterface $session
+     * @param bool $enableCategorization
+     * @param AccessManager $accessManager
+     */
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        CategoryPermissionApiInterface $categoryPermissionApi,
+        SessionInterface $session,
+        $enableCategorization,
+        AccessManager $accessManager
+    ) {
+        $this->entityManager = $entityManager;
+        $this->categoryPermissionApi = $categoryPermissionApi;
+        $this->session = $session;
+        $this->enableCategorization = $enableCategorization;
+        $this->accessManager = $accessManager;
     }
 
     /**
-     * Get the search results
-     *
-     * @param array $words array of words to search for
-     * @param string $searchType AND|OR|EXACT
-     * @param array|null $modVars module form vars passed though
-     * @return array
+     * {@inheritdoc}
      */
-    function getResults(array $words, $searchType = 'AND', $modVars = null)
+    public function amendForm(FormBuilderInterface $form)
     {
-//        if (!\SecurityUtil::checkPermission($this->name . '::', '::', ACCESS_READ)) {
-//            return array();
-//        }
-//
-//        $qb = $this->entityManager->createQueryBuilder();
-//        $qb->select('p')->from('Kaikmedia\PagesModule\Entity\PageEntity', 'p');
-//        $whereExpr = $this->formatWhere($qb, $words, array('p.title', 'p.content'), $searchType);
-//        $qb->andWhere($whereExpr);
-//        $pages = $qb->getQuery()->getResult();
-//
-//        $sessionId = session_id();
-//        $enableCategorization = \ModUtil::getVar($this->name, 'enablecategorization');
-//
-//        $records = array();
-//        foreach ($pages as $page) {
-//            /** @var $page \Zikula\PagesModule\Entity\PageEntity */
-//
-//            $pagePermissionCheck = \SecurityUtil::checkPermission($this->name . '::', $page->getTitle() . '::' . $page->getPageid(), ACCESS_OVERVIEW);
-//            if ($enableCategorization) {
-//                $pagePermissionCheck = $pagePermissionCheck && \CategoryUtil::hasCategoryAccess($page->getCategories(), $this->name);
-//            }
-//            if (!$pagePermissionCheck) {
-//                continue;
-//            }
-//
-//            $records[] = array(
-//                'title' => $page->getTitle(),
-//                'text' => $page->getContent(),
-//                'created' => $page->getCr_date(),
-//                'module' => $this->name,
-//                'sesid' => $sessionId,
-//                'url' => RouteUrl::createFromRoute('zikulapagesmodule_user_display', array('urltitle' => $page->getUrltitle()))
-//            );
-//        }
+        // not needed because `active` child object is already added and that is all that is needed.
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getResults(array $words, $searchType = 'AND', $modVars = null)
+    {
+        if (!$this->accessManager->hasPermission(ACCESS_READ, false)) {
+            return [];
+        }
+        $method = ('OR' == $searchType) ? 'orX' : 'andX';
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('p')
+            ->from('Kaikmedia\PagesModule\Entity\PageEntity', 'p');
+        /** @var $where \Doctrine\ORM\Query\Expr\Composite */
+        $where = $qb->expr()->$method();
+        $i = 1;
+        foreach ($words as $word) {
+            $subWhere = $qb->expr()->orX();
+            foreach (['p.title', 'p.content'] as $field) {
+                $expr = $qb->expr()->like($field, "?$i");
+                $subWhere->add($expr);
+                $qb->setParameter($i, '%' . $word . '%');
+                $i++;
+            }
+            $where->add($subWhere);
+        }
+        $qb->andWhere($where);
+        $pages = $qb->getQuery()->getResult();
+        $results = [];
+        /** @var $pages \Zikula\PagesModule\Entity\PageEntity[] */
+        foreach ($pages as $page) {
+            $pagePermissionCheck = $this->accessManager->hasPermission(ACCESS_OVERVIEW, false, '::', $page->getTitle() . '::' . $page->getId());
+            if ($this->enableCategorization) {
+                $pagePermissionCheck = $pagePermissionCheck && $this->categoryPermissionApi->hasCategoryAccess($page->getCategoryAssignments()->toArray());
+            }
+            if (!$pagePermissionCheck) {
+                continue;
+            }
+            $result = new SearchResultEntity();
+            $result->setTitle($page->getTitle())
+                ->setText($page->getContent())
+                ->setModule('KaikmediaPagesModule')
+                ->setCreated($page->getCreatedAt())
+                ->setUrl(RouteUrl::createFromRoute('kaikmediapagesmodule_page_display', ['urltitle' => $page->getUrltitle()]))
+                ->setSesid($this->session->getId());
+            $results[] = $result;
+        }
+        return $results;
+    }
+    public function getErrors()
+    {
         return [];
     }
 }

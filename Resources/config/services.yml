@@ -19,6 +19,17 @@ services:
     kaikmedia_pages_module.import_helper:
         class: Kaikmedia\PagesModule\Helper\ImportHelper
         arguments:
-            - "@request_stack"
-            - "@doctrine.orm.default_entity_manager"
-            - "@zikula_extensions_module.api.variable"
+          - "@request_stack"
+          - "@doctrine.orm.default_entity_manager"
+          - "@zikula_extensions_module.api.variable"
+
+    kaikmedia_pages_module.helper.search_helper:
+        class: Kaikmedia\PagesModule\Helper\SearchHelper
+        arguments:
+          - '@doctrine.orm.entity_manager'
+          - '@zikula_categories_module.api.category_permission'
+          - '@session'
+          - "@=service('zikula_extensions_module.api.variable').get('KaikmediaPagesModule', 'enablecategorization', true)"
+          - "@kaikmedia_pages_module.access_manager"
+        tags:
+          - { name: zikula.searchable_module, bundleName: KaikmediaPagesModule}
