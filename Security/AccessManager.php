@@ -55,7 +55,7 @@ class AccessManager
         $this->request = $requestStack->getMasterRequest();
         $this->translator = $translator;
         $this->permissionApi = $permissionApi;
-        $this->user = $this->request->getSession()->get('uid') > 1 ? $this->request->getSession()->get('uid') : 1;
+//        $this->user = $this->request->getSession()->get('uid') > 1 ? $this->request->getSession()->get('uid') : 1;
     }
 
     /*
