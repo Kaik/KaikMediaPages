@@ -57,7 +57,6 @@ class LinkContainer implements LinkContainerInterface
         $this->enableCategorization = $enableCategorization;
     }
 
-
     /**
      * get Links of any type for this extension
      * required by the interface.
@@ -113,7 +112,7 @@ class LinkContainer implements LinkContainerInterface
                     'title' => $this->translator->__('Import'),
                     'icon' => 'download'];
             }
-            
+
         return $links;
     }
 
