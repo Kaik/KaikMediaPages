@@ -33,3 +33,10 @@ services:
           - "@kaikmedia_pages_module.access_manager"
         tags:
           - { name: zikula.searchable_module, bundleName: KaikmediaPagesModule}
+            
+    kaikmedia_pages_module.hook_subscriber.page_ui_hooks_subscriber:
+        class: Kaikmedia\PagesModule\HookSubscriber\PageUiHooksSubscriber
+        arguments:
+          - "@translator.default"
+        tags:
+            - { name: zikula.hook_subscriber, areaName: "subscriber.pages.ui_hooks.page" }
