@@ -8,6 +8,7 @@
     {% set title=__('Pages') %}
 {% endblock %}
 {% block content %}
+{% set hooks=notifyDisplayHooks('pages.ui_hooks.page.form_edit', page.id, NULL, TRUE)  %}
 <div id="km_pages_admin_index" class="col-md-12 clearfix">    
     <div class="container-fluid">
         <div class="row">
@@ -39,6 +40,8 @@
                 </div>
                 <div class="list-group-item col-md-12">	
                     {#                {{ render(controller('KaikmediaGalleryModule:Plugin:gallery', {'obj_name': 'KaikmediaPagesModule', 'obj_id': page.id})) }}#}
+                    {% set gallery=attribute(hooks, 'provider.gallery.ui_hooks.media') %}
+                    {{ gallery.__toString()|raw }}
                 </div>		
                 <div class="list-group-item col-md-12" style="background: #eee;">
                     <h4><span class="fa fa-file"></span> {{ __('Content')}}</h4>

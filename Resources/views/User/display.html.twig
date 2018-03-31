@@ -9,6 +9,14 @@
     {{ parent() }}
 {% endblock %}
 {% block content %}
+    {% set hooks=notifyDisplayHooks('pages.ui_hooks.page.display_view', page.id, NULL, TRUE)  %}
+    {% set gallery=(attribute(hooks, 'provider.gallery.ui_hooks.media') is defined ? attribute(hooks, 'provider.gallery.ui_hooks.media').__toString() : {}) %}
+    {% for feature in gallery %}
+        {% if feature.relation.media is defined and feature.relation.media.mediaExtra.fileName is defined and feature.relation.media.mediaExtra.fileName is not empty %}
+            <img src="{{ ('/uploads/' ~ (feature.relation.media.mediaExtra.subdir is defined ? feature.relation.media.mediaExtra.subdir ~ '/' : '') ~ feature.relation.media.mediaExtra.fileName)|imagine_filter('dynamic', {"thumbnail": {"size": [700, 300] }}) }}" />
+        {% endif %}
+    {% endfor %}
+    
     {% if hasPermission('KaikmediaPagesModule:manager:modify', '::', 'ACCESS_EDIT') %}
         <div class="col-md-2 pull-right text-right">
             <div class="dropdown">
@@ -23,7 +31,7 @@
             </div>
         </div>
     {% endif %}
-    {{ dump(notifyDisplayHooks('pages.ui_hooks.page.display_view', page.id, NULL, TRUE)) }}
+
     {{ page.content|raw }}
 {% endblock %}
 {% block footer %}
@@ -90,8 +98,14 @@
         </div>
     </div>
 </div>#}
-
-
+{#    {% set hooks=notifyDisplayHooks('pages.ui_hooks.page.display_view', page.id, NULL, TRUE)  %}#}
+{#    {% set gallery=attribute(hooks, 'provider.gallery.ui_hooks.media').__toString() %}#}
+{#    {{ gallery.__toString() }}#}
+{#    {% for media in gallery.__toString() %}
+        <img src="/web/uploads/{{ media.media.mediaExtra.fileName }}" />
+    {% endfor %}#}
+{#    {{ dump(gallery) }}#}
+{#    {{ dump(notifyDisplayHooks('pages.ui_hooks.page.display_view', page.id, NULL, TRUE)) }}#}
 
 {#{% include 'KaikmediaPagesModule:Common:resources.html.twig'  %}
 <div class="panel">

@@ -15,15 +15,15 @@ namespace Kaikmedia\PagesModule\Controller;
 use Kaikmedia\PagesModule\Entity\PageEntity;
 use Kaikmedia\PagesModule\Form\Type\PageType;
 use Kaikmedia\PagesModule\Form\Type\PageFilterType;
-//use Kaikmedia\GalleryModule\Manager\Plugin as GalleryPlugin;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-//use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Routing\RouterInterface;
+use Zikula\Bundle\HookBundle\Hook\ProcessHook;
 use Zikula\Core\Controller\AbstractController;
+use Zikula\Core\RouteUrl;
 use Zikula\Component\SortableColumns\SortableColumns;
 use Zikula\Component\SortableColumns\Column;
 use Zikula\ThemeModule\Engine\Annotation\Theme;
@@ -177,23 +177,22 @@ class ManagerController extends AbstractController
 
         $formBuilder = $this->get('form.factory')
             ->createBuilder(PageType::class, $page)
-//                ->setAction($this->get('router')->generate('kaikmediapagesmodule_manager_list', [], RouterInterface::ABSOLUTE_URL))
             ->setMethod('POST');
 
         $form = $formBuilder->getForm();
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            //$images = $form->get('images')->getData();
+
             $em->persist($page);
             $em->flush();
 
             $request->getSession()
-            ->getFlashBag()
-            ->add('status', $this->__('Page saved!'));
+                ->getFlashBag()
+                    ->add('status', $this->__('Page saved!'));
 
-            //$gallery = new GalleryPlugin($this->container->get('doctrine.entitymanager'));
-            //$result = $gallery->assignMedia('KaikmediaPagesModule', $page->getId(), $images);
+            $routeUrl = new RouteUrl('kaikmediamodule_page_display', ['urltitle' => $page->getUrltitle()]);
+            $this->get('hook_dispatcher')->dispatch('pages.ui_hooks.page.process_edit', new ProcessHook($page->getId(), $routeUrl));
 
             return $this->redirect($this->generateUrl('kaikmediapagesmodule_manager_display', [
                 'id' => $page->getId()

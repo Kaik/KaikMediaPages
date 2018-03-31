@@ -18,7 +18,13 @@ use Zikula\Common\Translator\TranslatorInterface;
 
 class PageUiHooksSubscriber implements HookSubscriberInterface
 {
-    const PAGE_DISPLAY = 'pages.ui_hooks.page.display_view';
+    const DISPLAY_VIEW = 'pages.ui_hooks.page.display_view';
+    const FORM_EDIT = 'pages.ui_hooks.page.form_edit';
+    const VALIDATE_EDIT = 'pages.ui_hooks.page.validate_edit';
+    const PROCESS_EDIT = 'pages.ui_hooks.page.process_edit';
+    const FORM_DELETE = 'pages.ui_hooks.page.form_delete';
+    const VALIDATE_DELETE = 'pages.ui_hooks.page.validate_delete';
+    const PROCESS_DELETE = 'pages.ui_hooks.page.process_delete';
 
     /**
      * @var TranslatorInterface
@@ -51,7 +57,13 @@ class PageUiHooksSubscriber implements HookSubscriberInterface
     public function getEvents()
     {
         return [
-            UiHooksCategory::TYPE_DISPLAY_VIEW => self::PAGE_DISPLAY,
+            UiHooksCategory::TYPE_DISPLAY_VIEW => self::DISPLAY_VIEW,
+            UiHooksCategory::TYPE_FORM_EDIT => self::FORM_EDIT,
+            UiHooksCategory::TYPE_VALIDATE_EDIT => self::VALIDATE_EDIT,
+            UiHooksCategory::TYPE_PROCESS_EDIT => self::PROCESS_EDIT,
+            UiHooksCategory::TYPE_FORM_DELETE => self::FORM_DELETE,
+            UiHooksCategory::TYPE_VALIDATE_DELETE => self::VALIDATE_DELETE,
+            UiHooksCategory::TYPE_PROCESS_DELETE => self::PROCESS_DELETE,
         ];
     }
 }
