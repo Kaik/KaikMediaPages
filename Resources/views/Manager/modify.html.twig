@@ -1,4 +1,4 @@
-{% extends 'KaikmediaPagesModule:Base:admin.html.twig' %}
+{% extends 'KaikmediaPagesModule:Base:manager.html.twig' %}
 {% block header %}
     {% set settings='settings' %}
     {{ parent() }}
@@ -8,17 +8,189 @@
     {% set title=__('Pages') %}
 {% endblock %}
 {% block content %}
-{% set hooks=notifyDisplayHooks('pages.ui_hooks.page.form_edit', page.id, NULL, TRUE)  %}
-<div id="km_pages_admin_index" class="col-md-12 clearfix">    
-    <div class="container-fluid">
-        <div class="row">
-            {% form_theme form with [
-                '@KaikmediaPagesModule/Form/bootstrap_3_horizontal_layout.html.twig',
-                '@KaikmediaPagesModule/Form/bootstrap_3_zikula_admin_layout.html.twig',
-                '@KaikmediaPagesModule/Form/radio.html.twig'
-            ] %}
-            {{ form_start(form) }}
-            {{ form_errors(form) }}
+{% set hooks=notifyDisplayHooks('pages.ui_hooks.page.form_edit', article.id, NULL, TRUE)  %}
+<div id="km_pages_manager_index" class="row clearfix">    
+        {% form_theme form with [
+            'bootstrap_3_layout.html.twig',
+            '@KaikmediaPagesModule/Form/zikulausersmodule.userlivesearch.widget.twig',
+            '@KaikmediaPagesModule/Form/radio.html.twig'
+        ] %}
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        <div class="edit-item-menu col-xs-12">
+            <div class="row">   
+               <div class="view-onsite col-xs-2 text-center">
+                    {% if article.id is defined and article.id %}
+                        {% set topic=categorisationHelper.getTopicByArticle(article) %}
+                        {% set topic_name=attribute(topic, 'name') is defined  ? topic.name|lower : 'global' %} 
+                        <a class="btn btn-lg btn-default fa fa-tv"
+                           title="{{ __('View') }}"
+                           href="{{ path('kaikmedianewsmodule_news_display', {'topic_name': topic_name, 'slug' : article.urltitle, 'id': article.id}) }}">
+                            {{ __('View online') }}
+                        </a>
+                        <a class="btn btn-lg btn-default fa fa-desktop"
+                           title="{{ __('Preview') }}"
+                           href="{{ path('kaikmedianewsmodule_manager_display', {'id': article.id}) }}">
+                           {{ __('Preview') }}
+                        </a>
+                    {% endif %}
+                </div>   
+                <div class="main-layout-select  {{ article.id is defined and article.id ? 'col-xs-8' : ' col-xs-3' }}">
+                    {% if article.id is defined and article.id %}
+                        <div class="row">   
+                            <div class="col-centered text-center col-xs-11">
+                                {% include "@KaikmediaNewsModule/Common/layout.select.html.twig" with {
+                                            'thisname': 'layouts-big',
+                                            'id': article.id,
+                                            'preview_type': 'layout',
+                                            'preview_name': 'default',
+                                            'layouts': layoutHelper.getLayoutsList(),
+                                            'cards': layoutHelper.getCardsList(),
+                                } %}
+                            </div>   
+                        </div>   
+                    {% endif %}
+                </div>   
+                <div class="edit col-xs-2 text-center">
+                    {{ form_widget(form.save, {
+                        'label': ' ' ~ __('Save') ,
+                        'attr': {'class': 'btn btn-lg btn-success fa fa-floppy-o'}
+                    }) }}
+                   <div id="autosave-info" class="alert {{ article.id ? 'text-success' : 'text-warning' }} text-center hide" >
+                        <i class="fa fa-floppy-o"> </i>
+                        <span id="autosave-info-off" class="{% if article.id %} hide {% else %}  {% endif %}">{{ __('Autosave is off! Please enter title to turn on auto save feature.')}}</span>
+                        <span id="autosave-info-on" class="{% if article.id %}  {% else %} hide {% endif %}">{{ __('Autosave is on.')}}</span>
+                    </div> 
+                </div>   
+            </div>   
+        </div>   
+        <div class="resizable-content center-block">
+            <div class="resizable-content-inner">
+                <div class="col-xs-12">
+                    <div class="list-group">
+                        <div class="list-group-item clearfix" style="background: #eee;">
+                            <h4><span class="fa fa-toggle-on"></span> {{ __('Publish settings')}}</h4>
+                            <div class="col-xs-3 col-md-3 ">{{ form_widget(form.depot, {'attr': {'class': 'btn btn-primary btn-xs radio-inline' }}) }}</div>
+                            <div class="col-xs-3 col-md-3">{{ form_widget(form.online, {'attr': {'class': 'btn btn-primary btn-xs radio-inline' }}) }}</div>
+                            <div class="col-xs-3 col-md-3 ">{{ form_widget(form.inmenu, {'attr': {'class': 'btn btn-primary btn-xs radio-inline' }}) }}</div>
+                            <div class="col-xs-3 col-md-3">{{ form_widget(form.inlist, {'attr': {'class': 'btn btn-primary btn-xs radio-inline' }}) }}</div>
+                        </div>
+                        <div class="list-group-item clearfix">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h4><span class="fa fa-picture-o"></span> {{ __('Featured media')}}</h4>
+                                    <div class="row">
+                                        {{ notifyDisplayHooks('pages.ui_hooks.mainmedia.form_edit', article.id) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item clearfix"
+                             style="background: #eee;">
+                            <div class="form-group has-float-label">
+                                {{ form_widget(form.title, {'attr': {'class': 'input-lg' }}) }}
+                                {{ form_label(form.title) }}
+                            </div>
+                        </div>
+                        <div class="list-group-item clearfix" style="background: #eee;">
+                            <div class="form-group has-float-label">
+                                {{ form_widget(form.urltitle, {'attr': {'class': '' }}) }}
+                                {{ form_label(form.urltitle) }}
+                            </div>
+                        </div>
+                        <div class="list-group-item" style="background: #eee;">
+                            <div class="form-group has-float-label">
+                                {{ form_widget(form.description) }}
+                                {{ form_label(form.description) }}
+                            </div>  
+                        </div>
+                        <div class="list-group-item" style="background: #eee;">
+                            <div class="form-group has-float-label">
+                                {{ form_widget(form.content, { 'attr': {'rows' : '10', 'cols' : '30' }} ) }}
+                                {{ form_label(form.content) }}
+                            </div>  
+                        </div>	
+                        <div class="list-group-item clearfix">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h4><span class="fa fa-picture-o"></span> {{ __('Gallery and media')}}</h4>
+                                    <div class="row">
+                                        {{ notifyDisplayHooks('pages.ui_hooks.gallery.form_edit', article.id) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item" style="background: #eee;">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h4><span class="fa fa-sitemap"></span> {{ __('Categories and Topics')}}</h4>
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <div class="form-group has-float-label">
+                                                {{ form_label(form.categoryAssignments, __('Topic'), { 'label_attr': {'class': ''} }) }}
+                                                {{ form_widget(form.categoryAssignments, { 'attr': {'class': ''} }) }}
+                                            </div> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item" style="background: #eee;">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h4><span class="fa fa-wrench"></span> {{ __('Options')}}</h4>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-6">
+                                            <div class="form-group has-float-label">
+                                                {{ form_widget(form.author, { 'attr': {'class': ''}, 'btn_size': ''}) }}
+        {#                                        {{ form_label(form.author, __('Author'), { 'label_attr': {'class': 'control-label'} }) }}#}
+                                            </div>      
+                                            <div class="form-group has-float-label">
+                                                {{ form_widget(form.layout, {'attr': {'class': 'control-label'} }) }}
+                                                {{ form_label(form.layout, __('Layout'), { 'label_attr': {'class':'control-label'} }) }}
+                                            </div>       
+                                            <div class="form-group has-float-label">
+                                                {{ form_widget(form.views,{ 'attr': {'class': 'control-label'} }) }}
+                                                {{ form_label(form.views, __('Views'), { 'label_attr': {'class': 'control-label'} }) }}
+                                            </div>       
+                                        </div>       			          			
+                                        <div class="col-xs-12 col-md-6">
+                                            <div class="form-group has-float-label">
+                                                {{ form_widget(form.language,{'attr': {'class': 'control-label','placeholder': __('All')} }) }}
+                                                {{ form_label(form.language, __('Language'), { 'label_attr': {'class':'control-label'} }) }}
+                                            </div>       
+                                            <div class="form-group has-float-label">
+                                                {{ form_widget(form.publishedAt,{'attr': {'class': 'control-label'} }) }}                                          
+                                                {{ form_label(form.publishedAt, __('Published'), { 'label_attr': {'class': ''} }) }}
+                                            </div>
+                                            <div class="form-group has-float-label">
+                                                {{ form_widget(form.expiredAt,{ 'attr': {'class': 'control-label'} }) }}                                      
+                                                {{ form_label(form.expiredAt, __('Expired'), { 'label_attr': {'class': ''} }) }}
+                                            </div>    	
+                                        </div>    	
+                                    </div>			   			
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+        <script type="text/javascript">
+        // used in @ZikulaCategoriesModule:js/ZikulaCategoriesModule.Category.Edit.js
+{#        var attributeCount = '{{ form.attributes|length }}';#}
+        </script>
+{#        {{ pageAddAsset('javascript', zasset('@KaikmediaPagesModule:js/Kaikmedia.Pages.Manager.modify.js')) }}#}
+{% endblock %}
+
+
+        
+            {#
             <div class="list-group col-md-12">
                 <div id="autosave-info" class="list-group-item col-md-12 {% if page.id %} list-group-item-success {% else %} list-group-item-warning {% endif %}" >
                     <p> <i class="fa fa-floppy-o"> </i>
@@ -39,7 +211,7 @@
                     </div>
                 </div>
                 <div class="list-group-item col-md-12">	
-                    {#                {{ render(controller('KaikmediaGalleryModule:Plugin:gallery', {'obj_name': 'KaikmediaPagesModule', 'obj_id': page.id})) }}#}
+                                    {{ render(controller('KaikmediaGalleryModule:Plugin:gallery', {'obj_name': 'KaikmediaPagesModule', 'obj_id': page.id})) }}
                     {% set gallery=attribute(hooks, 'provider.gallery.ui_hooks.media') %}
                     {{ gallery.__toString()|raw }}
                 </div>		
@@ -88,42 +260,5 @@
                 <div class="list-group-item list-group-item-info col-md-12 text-center">{{ form_widget(form.save, {'attr': {'class': 'btn btn-info'}}) }}</div>
             </div>
             {{ form_end(form) }}
-        </div>
-    </div>  
-</div>
-{% endblock %}
-{% block footer %}
-    {{ parent() }}
-    {% set formInitScript %}
-        <script type="text/javascript">
-            /* <![CDATA[ */
-            (function ($) {
-                $(document).ready(function () {
-                    // initialise auto completion for user fields
-                        initUserLiveSearch('page_author');
-                    });
-                })(jQuery);
-                /* ]]> */
-        </script>
-    {% endset %}
-    {% set formCss %}
-        <style>
-        .ui-autocomplete .suggestion {
-            background-image: none;
-        }
-        .ui-autocomplete .suggestion {
-            margin: 0;
-            padding: 0.2em 0 0.2em 5px;
-            list-style-type: none;
-            line-height: 1.4em;
-            cursor: pointer;
-            display: block;
-            background-position: 2px 2px;
-            background-repeat: no-repeat;
-            background-color: #fff;
-        }
-        </style>
-    {% endset %}
-    {{ pageAddAsset('footer', formInitScript) }}
-    {{ pageAddAsset('header', formCss) }}
-{% endblock %}
+            
+            #}

@@ -1,0 +1,51 @@
+{#
+                'thisname': 'topic',
+                'id': article.id,
+                'categories' : categorisationHelper.getTopics(),
+                'locale' : app.request.getLocale(),
+                'selected': article.categoryAssignments,
+                'multiple': false
+
+#}
+{% set category_text = __('No category') %}
+{% set label_type = selected|length > 1 ? 'label-success' : 'label-warning' %}
+{% if selected is not null %}
+    {% for assignment in selected %}
+        {% if loop.first %}
+            {% set label_type = 'label-success' %}
+            {% set category_text = assignment.category.display_name[locale] %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% set button_text = '{0} Select category|{1} %category% |]1,Inf[ %selected% categories'|transchoice(selected|length, {'%category%': category_text}, 'kaikmediapagesmodule') %}
+<div id="{{ thisname }}-dropdown-{{ id }}" class="dropdown">
+  	<a class="dropdown-toggle" id="{{ thisname }}-menu-{{ id }}" data-toggle="dropdown" aria-expanded="true">
+            <span class="label {{ thisname }} {{ label_type }}">{{ button_text }}</span>
+        </a>
+  	<ul class="dropdown-menu" role="menu" aria-labelledby="{{ thisname }}-menu-{{ id }}">
+        {% set isSelected = false  %}
+        {% for category in categories %}
+            {% if selected is not null %}
+                {% for assignment in selected %}
+                    {% set isSelected = (assignment.category.id == category.id ? true : false )  %}
+                {% endfor %}
+            {% endif %}
+
+            <li role="presentation" 
+                class="{{ isSelected ? 'disabled' : '' }}">
+                <a role="menuitem" 
+                    class="{{ thisname }}-menuitem-{{ id }} action-property" 
+                    data-name="{{ thisname }}" 
+                    data-id="{{ id }}"
+                    data-value="{{ category.id }}"
+                    data-multiple="0"
+                    tabindex="-1" 
+                    href="#">
+                    <i class="{{ isSelected ? ' fa fa-check-circle text-primary ' : 'fa fa-circle ' }}"> </i> 
+                    {{ category.display_name[locale] is defined ? category.display_name[locale] : category.name  }}
+                </a>    
+            </li>		
+        {% endfor %}
+  	</ul>
+</div>

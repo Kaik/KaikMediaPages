@@ -1,0 +1,17 @@
+{% set label_type = selected.id is defined ? 'label-info' : 'label-warning' %}
+{% set selected_text = selected.id is defined ? selected.uname : selected %}
+{% set selected_value = selected.id is defined ? selected.id : false %}
+<div class="dropdown">
+    <a class="dropdown-toggle" id="{{ thisname }}-menu-{{ id }}" data-toggle="dropdown" aria-expanded="true">
+        {#<i title="{{ selected|keys|first }}" class="sr-only fa fa-circle "></i>#}
+        <span class="label {{ label_type }}">{{ selected_text }}</span>
+    </a>
+    <div class="dropdown-menu" role="menu" aria-labelledby="{{ thisname }}-menu-{{ id }}">
+        <div class="dropdown-header">{{ __('Select user') }}</div>
+        <div class="form-group has-float-label col-xs-12">
+            <input id="{{ thisname }}-usersearch-{{ id }}" type="text" class="form-control">
+            <label for="{{ thisname }}-usersearch-{{ id }}" /> {{ __('User search') }} </label>
+            <button class="btn btn-link btn-xs" type="button">{{ __('Save') }}</button>
+        </div>
+    </div>
+</div>

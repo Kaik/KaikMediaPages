@@ -1,81 +1,65 @@
-{% extends 'KaikmediaPagesModule:Base:admin.html.twig' %}
+{% extends 'KaikmediaPagesModule:Base:manager.html.twig' %}
 {% block header %}
     {% set settings='settings' %}
     {{ parent() }}
+    {{ pageAddAsset('stylesheet', zasset('@KaikmediaPagesModule:css/page.css')) }}
 {% endblock %} 
 {% block title %}
-    {% set title_icon="<i class='fa fa-user-secret'></i>" %}
-    {% set title=__('Pages') %}
-{#    {{ parent() }}#}
+    {% set title_icon="" %}
+    {% set title='Manager' %}
 {% endblock %}
 {% block content %}
+<div id="km_pages_manager" class="manager preview clearfix">
     <div class="container-fluid"> 
         <div class="row">   
-            <div class="list-group col-md-12">
-                <div class="list-group-item col-md-12"   style="background: #FFF6DF;">
-                    <h1> {{ page.title }} </h1>
-                    <p><small>{{ __('url')}}</small> {{ page.urltitle }}</p>
-                </div>
-                <div class="list-group-item col-md-12 clearfix" style="background:#eee;">
-                    <div class="col-md-3">{{ __('Views')}}: {{ page.views }}</div>                   
-                    <div class="col-xs-3 col-md-1">		
-                        {% include "KaikmediaPagesModule:Common:online.menu.html.twig" with {'id': page.id, 'selected': page.online} %}
-                    </div>	
-                    <div class="col-xs-3 col-md-1">			            
-                        {% include "KaikmediaPagesModule:Common:depot.menu.html.twig" with {'id': page.id, 'selected': page.depot} %}	
-                    </div>	
-                    <div class="col-xs-3 col-md-1">		
-                        {% include "KaikmediaPagesModule:Common:inlist.menu.html.twig" with {'id': page.id, 'selected': page.inlist} %}
-                    </div>	
-                    <div class="col-xs-3 col-md-1">			            
-                        {% include "KaikmediaPagesModule:Common:inmenu.menu.html.twig" with {'id': page.id, 'selected': page.inmenu} %}	
-                    </div>            
-                    <div class="col-xs-3 col-md-1">
-                        {% include "KaikmediaPagesModule:Common:layout.menu.html.twig" with {'id': page.id, 'selected': page.layout} %}	
-                    </div>
-                    <div class="col-xs-3 col-md-1">
-                        {% include "KaikmediaPagesModule:Common:language.menu.html.twig" with {'id': page.id, 'selected': page.language} %}	
-                    </div>
-                    {% if page.categoryAssignments is not null %}
-                    <div class="col-xs-3 col-md-1">
-                        {% for assignment in page.categoryAssignments %}
-                            {{ assignment.category.display_name[app.request.getLocale()] }}{% if not loop.last %}, {% endif %}
-                        {% else %}
-                            {{  __('No category') }}
-                        {% endfor %}
-                    </div>
+            <div class="col-centered text-center col-xs-8">
+                <div class="row">   
+                    <div class="view-onsite col-xs-3">
+                        {% set topic=categorisationHelper.getTopicByArticle(article) %}
+                        {% set topic_name=attribute(topic, 'name') is defined  ? topic.name|lower : 'global' %} 
+                        <a class="btn btn-lg btn-default"
+                           title="{{ __('View') }}"
+{#                           href="{{ path('kaikmediapagesmodule_news_display', {'topic_name': topic_name, 'slug' : article.urltitle, 'id': article.id}) }}#}
+                           ">
+                            <i class="fa fa-tv"></i>
+                        </a>
+                    </div>   
+                    <div class="main-layout-select col-xs-6">
+                        {% include "@KaikmediaPagesModule/Common/layout.select.html.twig" with {
+                                    'thisname': 'layouts-big',
+                                    'id': article.id,
+                                    'current_type': preview_type,
+                                    'current_name': preview_name,
+                                    'layouts': layoutHelper.getLayoutsList(),
+                                    'cards': layoutHelper.getCardsList(),
+                        } %}
+                    </div>   
+                    <div class="edit col-xs-3">
+                        <a class="btn btn-lg btn-warning"
+                           title="{{ __('Edit') }}"
+                           href="{{ path('kaikmediapagesmodule_manager_modify', {'id': article.id}) }}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </div>   
+                </div>   
+            </div>   
+        </div>   
+        <div class="row">   
+            <div class="main-item-preview center-block">
+                <div class="layout-preview-inner full-story">
+                    {% if article is defined %}
+                        {% include layoutHelper.getPreview(preview_type, preview_name) with {
+                            'edit': false,
+
+                        } %}
                     {% endif %}
-                    
-                    <div class="col-md-2 pull-right text-right">
-                        <div class="dropdown">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="options-menu" data-toggle="dropdown" aria-expanded="true">
-                                {{ __('Options')}}
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_manager_modify', {'id': page.id}) }}">{{ __('Edit')}}</a></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>
-                            </ul>
-                        </div>
-                    </div>     
-                </div>                         
-                <div class="list-group-item col-md-12 clearfix" >
-                    {{ page.content|raw }}               
-                </div>           
-            </div>  
+                </div>   
+            </div>   
         </div>   
     </div>
+</div>
 {% endblock %}
 {% block footer %}
     {{ parent() }}
-    {#{ include('ZikulaIntercomModule:Base:modal.html.twig') }
-    { pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
-    <script>
-    (function($) {
-            $(function(){
-                Zikula.Intercom.InboxManager.init();  
-            });
-    })(jQuery);
-    </script>#}
-{#    {{ dump(page) }}#}
+    {{ pageAddAsset('javascript', zasset('@KaikmediaPagesModule:js/Kaikmedia.Pages.Manager.preview.js')) }}
 {% endblock %}

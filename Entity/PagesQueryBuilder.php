@@ -30,6 +30,13 @@ class PagesQueryBuilder extends QueryBuilder
         }
     }
 
+    public function filterExcludeIds($ids)
+    {
+        if (is_array($ids)) {
+            return $this->andWhere('p.id NOT IN (:ids)')->setParameter('ids', $ids);
+        }
+    }
+    
     public function filterTitle($title)
     {
         if ($title !== false) {
@@ -53,28 +60,35 @@ class PagesQueryBuilder extends QueryBuilder
         }
     }
 
-    public function filterDepot($depot)
+    public function filterDepot($depot = 0)
     {
-        if ($depot !== false) {
+        if ($depot !== 'any') {
             return $this->andWhere('p.depot = :depot')->setParameter('depot', $depot);
         }
     }
 
-    public function filterOnline($online)
+    public function filterOnline($online = 1)
     {
-        if ($online !== false) {
+        if ($online !== 'any') {
             return $this->andWhere('p.online = :online')->setParameter('online', $online);
         }
     }
 
-    public function filterShowinlist($inlist)
+    public function filterInlist($inlist = 1)
     {
-        if ($inlist !== false) {
+        if ($inlist !== 'any') {
             return $this->andWhere('p.inlist = :inlist')->setParameter('inlist', $inlist);
         }
     }
 
-    public function filterShowinmenu($inmenu)
+    public function filterInmenu($inmenu = 'any')
+    {
+        if ($inmenu !== 'any') {
+            return $this->andWhere('p.inmenu = :inmenu')->setParameter('inmenu', $inmenu);
+        }
+    }
+
+    public function filterShfilterInmenuowinmenu($inmenu)
     {
         if ($inmenu !== false) {
             return $this->andWhere('p.inmenu = :inmenu')->setParameter('inmenu', $inmenu);
@@ -137,24 +151,24 @@ class PagesQueryBuilder extends QueryBuilder
         }
     }
 
-    public function filterCategory($category)
+    public function filterTopic($topic)
     {
-//        dump($category);
-//        if ($category !== false) {
-//            return $this->andWhere('c.category = :category')->setParameter('category', $category);
-//        }
+        if (!empty($topic) ) {
+            return $this->andWhere('c.category = :category')
+                ->setParameter('category', $topic);
+        }
     }
-
-    public function filterLanguage($language)
+    
+    public function filterLanguage($language = 'any')
     {
-        if ($language !== false) {
+        if ($language !== 'any') {
             return $this->andWhere('p.language = :language')->setParameter('language', $language);
         }
     }
 
     public function filterLayout($layout)
     {
-        if ($layout !== false) {
+        if ($layout !== 'any') {
             return $this->andWhere('p.layout = :layout')->setParameter('layout', $layout);
         }
     }

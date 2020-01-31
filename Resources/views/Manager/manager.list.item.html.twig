@@ -1,0 +1,184 @@
+{# 
+
+    id: false,
+    title: '',
+    urltitle: '',
+
+    description: '',
+    content: '',
+
+    author: null,
+
+    views: 0,
+
+    parent: null,
+    categoryAssignments: null, // list as id's
+
+    online: 1,
+    depot: 0,
+    inmenu: 1,
+    inlist: 1,
+    language: '',
+    layout: '',
+
+    publishedAt: null,
+    expiredAt: null,
+
+    status: 'A',
+
+    createdAt: false,
+    createdBy: false,
+    updatedAt: false,
+    updatedBy: false,
+    deletedAt: false,
+    deletedBy: false
+
+#}
+
+<i class="itemData hide" 
+   data-id="{{ article.id }}"
+   data-title="{{ article.title }}"
+   data-urltitle="{{ article.urltitle }}"
+   data-description="{{ article.description }}"
+   data-content="{{ article.content }}"
+
+   data-author="{{ article.author.uid is defined ? article.author.uid : false }}"
+   data-authorname="{{ article.author.uname is defined ? article.author.uname : 'Guest' }}"
+   
+   data-views="{{ article.views }}"
+   
+   data-parent="{{ article.parent }}"
+   data-categoryAssignments="{{ article.categoryAssignments|keys|join(', ') }}"
+   
+   
+   data-online="{{ article.online }}"
+   data-depot="{{ article.depot }}"
+   data-inmenu="{{ article.inmenu }}"
+   data-inline="{{ article.inlist }}"
+   
+   data-layout="{{ article.layout }}"
+   data-language="{{ article.language }}"
+   
+   data-status="{{ article.status }}"
+
+   data-publishedAt="{{ article.publishedAt|date() }}"
+   data-expiredAt="{{ article.expiredAt|date() }}"
+
+   data-createdAt="{{ article.createdAt|date() }}"
+   data-createdBy="{{ article.createdBy.uid is defined ? article.createdBy.uid : null }}"
+
+   data-updatedAt="{{ article.updatedAt|date() }}"
+   data-updatedBy="{{ article.createdBy.uid is defined ? article.createdBy.uid : null }}"
+
+   data-deletedAt="{{ article.deletedAt|date() }}"
+   data-deletedBy="{{ article.deletedBy.uid is defined ? article.deletedBy.uid : null }}"
+
+>
+</i>
+
+<div class="actions col-xs-2 pull-right text-center">
+    <a class="btn btn-defaul action"
+       title="{{ __('Edit') }}"
+       href="{{ path('kaikmediapagesmodule_manager_modify', {'id': article.id}) }}">
+        <i class="fa fa-pencil"></i>
+    </a>
+    <a class="btn btn-defaul action"
+       title="{{ __('Preview') }}"
+       href="{{ path('kaikmediapagesmodule_manager_display', {'id': article.id}) }}">
+        <i class="fa fa-desktop"></i>
+    </a>
+{#    {% set topic=categorisationHelper.getTopicByArticle(article) %}
+    {% set topic_name=attribute(topic, 'name') is defined  ? topic.name|lower : 'global' %} 
+    <a class="btn btn-defaul action"
+       title="{{ __('View') }}"
+       href="{{ path('kaikmediapagesmodule_page_display', {'topic_name': topic_name, 'slug' : article.urltitle, 'id': article.id}) }}">
+        <i class="fa fa-tv"></i>
+    </a>
+#}
+    <a class="btn btn-defaul action"
+       title="{{ __('Delete') }}"
+       href="{{ path('kaikmediapagesmodule_manager_modify', {'id': article.id}) }}">
+        <i class="fa fa-trash fa-red"></i>
+    </a>
+</div>
+
+<div class="action-media col-xs-5 col-sm-3 col-md-2">
+    {{ notifyDisplayHooks('pages.ui_hooks.mainmedia_preview.display_view', article.id) }}
+</div>
+
+<div class="basics col-xs-5 col-md-3">
+    <a href="{{ path('kaikmediapagesmodule_manager_display', {'id': article.id}) }}">
+        <h4 class="list-group-item-heading">{{ article.title }}</h4>
+    </a>
+    <p class="list-group-item-text">
+        <i title="{{ __('Id') }} {{ article.id }}" class="fa fa-key ">#{{ article.id }}</i> 
+    </p>
+    <p class="list-group-item-text">
+        <i title="{{ __('Url') }}" class="fa fa-link"> </i> {{ article.urltitle }}
+    </p>
+</div>
+
+<div class="statuses col-xs-3 col-md-1">
+    <div>
+    {% include "KaikmediaPagesModule:Common:onoff.menu.html.twig" with {
+                'thisname': 'online',
+                'id': article.id,
+                'options': [{'id': 0,'name': __('Offline')},{'id': 1,'name': __('Online')}], 
+                'selected': article.online,
+    } %}
+    </div>
+    <div>
+    {% include "KaikmediaPagesModule:Common:onoff.menu.html.twig" with {
+                'thisname': 'depot',
+                'id': article.id,
+                'options': [{'id': 0,'name': 'allowed'},{'id': 1,'name': 'depot'}], 
+                'selected': article.depot,
+                'label_on': 'label-danger',
+                'label_off': 'label-success',
+    } %}
+    </div>
+    <div>
+    {% include "KaikmediaPagesModule:Common:onoff.menu.html.twig" with {
+                'thisname': 'inlist',
+                'id': article.id,
+                'options': [{'id': 0,'name': 'notinlist'},{'id': 1,'name': 'inlist'}], 
+                'selected': article.inlist
+    } %}
+    </div>
+    <div>
+    {% include "KaikmediaPagesModule:Common:onoff.menu.html.twig" with {
+                'thisname': 'inmenu',
+                'id': article.id,
+                'options': [{'id': 0,'name': 'notinmenu'},{'id': 1,'name': 'inmenu'}], 
+                'selected': article.inmenu
+    } %}
+    </div>
+</div>
+<div class="properties col-xs-3 col-md-1">
+    {% include "KaikmediaPagesModule:Common:dropdown.menu.html.twig" with {
+                'thisname': 'language',
+                'id': article.id,
+                'options': { 'No Language': '', 'All': 'all'  }|merge(languages),
+                'selected': article.language
+    } %}
+        {% include "KaikmediaPagesModule:Common:dropdown.menu.html.twig" with {
+                'thisname': 'layout',
+                'id': article.id,
+                'options': { 'Default': 'default', 'No layout': '' }|merge(layouts|default([])),
+                'selected': article.layout 
+} %}
+{#                'selected': article.language layouts[article.language] is defined ? layouts[article.layout] : {'No Layout':'default'}#}
+    {% include "KaikmediaPagesModule:Common:user.select.html.twig" with {
+                'thisname': 'author',
+                'id': article.id,
+                'selected': article.author.uid is defined ? article.author : __('Select author')
+    } %} 
+   {% include "KaikmediaPagesModule:Common:category.select.html.twig" with {
+                'thisname': 'topic',
+                'id': article.id,
+                'categories' : categorisationHelper.getTopics(),
+                'locale' : app.request.getLocale(),
+                'selected': article.categoryAssignments,
+                'multiple': false
+    } %} 
+</div>

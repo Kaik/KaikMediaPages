@@ -24,7 +24,7 @@ use Zikula\Bundle\FormExtensionBundle\Form\Type\LocaleType;
 use Zikula\CategoriesModule\Form\Type\CategoriesType;
 use Zikula\UsersModule\Form\Type\UserLiveSearchType;
 
-class PageFilterType extends AbstractType
+class PagesFilterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

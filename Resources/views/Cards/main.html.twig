@@ -1,0 +1,68 @@
+{% set topic=categorisationHelper.getTopicByArticle(article) %}
+{% set topic_title=attribute(topic.display_name, app.request.locale) is defined ? attribute(topic.display_name, app.request.locale) : 'global' %}
+{% set topic_name=attribute(topic, 'name') is defined  ? topic.name|lower : 'global' %}
+{% set topic_url=path('kaikmedianewsmodule_news_topic', {'topic_name': topic_name}) %}
+{% set topic_color=attribute(topic.attributes, 'color') is defined ? topic.attributes.color.value : '' %}
+
+{% set article_id=article.id %}
+{% set article_title=article.title %}
+{% set article_urltitle=article.urltitle %}
+{#{% set featured_media=notifyDisplayHooks('news.ui_hooks.mainmedia_preview.display_view', article.id) %}#}
+
+{% set article_description=article.description %}
+{% set article_views=article.views %}
+{% set article_published_date=article.publishedAt|localizeddate('medium', 'none', app.request.locale)  %}
+{% set article_url=path('kaikmedianewsmodule_news_display', {'topic_name': topic_name, 'slug': article_urltitle, 'id': article_id}) %}
+{% set article_comments=notifyDisplayHooks('news.ui_hooks.comments_count.display_view', article.id, NULL, TRUE)|first %}
+{% set article_comments_preview=notifyDisplayHooks('news.ui_hooks.comments_preview.display_view', article.id, NULL, TRUE)|first %}
+
+{#  do user avatar uname box #}
+{% set article_by_name=article.author.uname|default('Admin') %}
+{% set article_by_id=article.author.uid|default(2) %}
+{% set article_by_avatar=userAvatar(article_by_id, {'class':'img-circle user-avatar', 'url':true}) %}
+
+
+{# html component
+    used variables:
+    topic_name
+    topic_url
+    topic_title
+    article_title
+    article_urltitle
+    article_image_html
+    article_image_src
+    article_description
+    article_views
+    article_published_date
+                    {{  }}
+                    {{  }}
+
+#}
+<article class="article {{ topic_name }}">
+    <div class="inner">
+        <div class="image-wrap">
+            <a class="topic"
+               style="background-color: {{ topic_color }};"
+               href="{{ topic_url }}">{{ topic_title }}
+            </a>
+            <a href="{{ article_url }}" title="{{ article_title }}" class="article-link">
+                <div class="img-wrapper">
+                    <picture>
+                        {{ notifyDisplayHooks('news.ui_hooks.mainmedia_preview.display_view', article.id) }}
+                    </picture>
+                 </div>
+            </a>
+            <div class="content">
+                <h3 class="title">
+                    <a href="{{ article_url }}" title="{{ article_title }}">{{ article_title }}</a>
+                </h3>
+                <span class="description" title="{{ __('description') }}">{{ article_description }}</span>
+                <span class="date" title="{{ __('added') }}">{{ article_published_date }} </span>
+                <span class="views" title="{{ __('views') }}">{{ article_views }} </span>
+                <span class="comments" title="{{ __('comments') }}">{{ article_comments }} </span>
+                <span class="comments_preview" title="{{ __('comments') }}">{{ article_comments_preview }} </span>
+                <span class="author">{{ article_by_avatar|raw }} </span>
+            </div>
+        </div>
+    </div>
+</article>

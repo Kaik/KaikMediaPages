@@ -1,0 +1,65 @@
+{# article full
+#}
+{% set hooks=notifyDisplayHooks('pages.ui_hooks.page.display_view', article.id, NULL, TRUE)  %}
+{% set owner=(currentUser.loggedIn and currentUser.get('uid') == article.author.uid|default(-5))  %}
+{% set edit=hasPermission('KaikmediaPagesModule', '::', 'ACCESS_ADMIN')  %}
+
+{#{% set topic_url=path('kaikmediapagesmodule_news_topic', {'topic_name': topic_name}) %}
+{% set topic_color=attribute(topic.attributes, 'color') is defined ? topic.attributes.color.value : '' %}
+{% set topic_icon=attribute(topic.attributes, 'icon') is defined ? topic.attributes.icon.value : '' %}#}
+
+{% set article_id=article.id %}
+{% set article_title=article.title %}
+{% set article_urltitle=article.urltitle %}
+
+{% set article_description=article.description %}
+{% set article_views=article.views %}
+{% set article_published_date=article.publishedAt|localizeddate('medium', 'none', app.request.locale) %}
+{% set article_url=path('kaikmediapagesmodule_page_display', {'topic_name': topic_name, 'slug': article_urltitle}) %}
+{% set article_full_url=absolute_url(path('kaikmediapagesmodule_page_display', {'topic_name': topic_name, 'slug': article_urltitle})) %}
+
+{#{% set article_comments=notifyDisplayHooks('news.ui_hooks.comments_count.display_view', article.id, NULL, TRUE)|first %}#}
+
+{#  do user avatar uname box #}
+{#{% set article_by_name=article.author.uname|default('Admin') %}
+{% set article_by_id=article.author.uid|default(2) %}
+{% set article_by_avatar=userAvatar(article_by_id, {'class':'img-circle user-avatar', 'url':true}) %}#}
+
+{# html component
+    used variables:
+    topic_name
+    topic_url
+    topic_title
+    article_title
+    article_urltitle
+    article_image_html
+    article_image_src
+    article_description
+    article_views
+    article_published_date
+    +++++
+    article_author_id
+    article_author_name
+#}
+
+{{ pageSetVar('title', __('About') ~ ' ' ~ article_title) }}
+
+<div class="col-xs-6">
+    {{ notifyDisplayHooks('pages.ui_hooks.mainmedia.display_view', article_id) }}
+</div>
+
+<div class="col-xs-6 content">
+    <h1 class="title">{{ article_title }}</h1>
+    <div class="description">
+        {{ article.description}}
+    </div>
+    <div class="full-content">
+        {{ article.content|raw|nl2br }}
+    </div>
+    <div class="gallery">
+        {{ notifyDisplayHooks('news.ui_hooks.gallery.display_view', article_id) }}
+    </div>
+</div>
+
+                
+               

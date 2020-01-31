@@ -1,0 +1,17 @@
+{% block header %}
+    {{ adminHeader() }}
+    {{ pageAddAsset('stylesheet', zasset('@KaikmediaPagesModule:css/common.css')) }}
+{#    {{ pageAddAsset('stylesheet', zasset('@KaikmediaPagesModule:css/manager.css')) }}#}
+    {#    // news settings goes here #}
+    
+{% endblock %}
+{% block title %}
+    <h1>
+        {{ pageSetVar('title', title) }}
+    </h1>
+{% endblock %} 
+{% block content %}{% endblock %}
+{% block footer %}
+    {{ adminFooter() }}
+    {{ pageAddAsset('javascript', zasset('@KaikmediaPagesModule:js/Kaikmedia.Pages.pageItem.js')) }}
+{% endblock %}

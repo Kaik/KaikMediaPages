@@ -1,0 +1,52 @@
+{% extends 'KaikmediaPagesModule:Base:user.html.twig' %}
+{% block header %}
+    {% set settings='settings' %}
+    {{ parent() }}
+{% endblock %} 
+{% block title %}
+    {% set title_icon="" %}
+    {% set title=__('About') %}
+{% endblock %}
+{% block content %}
+<div id="km_pages_user_index" class="col-md-12 clearfix">
+        <div class="pages header row">
+            <div class="col-xs-12">
+                <h1>
+                    <a href="{{ path('kaikmediapagesmodule_page_home') }}">
+                        <i class="fa fa-info-circle" aria-hidden="true"></i>
+                        {{ __('About')}}
+                    </a>
+                </h1>
+            </div>
+        </div>
+        <div class="pages categories row">
+            {% for catAndPage in catsAndPages %}
+                {% if catAndPage.pages.items|length > 0 %}
+                    <div class="col-xs-12 {{ loop.last ? '' : 'col-md-12' }}">
+                        <h2>
+                            {{ catAndPage.category.display_name[app.request.getLocale()] ? catAndPage.category.display_name[app.request.getLocale()] : catAndPage.category.name }}
+                        </h2>
+                        <h5>
+                            <i class="{{ attribute(catAndPage.category.attributes, 'icon') is defined ? attribute(catAndPage.category.attributes, 'icon').value : 'hide' }}"> </i>
+                            {{ catAndPage.category.display_desc[app.request.getLocale()] ? catAndPage.category.display_desc[app.request.getLocale()] : '' }}
+                        </h5>
+                        <div class="pages categories items row">
+                            {% for page in catAndPage.pages.items %}
+                                <div class="col-xs-6 col-md-3">
+                                    {% include "@KaikmediaPagesModule/Cards/tile.html.twig" with {
+                                        'article': page,
+                                    } %}
+                                </div>      
+                            {% endfor %}
+                        </div>        
+                    </div>    
+                {% endif %}
+            {% endfor %}
+        </div>
+</div>
+{% endblock %}
+{% block footer %}
+    {{ parent() }}
+{#    {{ dump() }}#}
+{#    {{ pageAddAsset('javascript', zasset('@KaikmediaPagesModule:js/Kaikmedia.Pages.Manager.list.js')) }}#}
+{% endblock %}

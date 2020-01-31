@@ -15,6 +15,8 @@ services:
           - "@request_stack"
           - "@translator.default"
           - "@zikula_permissions_module.api.permission"
+            
+# HELPERS
 
     kaikmedia_pages_module.import_helper:
         class: Kaikmedia\PagesModule\Helper\ImportHelper
@@ -33,10 +35,33 @@ services:
           - "@kaikmedia_pages_module.access_manager"
         tags:
           - { name: zikula.searchable_module, bundleName: KaikmediaPagesModule}
-            
-    kaikmedia_pages_module.hook_subscriber.page_ui_hooks_subscriber:
-        class: Kaikmedia\PagesModule\HookSubscriber\PageUiHooksSubscriber
+
+    kaikmedia_pages_module.helper.categorisation_helper:
+        class: Kaikmedia\PagesModule\Helper\CategorisationHelper
+        arguments:
+          - '@doctrine.orm.entity_manager'
+          - '@zikula_categories_module.api.category_permission'
+          - '@session'
+          - "@=service('zikula_extensions_module.api.variable').get('KaikmediaPagesModule', 'enablecategorization', true)"
+          - "@kaikmedia_pages_module.access_manager"
+          - "@zikula_categories_module.category_registry_repository"
+          - "@zikula_categories_module.category_repository"
+          
+    kaikmedia_pages_module.page_manager:
+        class: Kaikmedia\PagesModule\Manager\PageManager
+        shared: false
         arguments:
           - "@translator.default"
-        tags:
-            - { name: zikula.hook_subscriber, areaName: "subscriber.pages.ui_hooks.page" }
+          - "@doctrine.orm.default_entity_manager"
+          - "@zikula_extensions_module.api.variable"
+          - "@kaikmedia_pages_module.helper.categorisation_helper"
+
+    kaikmedia_pages_module.pages_collection_manager:
+        class: Kaikmedia\PagesModule\Manager\PagesCollectionManager
+        shared: false
+        arguments:
+          - "@kernel"
+          - "@request_stack"
+          - "@doctrine.orm.default_entity_manager"
+          - "@zikula_extensions_module.api.variable"
+          - "@kaikmedia_pages_module.helper.categorisation_helper"

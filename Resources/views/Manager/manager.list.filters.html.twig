@@ -1,0 +1,83 @@
+{% form_theme form with [
+    'bootstrap_3_layout.html.twig',
+    '@KaikmediaPagesModule/Form/zikulausersmodule.userlivesearch.widget.twig',
+    '@KaikmediaPagesModule/Form/radio.html.twig'
+] %}
+{{ form_start(form) }}
+{{ form_errors(form) }}
+<div class="panel panel-default form-group-sm clearfix">
+  <div  id="all_filters" class="panel-body collapse" style="background: #fafaff;">
+    <div class="col-xs-12 col-md-4">
+        <div class="row">
+            <div class="col-xs-12 form-group has-float-label">
+                {{ form_widget(form.title) }}
+                {{ form_label(form.title) }}
+            </div>
+            <div class="col-xs-12 form-group has-float-label">
+                {{ form_widget(form.author, {'btn_size': 'btn-sm', 'user_name': filtered_user_name }) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-4">
+        <div class="row">
+            <div class="col-xs-6 form-group has-float-label">
+                {{ form_widget(form.online) }}
+                {{ form_label(form.online) }}
+            </div>
+            <div class="col-xs-6 form-group has-float-label">
+                {{ form_widget(form.depot) }}
+                {{ form_label(form.depot) }}
+            </div>
+            <div class="col-xs-6 form-group has-float-label">
+                {{ form_widget(form.inmenu) }}
+                {{ form_label(form.inmenu) }}
+            </div>
+            <div class="col-xs-6 form-group has-float-label">
+                {{ form_widget(form.inlist) }}
+                {{ form_label(form.inlist) }}
+            </div>
+            <div class="col-xs-6 form-group has-float-label">
+                {{ form_widget(form.published) }}
+                {{ form_label(form.published) }}
+            </div>
+            <div class="col-xs-6 form-group has-float-label">
+                {{ form_widget(form.expired) }}
+                {{ form_label(form.expired) }}
+            </div>
+            <div class="col-xs-6 form-group has-float-label">
+                {{ form_widget(form.layout) }}
+                {{ form_label(form.layout) }}
+            </div>
+            <div class="col-xs-6 form-group has-float-label">
+                {{ form_widget(form.language) }}
+                {{ form_label(form.language) }}
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-4">
+        <div class="row">
+            <div class="col-xs-12 form-group has-float-label">
+                {{ form_widget(form.categoryAssignments) }}
+                {{ form_label(form.categoryAssignments, __('Topic')) }}
+            </div>
+       </div>
+    </div>
+  </div>
+   <div class="panel-footer clearfix">
+        <div class="col-xs-4 col-md-5">
+            <a data-toggle="collapse" data-target="#all_filters" class="btn btn-sm btn-success" href="#" >{{ __('Filters') }} <i class="fa fa-filter fa-1x" title="{{ __('Filters') }}"></i></a>
+            <a class="btn btn-sm btn-default" href="{{ path('kaikmediapagesmodule_manager_list') }}" >{{ __('Reset') }} <i class="fa fa-eraser fa-1x" title="{{ __('Reset') }}"></i></a>
+        </div>
+        <div class="col-xs-4 col-md-2">
+            <div class="has-float-label input-group">
+                {{ form_widget(form.limit, {'attr': {'class':'form-control'}}) }}
+                {{ form_label(form.limit) }}
+            </div>
+        </div>
+        <div class="col-xs-4 col-md-2 pull-right text-right">
+           {{ form_widget(form.filter, {'attr': {'class': 'btn btn-sm btn-info btn-block'}}) }}
+        </div>
+   </div>
+</div>
+{{ form_end(form) }}
+

@@ -2,6 +2,7 @@
 {% block header %}
     {% set settings='settings' %}
     {{ parent() }}
+    {{ pageAddAsset('stylesheet', zasset('@KaikmediaPagesModule:css/page.css')) }}
 {% endblock %}
 {% block title %}
     {% set title_icon="<i class='fa fa-info'></i>" %}
@@ -9,139 +10,41 @@
     {{ parent() }}
 {% endblock %}
 {% block content %}
-    {% set hooks=notifyDisplayHooks('pages.ui_hooks.page.display_view', page.id, NULL, TRUE)  %}
-    {% set gallery=(attribute(hooks, 'provider.gallery.ui_hooks.media') is defined ? attribute(hooks, 'provider.gallery.ui_hooks.media').__toString() : {}) %}
-    {% for feature in gallery %}
-        {% if feature.relation.media is defined and feature.relation.media.mediaExtra.fileName is defined and feature.relation.media.mediaExtra.fileName is not empty %}
-            <img src="{{ ('/uploads/' ~ (feature.relation.media.mediaExtra.subdir is defined ? feature.relation.media.mediaExtra.subdir ~ '/' : '') ~ feature.relation.media.mediaExtra.fileName)|imagine_filter('dynamic', {"thumbnail": {"size": [700, 300] }}) }}" />
-        {% endif %}
-    {% endfor %}
-    
-    {% if hasPermission('KaikmediaPagesModule:manager:modify', '::', 'ACCESS_EDIT') %}
-        <div class="col-md-2 pull-right text-right">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="options-menu" data-toggle="dropdown" aria-expanded="true">
-                    {{ __('Options')}}
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
-                    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_manager_modify', {'id': page.id}) }}">{{ __('Edit')}}</a></li>
-{#                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>#}
-                </ul>
+{# topic #}
+{% set topic_title=categorisationHelper.getTopicTitleByArticle(page, app.request.locale) %}
+{% set topic_name=categorisationHelper.getTopicNameByArticle(page) %}
+{% set topic_icon=categorisationHelper.getTopicAttributeByArticle(page, 'icon') %}
+<div id="km_pages_user_index" class="col-md-12 clearfix">
+    <div class="pages header row">
+        <div class="col-xs-12">
+            <h1>
+                <a href="{{ path('kaikmediapagesmodule_page_home') }}">
+                    <i class="fa fa-info-circle" aria-hidden="true"></i>
+                    {{ __('About')}}
+                </a>
+                {% if topic_title %}
+                    <span class="small"> 
+                        {{ topic_title }}
+                    </span>
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+    <div class="pages-display-wide">
+        <div class="row">
+            <div class="full-story col-xs-12">
+                {% if page is defined %}
+                        {% include layoutHelper.getPreview('layout', page.layout) with {
+                            'edit': false,
+                            'article': page,
+                        } %}
+                {% endif %}
             </div>
         </div>
-    {% endif %}
-
-    {{ page.content|raw }}
+    </div>
+</div>
+{#{{ dump() }}#}
 {% endblock %}
 {% block footer %}
     {{ parent() }}
 {% endblock %}
-
-{#{ include('ZikulaIntercomModule:Base:modal.html.twig') }#}
-{#{ pageAddAsset('javascript', zasset('@ZikulaIntercomModule:js/Zikula.Intercom.inbox.manager.js')) }}
-<script>
-(function($) {
-        $(function(){
-            Zikula.Intercom.InboxManager.init();
-        });
-})(jQuery);
-</script>
-{#{ dump() }#}
-{#<h3>
-    <span class="fa fa-list"></span>
-    {{ __('Manager')}}
-</h3>
-<div class="container-fluid">
-    <div class="row">
-        <div class="list-group col-md-12">
-            <div class="list-group-item col-md-12"   style="background: #FFF6DF;">
-                <h1> {{ page.title }} </h1>
-                <p><small>{{ __('url')}}</small> {{ page.urltitle }}</p>
-            </div>
-            <div class="list-group-item col-md-12 clearfix" style="background:#eee;">
-                <div class="col-md-3">{{ __('Views')}}: {{ page.views }}</div>
-                <div class="col-xs-3 col-md-1">
-                    {% include "KaikmediaPagesModule:Common:online.menu.html.twig" with {'id': page.id, 'selected': page.online} %}
-                </div>
-                <div class="col-xs-3 col-md-1">
-                    {% include "KaikmediaPagesModule:Common:depot.menu.html.twig" with {'id': page.id, 'selected': page.depot} %}
-                </div>
-                <div class="col-xs-3 col-md-1">
-                    {% include "KaikmediaPagesModule:Common:inlist.menu.html.twig" with {'id': page.id, 'selected': page.inlist} %}
-                </div>
-                <div class="col-xs-3 col-md-1">
-                    {% include "KaikmediaPagesModule:Common:inmenu.menu.html.twig" with {'id': page.id, 'selected': page.inmenu} %}
-                </div>
-                <div class="col-xs-3 col-md-1">
-                    {% include "KaikmediaPagesModule:Common:layout.menu.html.twig" with {'id': page.id, 'selected': page.layout} %}
-                </div>
-                <div class="col-xs-3 col-md-1">
-                    {% include "KaikmediaPagesModule:Common:language.menu.html.twig" with {'id': page.id, 'selected': page.language} %}
-                </div>
-                <div class="col-md-2 pull-right text-right">
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="options-menu" data-toggle="dropdown" aria-expanded="true">
-                            {{ __('Options')}}
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="options-menu">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_manager_modify', {'id': page.id}) }}">{{ __('Edit')}}</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="list-group-item col-md-12 clearfix" >
-                
-            </div>
-        </div>
-    </div>
-</div>#}
-{#    {% set hooks=notifyDisplayHooks('pages.ui_hooks.page.display_view', page.id, NULL, TRUE)  %}#}
-{#    {% set gallery=attribute(hooks, 'provider.gallery.ui_hooks.media').__toString() %}#}
-{#    {{ gallery.__toString() }}#}
-{#    {% for media in gallery.__toString() %}
-        <img src="/web/uploads/{{ media.media.mediaExtra.fileName }}" />
-    {% endfor %}#}
-{#    {{ dump(gallery) }}#}
-{#    {{ dump(notifyDisplayHooks('pages.ui_hooks.page.display_view', page.id, NULL, TRUE)) }}#}
-
-{#{% include 'KaikmediaPagesModule:Common:resources.html.twig'  %}
-<div class="panel">
-    <div class="panel-body km-podstrona">
-        <div > 
-            <div class="title col-md-9" > 
-                <h1>{{ page.title }}
-                </h1>	
-            </div>
-            <div class="menu col-md-2 pull-right text-right" > 
-
-                <div class="dropdown">
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                        {{ __('Options')}}
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('kaikmediapagesmodule_admin_modify', {'id': page.id}) }}">{{ __('Edit')}}</a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">{{ __('Depot')}}</a></li>
-                    </ul>
-                </div>
-
-            </div>     	
-        </div>
-        <div>     	        
-            <div class="col-md-12" > 
-                {{ notifyDisplayHooks('kaikmediapages.ui_hooks.page.display_view', page.id) }}	        
-                {{ page.content|raw }}      
-            </div>	              
-        </div>
-        <div class="col-md-12 text-center services-bottom">
-            <h2>{% trans from "kaikmediakmtheme" %}Want to contact us?{% endtrans %}
-                <a class="btn btn-primary btn-info btn-cta" href="{{  path('kaikmediakmdmodule_messages_contact') }}">
-                    {% trans from "kaikmediakmtheme" %}Why not by sending a message?{% endtrans %}
-                </a>
-            </h2>
-        </div>	
-    </div>
-</div>#}

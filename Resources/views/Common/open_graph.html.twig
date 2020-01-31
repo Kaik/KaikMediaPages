@@ -1,0 +1,13 @@
+{% set openGraph %}
+    <meta property="og:title"   content="{{ og_title|default(getModVar('ZConfig', 'sitename')) }}" />
+    <meta property="og:type"    content="{{ og_type|default('website') }}" />
+    <meta property="og:url"     content="{{ og_url|default(absolute_url(path('home'))) }}" />
+    <meta property="og:image"   content="{{ og_image|default('') }}" />
+{% endset %}
+{{ pageAddAsset('header', openGraph) }}
+
+{#
+{% if og_image is not null %}
+{% else %}
+{% endif %}
+#}

@@ -1,0 +1,41 @@
+{# tile page item template
+
+#}
+{% set hooks=notifyDisplayHooks('pages.ui_hooks.page.display_view', article.id, NULL, TRUE)  %}
+{% set owner=(currentUser.loggedIn and currentUser.get('uid') == article.author.uid|default(-5))  %}
+{% set edit=hasPermission('KaikmediaPagesModule', '::', 'ACCESS_ADMIN')  %}
+{# topic #}
+{% set topic=categorisationHelper.getTopicByArticle(article) %}
+{% set topic_title=attribute(topic.display_name, app.request.locale) is defined ? attribute(topic.display_name, app.request.locale) : 'global' %}
+{% set topic_name=attribute(topic, 'name') is defined  ? topic.name|lower : 'global' %}
+{#{% set topic_url=path('kaikmediapagesmodule_page_topic', {'topic_name': topic_name}) %}
+{% set topic_color=attribute(topic.attributes, 'color') is defined ? topic.attributes.color.value : '' %}
+{% set topic_icon=attribute(topic.attributes, 'icon') is defined ? topic.attributes.icon.value : '' %}#}
+
+{% set article_id=article.id %}
+{% set article_title=article.title %}
+{% set article_urltitle=article.urltitle %}
+
+{#{% set article_description=article.description %}#}
+{% set article_views=article.views %}
+{% set article_published_date=article.publishedAt|localizeddate('medium', 'none', app.request.locale) %}
+{% set article_url=path('kaikmediapagesmodule_page_display', {'topic_name': topic_name, 'slug': article_urltitle}) %}
+{#{% set article_full_url=absolute_url(path('kaikmedianewsmodule_news_display', {'topic_name': topic_name, 'slug': article_urltitle, 'id': article_id})) %}#}
+
+{#{% set article_comments=notifyDisplayHooks('news.ui_hooks.comments_count.display_view', article.id, NULL, TRUE)|first %}#}
+
+{#  do user avatar uname box #}
+{#{% set article_by_name=article.author.uname|default('Admin') %}
+{% set article_by_id=article.author.uid|default(2) %}
+{% set article_by_avatar=userAvatar(article_by_id, {'class':'img-circle user-avatar', 'url':true}) %}#}
+
+<div class="page tile panel panel-default">
+    <a href="{{ article_url }}"   >
+        <div class="panel-media">
+            {{ notifyDisplayHooks('pages.ui_hooks.mainmedia_preview.display_view', article_id) }}
+        </div>
+        <div class="panel-footer">
+            {{ article_title }}
+        </div>
+    </a>
+</div>  

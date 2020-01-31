@@ -1,16 +1,15 @@
-<<<<<<< OURS
 msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
+"Language: en\n"
 
 msgid "1. Select table to import"
 msgstr "1. Select table to import"
 msgid "2. Import settings"
 msgstr "2. Import settings"
 msgid "About"
-msgstr "Informacje"
+msgstr "About"
 msgid "Add a new Page"
 msgstr "Add a new Page"
 msgid "Ajax timeout:"
@@ -191,52 +190,3 @@ msgid "views"
 msgstr "views"
 msgid "{0} Select category|{1} %category% |]1,Inf[ %selected% categories"
 msgstr "{0} Select category|{1} %category% |]1,Inf[ %selected% categories"
-=======
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-msgid ""
-msgstr ""
-"Project-Id-Version: Zikula 1.2.x\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-07 21:34+0000\n"
-"PO-Revision-Date: 2015-05-01 23:16+0100\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"X-Generator: Poedit 1.7.5\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"Language: pl\n"
-
-#: pnadmin.php:132
-msgid "Pages"
-msgstr "Strony"
-
-#: pnadmin.php:135
-msgid "Page"
-msgstr "Strona"
-
-#: pnadmin.php:141
-msgid "pages"
-msgstr "strony"
-
-#: pnadmin.php:144
-msgid "page"
-msgstr "strona"
-
-#: pnadmin.php:150
-msgid "read more"
-msgstr "czytaj więcej"
-
-#: pnadmin.php:153
-msgid "title"
-msgstr "tytuł"
-
-#: pnadmin.php:159
-msgid "description"
-msgstr "opis"
->>>>>>> THEIRS

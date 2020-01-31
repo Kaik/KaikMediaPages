@@ -1,0 +1,30 @@
+.manager .statuses a {
+   text-transform: capitalize;
+}
+.manager.preview .main-layout-select {
+   /*float:none;*/
+}
+.manager.preview .main-layout-select .dropdown-header {
+   text-transform: uppercase;
+   font-weight: bold;
+}
+.manager.preview .main-item-preview {
+    width:65%;
+    margin-top: 30px;
+}
+.manager.preview .main-item-preview .layout-preview-inner {
+
+}
+@media (max-width: 1199px){
+    .manager.preview .main-item-preview {
+        width:100%;
+        margin-top: 30px;
+    }
+}
+.edit-item-menu {
+    margin-bottom: 20px;
+}
+
+.ck-editor__editable_inline {
+    min-height: 300px !important;
+}

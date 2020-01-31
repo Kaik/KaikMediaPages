@@ -1,0 +1,37 @@
+{% set default = {'text': __('Empty') ,'value': ''} %}
+{% set label_type = selected ? 'label-success' : 'label-warning' %}
+{% for name, value in options %}
+    {% if loop.first  %} 
+        {% set default = {'text': name ,'value': value} %}
+    {% endif %}
+    {% if selected == value  %} 
+        {% set selected = {'text': name ,'value': value} %}
+    {% endif %}
+{% endfor %}
+
+{% set selected = selected is iterable ? selected : default %}
+
+<div class="dropdown">
+    <a class="dropdown-toggle" id="{{ thisname }}-menu-{{ id }}" data-toggle="dropdown" aria-expanded="true">
+        {#<i title="{{ selected|keys|first }}" class="sr-only fa fa-circle "></i>#}
+        <span class="label {{ thisname }}-{{ selected.value }} {{ label_type }}">{{ selected.text }}</span>
+    </a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="{{ thisname }}-menu-{{ id }}">
+            {% for name, value in options %} 	
+                <li role="presentation" 
+                    class="{{ selected == value ? ' disabled ' :'' }}">
+                        <a role="menuitem" 
+                           class="{{ thisname }}-menuitem-{{ id }} action-property" 
+                           data-name="{{ thisname }}" 
+                           data-id="{{ id }}" 
+                           data-value="{{ value }}"
+                           data-multiple="0"
+                           tabindex="-1" 
+                           href="#">
+                            <i class="{{ selected.value == value ? ' fa fa-check-circle text-primary ' : 'fa fa-circle ' }}"> </i> 
+                            {{ name }}
+                        </a>
+                </li>		
+            {% endfor %}
+    </ul>
+</div>

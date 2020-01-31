@@ -1,0 +1,24 @@
+<div class="btn-group">
+    <button type="button" 
+            class="btn btn-info btn-lg dropdown-toggle" 
+            data-toggle="dropdown" 
+            aria-haspopup="true" 
+            aria-expanded="false">
+        {{ __('Preview type') }}: {{ preview_type }}-{{ preview_name|replace({'.html.twig': ''}) }}
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        {% for layout in layouts %}
+            {% if loop.first %}
+                <li class="dropdown-header">{{ __('Layouts') }}</li>
+            {% endif %}
+            <li><a href="{{ path('kaikmediapagesmodule_manager_display', {'id': id, 'preview_type': 'layout', 'preview_name': layout|replace({'.html.twig': ''}) }) }}">{{ layout|replace({'.html.twig': ''}) }}</a></li>
+        {% endfor %}
+        {% for card in cards %}
+            {% if loop.first %}
+                <li class="dropdown-header">{{ __('Cards') }}</li>
+            {% endif %}
+            <li><a href="{{ path('kaikmediapagesmodule_manager_display', {'id': id, 'preview_type': 'card', 'preview_name': card|replace({'.html.twig': ''}) }) }}">{{ card|replace({'.html.twig': ''}) }}</a></li>
+        {% endfor %}
+    </ul>
+</div>

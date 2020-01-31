@@ -99,7 +99,7 @@ class PageEntity extends AbstractBaseEntity
     }
 
     /**
-     * Get page category assignments
+     * Get article category assignments
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
@@ -109,7 +109,7 @@ class PageEntity extends AbstractBaseEntity
     }
 
     /**
-     * Set page category assignments
+     * Set article category assignments
      *
      * @param ArrayCollection $assignments
      */
@@ -137,7 +137,7 @@ class PageEntity extends AbstractBaseEntity
     private function collectionContains(ArrayCollection $collection, CategoryAssignmentEntity $element)
     {
         foreach ($collection as $key => $collectionAssignment) {
-            /** @var \Kaikmedia\PagesModule\Entity\CategoryAssignmentEntity $collectionAssignment */
+            /** @var \Kaikmedia\NewsModule\Entity\CategoryAssignmentEntity $collectionAssignment */
             if ($collectionAssignment->getCategoryRegistryId() == $element->getCategoryRegistryId()
                 && $collectionAssignment->getCategory() == $element->getCategory()
             ) {
@@ -145,5 +145,47 @@ class PageEntity extends AbstractBaseEntity
             }
         }
         return false;
+    }
+
+    /**
+     * Set article category assignments
+     */
+    public function getCategoryForRegistryId($regId = null)
+    {
+        if (null === $regId) {
+            return null;
+        }
+
+        foreach ($this->categoryAssignments as $assignment) {
+            if ($assignment->getCategoryRegistryId() == $regId) {
+                return $assignment->getCategory();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Set article category assignments
+     */
+    public function getCategoryNameForRegistryId($regId = null)
+    {
+        if (null === $regId) {
+            return null;
+        }
+
+        $category = $this->getCategoryForRegistryId($regId);
+
+        return $category == null ? null : $category->getName() ;
+    }
+
+    function getTopic()
+    {
+        return $this->getCategoryAssignments();
+    }
+
+    function setTopic($topic)
+    {
+        $this->setCategoryAssignments($topic);
     }
 }

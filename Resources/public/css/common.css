@@ -1,3 +1,40 @@
+.pages.header h1 a,
+.pages.header h1 a:hover {
+    text-decoration: none;
+    color: #333;
+}
+.page.panel {
+    background: transparent;
+    box-shadow: none;
+}
+.page.panel .panel-media {
+    margin:0px;
+}
+.page.panel .panel-footer {
+    text-align: center;
+    background: transparent;
+    text-transform: uppercase;
+    font-size: 1.3em;
+}
+.page.tile.panel a {
+    color:#444;
+}
+.page.tile.panel a:hover {
+    text-decoration: none;
+    color:#444;
+}
+.panel-transparent {
+    background: none;
+}
+
+.panel-transparent .panel-heading{
+    background: rgba(122, 130, 136, 0.2)!important;
+}
+
+.panel-transparent .panel-body{
+    background: rgba(46, 51, 56, 0.2)!important;
+}
+
 .simplebox {
 	background:none;
 	padding-left:0px;
@@ -8,17 +45,6 @@
   	box-shadow: none !important;
 }
 
-   .panel-transparent {
-        background: none;
-    }
-
-    .panel-transparent .panel-heading{
-        background: rgba(122, 130, 136, 0.2)!important;
-    }
-
-    .panel-transparent .panel-body{
-        background: rgba(46, 51, 56, 0.2)!important;
-    }
 
 #mceu_23 { float: right; }
 
@@ -60,4 +86,24 @@
 
 .layout-default, .layout-slider {
 	background-color: #777;
+}
+
+
+
+.resizable-content {
+    width:60%;
+}
+.resizable-content-inner {
+    
+}
+@media (max-width: 1199px){
+    .resizable-content {
+        width:100%;
+    }
+}
+.col-auto-centered {
+    float: none;
+    margin: 0 auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }

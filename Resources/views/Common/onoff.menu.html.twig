@@ -1,0 +1,14 @@
+
+{% set label_type = selected ? label_on|default('label-success') : label_off|default('label-default') %}
+
+<a class="action-status {{ thisname }}-onoff-{{ id }} label {{ thisname }}-label-{{ options[selected].id }} {{ label_type }}" 
+    data-name="{{ thisname }}" 
+    data-id="{{ id }}" 
+    data-value="{{ selected ? 1 : 0 }}" 
+    data-textoff="{{ options[0].name is defined ? options[0].name : __('Off') }}" 
+    data-texton="{{ options[1].name is defined ? options[1].name : __('On') }}" 
+    data-labeloff="{{ label_off|default('label-default') }}" 
+    data-labelon="{{ label_on|default('label-success') }}" 
+    title="{{ options[selected].name }}">
+    {{ options[selected].name }}
+</a>

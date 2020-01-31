@@ -1,0 +1,39 @@
+services:
+    kaikmedia_pages_module.hook_subscriber.page_ui_hooks_subscriber:
+        class: Kaikmedia\PagesModule\HookSubscriber\PageUiHooksSubscriber
+        arguments:
+          - "@translator.default"
+        tags:
+            - { name: zikula.hook_subscriber, areaName: "subscriber.pages.ui_hooks.page" }
+
+    kaikmedia_pages_module.hook_subscriber.mainmedia_ui_hooks_subscriber:
+        class: Kaikmedia\PagesModule\HookSubscriber\MainMediaUiHooksSubscriber
+        arguments:
+          - "@translator.default"
+        tags:
+            - { name: zikula.hook_subscriber, areaName: "subscriber.pages.ui_hooks.mainmedia" }
+            
+    kaikmedia_pages_module.hook_subscriber.gallery_ui_hooks_subscriber:
+        class: Kaikmedia\PagesModule\HookSubscriber\GalleryUiHooksSubscriber
+        arguments:
+          - "@translator.default"
+        tags:
+            - { name: zikula.hook_subscriber, areaName: "subscriber.pages.ui_hooks.gallery" }
+
+    kaikmedia_pages_module.hook_subscriber.mainmedia_preview_ui_hooks_subscriber:
+        class: Kaikmedia\PagesModule\HookSubscriber\MainMediaPreviewUiHooksSubscriber
+        arguments:
+          - "@translator.default"
+        tags:
+            - { name: zikula.hook_subscriber, areaName: "subscriber.pages.ui_hooks.mainmedia_preview" }
+
+#    kaikmedia_pages_module.topic_hooked_meta:
+#        class: Kaikmedia\NewsModule\TopicHookedMeta\News
+#        arguments:
+#          - "@translator.default"
+#          - "@zikula_extensions_module.api.variable"
+#          - "@kaikmedia_news_module.news_manager"
+#          - "@kaikmedia_news_module.helper.categorisation_helper"
+#          - "@hook_dispatcher"
+#        tags:
+#            - { name: zikula.dizkus.topic_hooked_meta, bundleName: "KaikmediaNewsModule" }
